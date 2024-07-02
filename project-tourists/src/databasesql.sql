@@ -21,6 +21,9 @@ CREATE TABLE user_table (
     user_id INT,
     username VARCHAR(50) NOT NULL,
     is_admin BOOLEAN NOT NULL DEFAULT FALSE,
+    practiced BOOLEAN DEFAULT FALSE,
+    created_Quizzes INT DEFAULT 0,
+    scored_Highest BOOLEAN DEFAULT FALSE,
     PRIMARY KEY (user_id),
     FOREIGN KEY (user_id) REFERENCES login_table(user_id)
 );
@@ -36,9 +39,9 @@ CREATE TABLE achievement_table (
     achievement_id INT AUTO_INCREMENT PRIMARY KEY,
     achievement VARCHAR(255),
     num_created INT,
-    taken BOOLEAN,
-    user_id INT,
-    FOREIGN KEY (user_id) REFERENCES user_table(user_id)
+    num_taken INT,
+    had_highest_score boolean,
+    practiced boolean
 );
 
 CREATE TABLE friend_table (
