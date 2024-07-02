@@ -70,7 +70,7 @@ CREATE TABLE post_table (
 
 CREATE TABLE quiz_table (
     quiz_id INT AUTO_INCREMENT PRIMARY KEY,
-    quit_name TEXT,
+    quiz_name TEXT,
     quiz_tag TEXT,
     difficulty TEXT,
     creator_id INT not null,
