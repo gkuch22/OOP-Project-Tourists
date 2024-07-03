@@ -1,5 +1,6 @@
 package javaFiles;
 
+import java.util.Date;
 import java.util.List;
 
 public interface Quiz {
@@ -27,5 +28,7 @@ public interface Quiz {
 
     boolean isGradable();
     void setGradable(boolean gradable);
+
+    Date getDate();
 
 }

@@ -5,6 +5,7 @@ import org.apache.commons.dbcp2.BasicDataSource;
 
 import java.sql.*;
 import java.util.*;
+import java.util.Date;
 
 public class DBManager {
 
@@ -32,7 +33,9 @@ public class DBManager {
             boolean multiple_pages = resultSet.getBoolean("multiple_pages");
             boolean practice_mode = resultSet.getBoolean("practice_mode");
             boolean gradable = resultSet.getBoolean("gradable");
-            Quiz newQuiz = new QuizImpl(quiz_id, quiz_name, quiz_tag, difficulty, creator_id, multiple_pages, practice_mode, gradable);
+            Date date_created = resultSet.getDate("date_created");
+            Quiz newQuiz = new QuizImpl(quiz_id, quiz_name, quiz_tag, difficulty,
+                                creator_id, multiple_pages, practice_mode, gradable, date_created);
             quizzes.add(newQuiz);
         }
         resultSet.close();
@@ -104,7 +107,7 @@ public class DBManager {
         }
 
         orderBy = orderBy.toLowerCase();
-        System.out.println(orderBy);
+//        System.out.println(orderBy);
         if(!"none".equals(orderBy)){
             if(orderBy.equals("difficulty")){
                 List<Quiz> lst = new ArrayList<Quiz>(quizzes);
@@ -152,8 +155,34 @@ public class DBManager {
                 Collections.reverse(quizzes);
             }
 
-        }
+            if(orderBy.equals("recent")){
+                Map<Date, ArrayList<Quiz>> myMap = new HashMap<Date, ArrayList<Quiz>>();
 
+                for(Quiz quiz : quizzes) {
+                    Date date_created = quiz.getDate();
+                    if(myMap.containsKey(date_created)){
+                        myMap.get(date_created).add(quiz);
+                    }else{
+                        ArrayList<Quiz> temp = new ArrayList<Quiz>();
+                        temp.add(quiz);
+                        myMap.put(date_created, temp);
+                    }
+                }
+                quizzes.clear();
+
+                List<Date> sortedDates = new ArrayList<Date>(myMap.keySet());
+                Collections.sort(sortedDates, Collections.reverseOrder());
+
+                for (Date currDate : sortedDates) {
+                    ArrayList<Quiz> lst = myMap.get(currDate);
+                    for (Quiz quiz : lst) {
+                        quizzes.add(quiz);
+                    }
+                }
+            }
+
+
+        }
         return quizzes;
     }
 

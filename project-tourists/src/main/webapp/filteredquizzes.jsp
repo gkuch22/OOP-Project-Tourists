@@ -9,11 +9,8 @@
 <%@ page import="javaFiles.DBManager" %>
 <%@ page import="java.sql.SQLException" %>
 <%@ page import="javaFiles.Quiz" %>
-<%@ page import="java.util.List" %>
-<%@ page import="java.util.ArrayList" %>
 <%@ page import="javafx.util.Pair" %>
-<%@ page import="java.util.Map" %>
-<%@ page import="java.util.HashMap" %>
+<%@ page import="java.util.*" %>
 
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -102,8 +99,9 @@
         <tr>
             <th>Name</th>
             <th>Difficulty</th>
-            <th>Quizzes taken</th>
+            <th>Taken</th>
             <th>Max Score</th>
+            <th>Date</th>
             <th>Link to Quiz</th>
         </tr>
         </thead>
@@ -122,6 +120,7 @@
                 int quiz_id = quiz.getQuiz_id();
                 int quizzestaken = 0;
                 int maxscore = 0;
+                Date currDate = quiz.getDate();
                 if(mp.containsKey(quiz_id)){
                     quizzestaken = mp.get(quiz_id).getKey();
                     maxscore = mp.get(quiz_id).getValue();
@@ -133,6 +132,7 @@
             <td><%= difficulty %></td>
             <td><%= quizzestaken %></td>
             <td><%= maxscore %></td>
+            <td><%= currDate %></td>
             <td><a href="quiz.jsp?id=<%= quiz.getQuiz_id() %>">Take Quiz</a></td>
         </tr>
         <%

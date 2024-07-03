@@ -1,6 +1,7 @@
 package javaFiles;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 public class QuizImpl implements Quiz{
@@ -12,8 +13,10 @@ public class QuizImpl implements Quiz{
     private boolean multiple_pages;
     private boolean practice_mode;
     private boolean gradable;
+    private Date date_created;
 
-    public QuizImpl(int quizId, String quizName, String quizTag, String difficulty, int creatorId, boolean multiplePages, boolean practiceMode, boolean gradable) {
+    public QuizImpl(int quizId, String quizName, String quizTag, String difficulty, int creatorId,
+                        boolean multiplePages, boolean practiceMode, boolean gradable, Date dateCreated) {
         this.quiz_id = quizId;
         this.quiz_name = quizName;
         this.quiz_tag = quizTag;
@@ -22,7 +25,10 @@ public class QuizImpl implements Quiz{
         this.multiple_pages = multiplePages;
         this.practice_mode = practiceMode;
         this.gradable = gradable;
+        this.date_created = dateCreated;
     }
+
+
 
     @Override
     public int getQuiz_id() {
@@ -103,5 +109,10 @@ public class QuizImpl implements Quiz{
     @Override
     public void setGradable(boolean gradable) {
         this.gradable = gradable;
+    }
+
+    @Override
+    public Date getDate(){
+        return this.date_created;
     }
 }
