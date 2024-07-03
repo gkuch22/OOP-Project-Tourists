@@ -4,10 +4,7 @@ import javafx.util.Pair;
 import org.apache.commons.dbcp2.BasicDataSource;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class DBManager {
 
@@ -104,8 +101,59 @@ public class DBManager {
             if(should){
                 quizzes.add(quiz);
             }
+        }
+
+        orderBy = orderBy.toLowerCase();
+        System.out.println(orderBy);
+        if(!"none".equals(orderBy)){
+            if(orderBy.equals("difficulty")){
+                List<Quiz> lst = new ArrayList<Quiz>(quizzes);
+                quizzes.clear();
+                List<Quiz> easy = new ArrayList<Quiz>();
+                List<Quiz> medium = new ArrayList<Quiz>();
+                List<Quiz> hard = new ArrayList<Quiz>();
+                for(Quiz quiz : lst){
+                    String currDifficulty = quiz.getDifficulty().toLowerCase();
+                    if(currDifficulty.equals("easy")) easy.add(quiz);
+                    if(currDifficulty.equals("medium")) medium.add(quiz);
+                    if(currDifficulty.equals("hard")) hard.add(quiz);
+                }
+                for(Quiz quiz : easy) quizzes.add(quiz);
+                for(Quiz quiz : medium) quizzes.add(quiz);
+                for(Quiz quiz : hard) quizzes.add(quiz);
+            }
+
+            if(orderBy.equals("popularity")){
+                Map<Integer, Pair<Integer, Integer>> mp = getStatMap();
+                Map<Integer, ArrayList<Quiz>> myMap = new HashMap<Integer, ArrayList<Quiz>>();
+
+                for(Quiz quiz : quizzes) {
+                    int quiz_id = quiz.getQuiz_id();
+                    int popularity = 0;
+                    if (mp.containsKey(quiz_id)) {
+                        popularity = mp.get(quiz_id).getKey();
+                    }
+                    if(myMap.containsKey(popularity)){
+                        myMap.get(popularity).add(quiz);
+                    }else{
+                        ArrayList<Quiz> temp = new ArrayList<Quiz>();
+                        temp.add(quiz);
+                        myMap.put(popularity, temp);
+                    }
+                }
+
+                quizzes.clear();
+                for(int pop : myMap.keySet()){
+                    ArrayList<Quiz> lst = myMap.get(pop);
+                    for(Quiz quiz : lst){
+                        quizzes.add(quiz);
+                    }
+                }
+                Collections.reverse(quizzes);
+            }
 
         }
+
         return quizzes;
     }
 
