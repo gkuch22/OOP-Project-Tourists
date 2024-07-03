@@ -144,3 +144,28 @@
     border-radius: 50%;
     margin-right: 10px;
 }
+
+.quiz-data {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 18px;
+    text-align: left;
+}
+.quiz-data th, .quiz-data td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+.quiz-data th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+.quiz-data tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+.quiz-data tr:hover {
+    background-color: #ddd;
+}
+.quiz-data th, .quiz-data td {
+    text-align: center;
+}

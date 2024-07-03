@@ -3,6 +3,11 @@
 <%@ page import="java.util.List" %>
 <%@ page import="javaFiles.*" %>
 <%@ page import="java.util.Map" %>
+
+<%
+    Integer user_id = (Integer) request.getAttribute("current_id");
+    System.out.println(user_id);
+%>
 <html>
 <head>
     <meta charset="UTF-8">
@@ -15,7 +20,7 @@
     DBManager manager = (DBManager) application.getAttribute("db-manager");
     User user;
     try {
-        user = manager.getUserData(1);
+        user = manager.getUserData(user_id);
     } catch (SQLException e) {
         throw new RuntimeException(e);
     }
@@ -55,12 +60,12 @@
                 <%
                     Map<String, Integer> tagCounts = user.getTagCount();
                     for (Map.Entry<String, Integer> entry : tagCounts.entrySet()) {
-            %>
-            <li>
-                <a><%= entry.getKey() %></a>
-                <span>(<%= entry.getValue() %> solved)</span>
-            </li>
-            <%
+                %>
+                <li>
+                    <a><%= entry.getKey() %></a>
+                    <span>(<%= entry.getValue() %> solved)</span>
+                </li>
+                <%
                     }
                 %>
             </ul>
@@ -112,19 +117,19 @@
             <%
                 try {
                     for(User user1 : manager.getFriends(user.getUser_id())){
-                %>
-                <li>
-                    <a href="AnotherUser?AnotherUserId=<%=user1.getUser_id()%>">
-                        <img src="<%=user1.getProfilePhoto()%>">
-                        <span><%=user1.getUsername()%>></span>
-                    </a>
-                </li>
-                 <%
+            %>
+            <li>
+                <a href="AnotherUser?AnotherUserId=<%=user1.getUser_id()%>">
+                    <img src="<%=user1.getProfilePhoto()%>">
+                    <span><%=user1.getUsername()%>></span>
+                </a>
+            </li>
+            <%
                     }
-                 } catch (SQLException e) {
-                     throw new RuntimeException(e);
-                 }
-             %>
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            %>
         </ul>
     </div>
 </div>

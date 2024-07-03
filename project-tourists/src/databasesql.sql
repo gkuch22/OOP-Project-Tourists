@@ -24,6 +24,7 @@ CREATE TABLE user_table (
     practiced BOOLEAN DEFAULT FALSE,
     created_Quizzes INT DEFAULT 0,
     scored_Highest BOOLEAN DEFAULT FALSE,
+    profilePhoto VARCHAR(500) DEFAULT 'https://i.pinimg.com/736x/64/5f/d9/645fd98adba55582c6851985779fcb0e.jpg',
     PRIMARY KEY (user_id),
     FOREIGN KEY (user_id) REFERENCES login_table(user_id)
 );
@@ -38,10 +39,10 @@ CREATE TABLE ban_table (
 CREATE TABLE achievement_table (
     achievement_id INT AUTO_INCREMENT PRIMARY KEY,
     achievement VARCHAR(255),
-    num_created INT,
-    num_taken INT,
-    had_highest_score boolean,
-    practiced boolean
+    num_created INT DEFAULT 0,
+    num_taken INT DEFAULT 0,
+    had_highest_score boolean DEFAULT false,
+    practiced boolean DEFAULT false
 );
 
 CREATE TABLE friend_table (
@@ -87,6 +88,7 @@ CREATE TABLE review_table (
     review_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     quiz_id INT not null,
+    quiz_name TEXT,
     score INT default 0,
     date date not null,
     rating int default 0,
@@ -106,4 +108,31 @@ CREATE TABLE question_table (
 );
 
 -- show tables;
+
+INSERT INTO login_table VALUES (1,'bendo','1234');
+INSERT INTO login_table VALUES (2,'Quaggy','1234');
+INSERT INTO login_table VALUES (3,'Joe','1234');
+INSERT INTO achievement_table(achievement_id, achievement, num_created) VALUES (1,'supreme',10);
+INSERT INTO user_table VALUES (1,'bendo',false,false,30,true,'https://i.pinimg.com/736x/64/5f/d9/645fd98adba55582c6851985779fcb0e.jpg');
+INSERT INTO user_table VALUES (2,'Quaggy',false,false,20,true,'https://www.watchmojo.com/uploads/thumbs720/Fi-T-Top10-Family-Guy-Characters_I2B8Z1-720p30-1.jpg');
+INSERT INTO user_table VALUES (3,'Joe',false,false,14,true,'https://media.entertainmentearth.com/assets/images/fe9f5fc5d21e4c338652f08b5f86b0caxl.jpg');
+Insert into achievement_table(achievement_id,achievement,num_created) Values (2,'wowzers',20);
+INSERT INTO quiz_table(quiz_id,quiz_name,quiz_tag,difficulty,creator_id) VALUES (1,'ez','history','easy',1);
+INSERT INTO quiz_table(quiz_id,quiz_name,quiz_tag,difficulty,creator_id) VALUES (2,'mid','english;history','medium',1);
+INSERT INTO quiz_table(quiz_id,quiz_name,quiz_tag,difficulty,creator_id) VALUES (3,'hard','math','hard',1);
+
+INSERT INTO review_table(user_id, quiz_id, quiz_name,score, date, review_text) VALUES (1,1,'ez',10,NOW(),'');
+INSERT INTO review_table(user_id, quiz_id, quiz_name,score, date, review_text) VALUES (1,2,'mid',8,NOW(),'');
+INSERT INTO review_table(user_id, quiz_id, quiz_name,score, date, review_text) VALUES (1,3,'hard',5,NOW(),'');
+
+INSERT INTO review_table(user_id, quiz_id, quiz_name,score, date, review_text) VALUES (2,1,'ez',9,NOW(),'');
+INSERT INTO review_table(user_id, quiz_id, quiz_name,score, date, review_text) VALUES (2,2,'mid',7,NOW(),'');
+INSERT INTO review_table(user_id, quiz_id, quiz_name,score, date, review_text) VALUES (2,3,'hard',4,NOW(),'');
+
+INSERT INTO review_table(user_id, quiz_id, quiz_name,score, date, review_text) VALUES (3,1,'ez',8,NOW(),'');
+INSERT INTO review_table(user_id, quiz_id, quiz_name,score, date, review_text) VALUES (3,2,'mid',7,NOW(),'');
+INSERT INTO review_table(user_id, quiz_id, quiz_name,score, date, review_text) VALUES (3,3,'hard',5,NOW(),'');
+INSERT INTO friend_table(user_id_1, user_id_2) VALUES (1,2);
+INSERT INTO friend_table(user_id_1, user_id_2) VALUES (1,3);
+INSERT INTO friend_table(user_id_1, user_id_2) VALUES (2,3);
 
