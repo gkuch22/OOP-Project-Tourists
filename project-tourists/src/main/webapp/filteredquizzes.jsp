@@ -35,7 +35,9 @@
     List<String> tags = new ArrayList<String>();
     for(Quiz quiz : quizzes) {
         List<String> currTags = quiz.getQuiz_tag();
-        for (String tag : currTags) tags.add(tag);
+        for (String tag : currTags) {
+            if(!tags.contains(tag)) tags.add(tag);
+        }
     }
 %>
 
@@ -112,8 +114,13 @@
             for(Quiz quiz : quizzes){
                 String name = quiz.getQuiz_name();
                 String difficulty = quiz.getDifficulty();
-                int quizzestaken = mp.get(quiz.getQuiz_id()).getKey();
-                int maxscore = mp.get(quiz.getQuiz_id()).getValue();
+                int quiz_id = quiz.getQuiz_id();
+                int quizzestaken = 0;
+                int maxscore = 0;
+                if(mp.containsKey(quiz_id)){
+                    quizzestaken = mp.get(quiz_id).getKey();
+                    maxscore = mp.get(quiz_id).getValue();
+                }
 
         %>
         <tr>
