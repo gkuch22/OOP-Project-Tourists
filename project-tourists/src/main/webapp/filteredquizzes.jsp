@@ -1,10 +1,11 @@
 <%--
   Created by IntelliJ IDEA.
   User: gkuch
-  Date: 02.07.2024
-  Time: 20:54
+  Date: 03.07.2024
+  Time: 14:01
   To change this template use File | Settings | File Templates.
 --%>
+
 <%@ page import="javaFiles.DBManager" %>
 <%@ page import="java.sql.SQLException" %>
 <%@ page import="javaFiles.Quiz" %>
@@ -22,7 +23,6 @@
 </head>
 
 <body>
-
 <%
     DBManager dbManager = (DBManager) application.getAttribute("db-manager");
     List<Quiz> quizzes = null;
@@ -59,7 +59,7 @@
             <%
                 for(String tag : tags){
             %>
-                    <option value="<%= tag %>"><%=tag%></option>
+            <option value="<%= tag %>"><%=tag%></option>
             <%
                 }
             %>
@@ -87,45 +87,46 @@
     </form>
 </div>
 
+<p>aaaaaaaaaaaaaa</p>
+
 <div class="quizTable">
     <table>
         <thead>
-            <tr>
-                <th>Name</th>
-                <th>Difficulty</th>
-                <th>Quizzes taken</th>
-                <th>Max Score</th>
-                <th>Link to Quiz</th>
-            </tr>
+        <tr>
+            <th>Name</th>
+            <th>Difficulty</th>
+            <th>Quizzes taken</th>
+            <th>Max Score</th>
+            <th>Link to Quiz</th>
+        </tr>
         </thead>
-            <tbody>
-            <%
-                Map<Integer, Pair<Integer, Integer>> mp;
-                try {
-                    mp = dbManager.getStatMap();
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
+        <tbody>
+        <%
+            Map<Integer, Pair<Integer, Integer>> mp;
+            try {
+                mp = dbManager.getStatMap();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            quizzes = (List<Quiz>) request.getAttribute("quizzeslist");
+            for(Quiz quiz : quizzes){
+                String name = quiz.getQuiz_name();
+                String difficulty = quiz.getDifficulty();
+                int quizzestaken = mp.get(quiz.getQuiz_id()).getKey();
+                int maxscore = mp.get(quiz.getQuiz_id()).getValue();
 
-
-                for(Quiz quiz : quizzes){
-                    String name = quiz.getQuiz_name();
-                    String difficulty = quiz.getDifficulty();
-                    int quizzestaken = mp.get(quiz.getQuiz_id()).getKey();
-                    int maxscore = mp.get(quiz.getQuiz_id()).getValue();
-
-            %>
-                    <tr>
-                        <td><%= name %></td>
-                        <td><%= difficulty %></td>
-                        <td><%= quizzestaken %></td>
-                        <td><%= maxscore %></td>
-                        <td><a href="quiz.jsp?id=<%= quiz.getQuiz_id() %>">Take Quiz</a></td>
-                    </tr>
-            <%
-                }
-            %>
-            </tbody>
+        %>
+        <tr>
+            <td><%= name %></td>
+            <td><%= difficulty %></td>
+            <td><%= quizzestaken %></td>
+            <td><%= maxscore %></td>
+            <td><a href="quiz.jsp?id=<%= quiz.getQuiz_id() %>">Take Quiz</a></td>
+        </tr>
+        <%
+            }
+        %>
+        </tbody>
     </table>
 </div>
 
@@ -134,3 +135,4 @@
 
 
 </html>
+
