@@ -16,6 +16,7 @@
 <html>
 <head>
     <title>Quizzerinho</title>
+    <link rel="stylesheet" href="quizzespagestyle.css">
 </head>
 
 <body>
@@ -42,21 +43,16 @@
     <h1><a href="index.jsp">Quizzerinho</a></h1>
 </div>
 
-<%--<div class="search">--%>
-<%--    <form action="filteredquizzes" method="get">--%>
-<%--        <input type="text" name="quizName" placeholder="Quiz name">--%>
-<%--        <input type="submit" value="Search">--%>
-<%--    </form>--%>
-<%--</div>--%>
+
 
 <div class="filters">
     <form action="filteredquizzes" method="get">
 
-        <input type="text" name="quizName" placeholder="Quiz name">
-        <input type="submit" value="Search">
+        <input class="searchfield" type="text" name="quizName" placeholder="Quiz name">
+        <input class="searchbutton" type="submit" value="Search">
 
-        <label for="tags">Tags:</label>
-        <select name="tags" id="tags">
+        <label class="taglabel" for="tags">Tags:</label>
+        <select class="tagcombobox" name="tags" id="tags">
             <option value="none">None</option>
             <%
                 for(String tag : tags){
@@ -68,28 +64,28 @@
         </select>
 
 
-        <label for="difficulty">Difficulty:</label>
-        <select name="difficulty" id="difficulty">
+        <label class="difficultylabel" for="difficulty">Difficulty:</label>
+        <select class="difficultycombobox" name="difficulty" id="difficulty">
             <option value="all">All</option>
             <option value="easy">Easy</option>
             <option value="medium">Medium</option>
             <option value="hard">Hard</option>
         </select>
 
-        <label for="orderby">Order By:</label>
-        <select name="orderby" id="orderby">
+        <label class="orderbylabel" for="orderby">Order By:</label>
+        <select class="orderbycombobox" name="orderby" id="orderby">
             <option value="none">None</option>
             <option value="difficulty">Difficulty</option>
             <option value="popularity">Popularity</option>
             <option value="recent">Recent</option>
         </select>
 
-        <button type="submit">Apply</button>
+        <button class="applybutton" type="submit">Apply</button>
 
     </form>
 </div>
 
-<div class="quizTable">
+<div class="quiztable">
     <table>
         <thead>
             <tr>

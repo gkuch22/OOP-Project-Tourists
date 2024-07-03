@@ -34,11 +34,6 @@ public class FilteredQuizzesServlet extends HttpServlet {
         DBManager dbManager = (DBManager) getServletContext().getAttribute("db-manager");
         List<Quiz> filteredQuizzes = null;
         try {
-//            if ("all".equals(difficulty) && "none".equals(tag) && "none".equals(orderBy)) {
-//                filteredQuizzes = dbManager.getQuizzes();
-//            } else {
-//                filteredQuizzes = dbManager.getFilteredQuizzes(difficulty, tag, orderBy, searchName);
-//            }
             filteredQuizzes = dbManager.getFilteredQuizzes(difficulty, tag, orderBy, searchName);
         } catch (SQLException e) {
             throw new RuntimeException(e);
