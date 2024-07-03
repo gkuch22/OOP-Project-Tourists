@@ -13,6 +13,9 @@ public class QuizImpl implements Quiz{
     private boolean multiple_pages;
     private boolean practice_mode;
     private boolean gradable;
+    private boolean isRandom;
+    private boolean isTimed;
+    private boolean immediatelyCorrected
     private Date date_created;
 
     public QuizImpl(int quizId, String quizName, String quizTag, String difficulty, int creatorId,
@@ -28,6 +31,21 @@ public class QuizImpl implements Quiz{
         this.date_created = dateCreated;
     }
 
+
+    public QuizImpl(int quizId, String quizName, String quizTag, String difficulty, int creatorId, boolean isRandom, boolean isTimed, boolean multiplePages,
+                        boolean immediatelyCorrected, boolean practiceMode, boolean gradable) {
+        this.quiz_id = quizId;
+        this.quiz_name = quizName;
+        this.quiz_tag = quizTag;
+        this.difficulty = difficulty;
+        this.creator_id = creatorId;
+        this.isRandom = isRandom;
+        this.isTimed = isTimed;
+        this.multiple_pages = multiplePages;
+        this.immediatelyCorrected = immediatelyCorrected;
+        this.practice_mode = practiceMode;
+        this.gradable = gradable;
+    }
 
 
     @Override
