@@ -9,4 +9,13 @@
     <listener-class>javaFiles.MainContextListener</listener-class>
   </listener>
 
+  <servlet>
+    <servlet-name>AnotherUser</servlet-name>
+    <servlet-class>javaFiles.AnotherUserServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>AnotherUser</servlet-name>
+    <url-pattern>/AnotherUser</url-pattern>
+  </servlet-mapping>
 </web-app>
