@@ -42,18 +42,21 @@
 %>
 
 <div class="header">
-    <h1><a href="homepage.jsp">Quizzerinho</a></h1>
+    <h1><a href="index.jsp">Quizzerinho</a></h1>
 </div>
 
-<div class="search">
-    <form action="filteredquizzes" method="get">
-        <input type="text" name="quizName" placeholder="Quiz name">
-        <input type="submit" value="Search">
-    </form>
-</div>
+<%--<div class="search">--%>
+<%--    <form action="filteredquizzes" method="get">--%>
+<%--        <input type="text" name="quizName" placeholder="Quiz name">--%>
+<%--        <input type="submit" value="Search">--%>
+<%--    </form>--%>
+<%--</div>--%>
 
 <div class="filters">
     <form action="filteredquizzes" method="get">
+
+        <input type="text" name="quizName" placeholder="Quiz name">
+        <input type="submit" value="Search">
 
         <label for="tags">Tags:</label>
         <select name="tags" id="tags">

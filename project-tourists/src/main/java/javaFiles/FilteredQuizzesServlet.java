@@ -18,16 +18,28 @@ public class FilteredQuizzesServlet extends HttpServlet {
         String orderBy = request.getParameter("orderby");
         String searchName = request.getParameter("quizName");
 
+        if (difficulty == null) {
+            difficulty = "all";
+        }
+        if (tag == null) {
+            tag = "none";
+        }
+        if (orderBy == null) {
+            orderBy = "none";
+        }
+        if (searchName == null) {
+            searchName = "";
+        }
 
         DBManager dbManager = (DBManager) getServletContext().getAttribute("db-manager");
         List<Quiz> filteredQuizzes = null;
         try {
-            if ("all".equals(difficulty) && "none".equals(tag) && "none".equals(orderBy)) {
-                filteredQuizzes = dbManager.getQuizzes();
-            } else {
-                filteredQuizzes = dbManager.getFilteredQuizzes(difficulty, tag, orderBy, searchName);
-            }
-//            filteredQuizzes = dbManager.getFilteredQuizzes(difficulty, tag, orderBy, searchName);
+//            if ("all".equals(difficulty) && "none".equals(tag) && "none".equals(orderBy)) {
+//                filteredQuizzes = dbManager.getQuizzes();
+//            } else {
+//                filteredQuizzes = dbManager.getFilteredQuizzes(difficulty, tag, orderBy, searchName);
+//            }
+            filteredQuizzes = dbManager.getFilteredQuizzes(difficulty, tag, orderBy, searchName);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

@@ -75,14 +75,19 @@ public class DBManager {
         List<Quiz> allquizzes = getQuizzes();
         List<Quiz> quizzes = new ArrayList<Quiz>();
 
+//        System.out.println(difficulty);
+//        System.out.println(tag);
+//        System.out.println(orderBy);
+//        System.out.println(searchName);
+
         for(Quiz quiz : allquizzes){
             boolean should = true;
 
-//            if(!"".equals(searchName)){
-//                if(!quiz.getQuiz_name().toLowerCase().contains(searchName.toLowerCase())){
-//                    should = false;
-//                }
-//            }
+            if(!"".equals(searchName)){
+                if(!quiz.getQuiz_name().toLowerCase().contains(searchName.toLowerCase())){
+                    should = false;
+                }
+            }
 
             if(!"all".equals(difficulty)){
                 if(!(quiz.getDifficulty().toLowerCase().equals(difficulty.toLowerCase()))){
