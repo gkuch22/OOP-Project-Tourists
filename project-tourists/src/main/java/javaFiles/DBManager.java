@@ -71,15 +71,21 @@ public class DBManager {
     }
 
 
-    public List<Quiz> getFilteredQuizzes(String difficulty, String tag, String orderBy) throws SQLException {
+    public List<Quiz> getFilteredQuizzes(String difficulty, String tag, String orderBy, String searchName) throws SQLException {
         List<Quiz> allquizzes = getQuizzes();
         List<Quiz> quizzes = new ArrayList<Quiz>();
 
         for(Quiz quiz : allquizzes){
             boolean should = true;
+
+//            if(!"".equals(searchName)){
+//                if(!quiz.getQuiz_name().toLowerCase().contains(searchName.toLowerCase())){
+//                    should = false;
+//                }
+//            }
+
             if(!"all".equals(difficulty)){
                 if(!(quiz.getDifficulty().toLowerCase().equals(difficulty.toLowerCase()))){
-
                     should = false;
                 }
             }

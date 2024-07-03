@@ -61,27 +61,29 @@
             <%
                 for(String tag : tags){
             %>
-            <option value="<%= tag %>"><%=tag%></option>
+                    <option value="<%= tag %>" <%= tag.equals(request.getParameter("tags")) ? "selected" : "" %>><%= tag %></option>
             <%
                 }
             %>
         </select>
 
-
+        <%
+            String defaultDifficulty = request.getParameter("difficulty");
+        %>
         <label for="difficulty">Difficulty:</label>
         <select name="difficulty" id="difficulty">
-            <option value="all">All</option>
-            <option value="easy">Easy</option>
-            <option value="medium">Medium</option>
-            <option value="hard">Hard</option>
+            <option value="all" <%= "all".equals(defaultDifficulty) ? "selected" : "" %>>All</option>
+            <option value="easy" <%= "easy".equals(defaultDifficulty) ? "selected" : "" %>>Easy</option>
+            <option value="medium" <%= "medium".equals(defaultDifficulty) ? "selected" : "" %>>Medium</option>
+            <option value="hard" <%= "hard".equals(defaultDifficulty) ? "selected" : "" %>>Hard</option>
         </select>
 
         <label for="orderby">Order By:</label>
         <select name="orderby" id="orderby">
-            <option value="none">None</option>
-            <option value="difficulty">Difficulty</option>
-            <option value="popularity">Popularity</option>
-            <option value="recent">Recent</option>
+            <option value="none" <%= "none".equals(request.getParameter("orderby")) ? "selected" : "" %>>None</option>
+            <option value="difficulty" <%= "difficulty".equals(request.getParameter("orderby")) ? "selected" : "" %>>Difficulty</option>
+            <option value="popularity" <%= "popularity".equals(request.getParameter("orderby")) ? "selected" : "" %>>Popularity</option>
+            <option value="recent" <%= "recent".equals(request.getParameter("orderby")) ? "selected" : "" %>>Recent</option>
         </select>
 
         <button type="submit">Apply</button>

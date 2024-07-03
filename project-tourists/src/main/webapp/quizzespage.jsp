@@ -46,7 +46,7 @@
 </div>
 
 <div class="search">
-    <form action="index.jsp" method="get">
+    <form action="filteredquizzes" method="get">
         <input type="text" name="quizName" placeholder="Quiz name">
         <input type="submit" value="Search">
     </form>
