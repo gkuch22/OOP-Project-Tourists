@@ -212,6 +212,8 @@ public class DBManager {
             String profilePhoto = resultSet.getString("profilePhoto");
             user = new UserImpl(User_id,username,is_admin,practiced,created_quizzes,scoredHighest,profilePhoto,quizzesTaken);
         }
+        resultSet.close();
+        statement.close();
         PreparedStatement statement1 = connection.prepareStatement("Select * from review_table where user_id = ?;");
         statement1.setInt(1,user_id);
         ResultSet resultSet1 = statement1.executeQuery();
@@ -228,15 +230,16 @@ public class DBManager {
             boolean multiple_pages = resultSet2.getBoolean("multiple_pages");
             boolean practice_mode = resultSet2.getBoolean("practice_mode");
             boolean gradable = resultSet2.getBoolean("gradable");
-            Quiz newQuiz = new QuizImpl(quiz_id, quiz_name, quiz_tag, difficulty, creator_id, multiple_pages, practice_mode, gradable);
+            Date date = resultSet2.getDate("date_created");
+            Quiz newQuiz = new QuizImpl(quiz_id, quiz_name, quiz_tag, difficulty, creator_id, multiple_pages, practice_mode, gradable,date);
             quizzesTaken.add(newQuiz);
             resultSet2.close();
             statement2.close();
         }
-        resultSet.close();
-        statement.close();
+
         resultSet1.close();
         statement1.close();
+        connection.close();
         user.setTakenQuizzes(quizzesTaken);
         System.out.println(quizzesTaken.size());
         return user;

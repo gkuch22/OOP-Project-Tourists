@@ -15,7 +15,7 @@ public class QuizImpl implements Quiz{
     private boolean gradable;
     private boolean isRandom;
     private boolean isTimed;
-    private boolean immediatelyCorrected
+    private boolean immediatelyCorrected;
     private Date date_created;
 
     public QuizImpl(int quizId, String quizName, String quizTag, String difficulty, int creatorId,
