@@ -21,4 +21,15 @@ public class MultipleChoice extends Question{
     public String[] getPossibleAnswers(){
         return possibleAnswers;
     }
+
+    public String getPossibleAnswersAsString(){
+        String answ = "";
+        for(int i = 0; i < possibleAnswers.length; i++){
+            answ += possibleAnswers[i];
+            if(i != possibleAnswers.length - 1){
+                answ += ';';
+            }
+        }
+        return answ;
+    }
 }
