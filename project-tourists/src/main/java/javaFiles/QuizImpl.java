@@ -1,5 +1,6 @@
 package javaFiles;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -17,6 +18,7 @@ public class QuizImpl implements Quiz{
     private boolean isTimed;
     private boolean immediatelyCorrected;
     private Date date_created;
+    private ArrayList<Question> questions = new ArrayList<Question>();
 
     public QuizImpl(int quizId, String quizName, String quizTag, String difficulty, int creatorId,
                         boolean multiplePages, boolean practiceMode, boolean gradable, Date dateCreated) {
@@ -132,5 +134,14 @@ public class QuizImpl implements Quiz{
     @Override
     public Date getDate(){
         return this.date_created;
+    }
+
+    @Override
+    public void addQuestion(Question question){
+        questions.add(question);
+    }
+    @Override
+    public ArrayList<Question> getQuestions(){
+        return questions;
     }
 }
