@@ -57,8 +57,9 @@ public class sendMessageServlet extends HttpServlet {
 
     private Timestamp convertToServerTimeZone(String timestamp) {
         try {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
             dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+
             Date parsedDate = dateFormat.parse(timestamp);
 
             return new Timestamp(parsedDate.getTime());
