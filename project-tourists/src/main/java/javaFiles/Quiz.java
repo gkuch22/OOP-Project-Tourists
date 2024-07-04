@@ -1,5 +1,6 @@
 package javaFiles;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -28,6 +29,9 @@ public interface Quiz {
 
     boolean isGradable();
     void setGradable(boolean gradable);
+
+    void addQuestion(Question question);
+    ArrayList<Question> getQuestions();
 
     Date getDate();
 
