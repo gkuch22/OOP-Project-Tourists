@@ -59,6 +59,8 @@ public class DBManager {
             String profilePhoto = resultSet.getString("profilePhoto");
             user = new UserImpl(User_id,username,is_admin,practiced,created_quizzes,scoredHighest,profilePhoto,quizzesTaken);
         }
+        resultSet.close();
+        statement.close();
         PreparedStatement statement1 = connection.prepareStatement("Select * from review_table where user_id = ?;");
         statement1.setInt(1,user_id);
         ResultSet resultSet1 = statement1.executeQuery();
@@ -80,10 +82,10 @@ public class DBManager {
             resultSet2.close();
             statement2.close();
         }
-        resultSet.close();
-        statement.close();
+
         resultSet1.close();
         statement1.close();
+        connection.close();
         user.setTakenQuizzes(quizzesTaken);
         System.out.println(quizzesTaken.size());
         return user;

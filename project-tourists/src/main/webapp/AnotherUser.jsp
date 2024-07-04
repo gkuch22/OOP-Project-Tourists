@@ -6,7 +6,7 @@
 
 <%
     Integer user_id = (Integer) request.getAttribute("current_id");
-    System.out.println(user_id);
+    //System.out.println(user_id);
 %>
 <html>
 <head>
@@ -31,7 +31,6 @@
 </div>
 
 <a href="index.jsp" class="homepage-button">Homepage</a>
-<a href="index.jsp" class="logout-button">Log out</a>
 <div class="container">
     <div class="left">
         <div class="Achievements">
@@ -78,6 +77,7 @@
         </div>
         <%
             List<QuizPerformance> quizzesTaken = null;
+            //System.out.println(quizzesTaken.size());
             try {
                 quizzesTaken = manager.getUserQuizzes(user.getUser_id());
             } catch (SQLException e) {
