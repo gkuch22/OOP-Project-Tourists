@@ -1,9 +1,6 @@
 package javaFiles;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class UserImpl implements User{
 
@@ -110,7 +107,9 @@ public class UserImpl implements User{
     @Override
     public Map<String, Integer> getTagCount() {
         Map<String,Integer> result = new HashMap<String,Integer>();
+        Set<Integer> alreadyVisited = new HashSet<Integer>();
         for(Quiz quiz : takenQuizzes) {
+            if(alreadyVisited.contains(quiz.getQuiz_id()))  continue;
             List<String> tags = quiz.getQuiz_tag();
             for (String tag : tags) {
                 if (result.containsKey(tag)) {
@@ -121,9 +120,8 @@ public class UserImpl implements User{
                     result.put(tag, 1);
                 }
             }
+            alreadyVisited.add(quiz.getQuiz_id());
         }
         return result;
     }
-
-
 }

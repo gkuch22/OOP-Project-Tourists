@@ -13,7 +13,13 @@ public class AnotherUserServlet extends HttpServlet {
         try {
             int visitingId = Integer.parseInt(request.getParameter("AnotherUserId"));
             request.setAttribute("current_id", visitingId);
-            RequestDispatcher dispatcher = request.getRequestDispatcher("AnotherUser.jsp");
+            RequestDispatcher dispatcher=null;
+            if(visitingId==1){
+                dispatcher = request.getRequestDispatcher("UserPage.jsp");
+            }else{
+                dispatcher = request.getRequestDispatcher("AnotherUser.jsp");
+            }
+
             dispatcher.forward(request, response);
         } catch (NumberFormatException e) {
             response.getWriter().println("Invalid user ID");
