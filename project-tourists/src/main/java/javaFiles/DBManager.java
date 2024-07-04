@@ -454,4 +454,68 @@ public class DBManager {
     }
 
 
+
+    public List<Message> getChallenges(int id) throws SQLException {
+        List<Message> challenges = new ArrayList<Message>();
+
+        Connection connection = dataSource.getConnection();
+        String query = "SELECT * FROM mail_table WHERE type = 'challenge' AND to_id = ?";
+        PreparedStatement statement = connection.prepareStatement(query);
+        statement.setInt(1, id);
+
+        ResultSet resultSet = statement.executeQuery();
+
+        while (resultSet.next()) {
+            int fromId = resultSet.getInt("from_id");
+            int toId = resultSet.getInt("to_id");
+            String messageType = resultSet.getString("type");
+            String messageText = resultSet.getString("message");
+            Date date = resultSet.getTimestamp("date");
+
+            Message message = new MessageImpl(messageType, fromId, toId, messageText, date);
+            challenges.add(message);
+        }
+
+        resultSet.close();
+        statement.close();
+        connection.close();
+
+        return challenges;
+    }
+
+    public String getQuizName(int quizId) throws SQLException {
+        String quizName = null;
+
+        String query = "SELECT * FROM quiz_table WHERE quiz_id = ?";
+        Connection connection = dataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement(query);
+        statement.setInt(1, quizId);
+        ResultSet resultSet = statement.executeQuery();
+
+        if (resultSet.next()) {
+            quizName = resultSet.getString("quiz_name");
+        }
+
+        resultSet.close();
+        statement.close();
+        connection.close();
+
+        return quizName;
+    }
+
+    public void removeChallengeRequest(int fromId, int toId, int quizId) throws SQLException {
+        String query = "DELETE FROM mail_table WHERE type = 'challenge' AND from_id = ? AND to_id = ? AND message = ?";
+
+        Connection connection = dataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement(query);
+        statement.setInt(1, fromId);
+        statement.setInt(2, toId);
+        statement.setString(3, String.valueOf(quizId));
+        statement.executeUpdate();
+
+        statement.close();
+        connection.close();
+    }
+
+
 }

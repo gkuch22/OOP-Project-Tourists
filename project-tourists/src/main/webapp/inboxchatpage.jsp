@@ -107,6 +107,43 @@
 </div>
 
 
+
+<%
+    List<Message> challenges = null;
+    try {
+        challenges = dbManager.getChallenges(id1);
+    } catch (SQLException e) {
+        throw new RuntimeException(e);
+    }
+%>
+<div class="challenges">
+    <h2>Friend Requests</h2>
+    <%
+        for (Message challange : challenges) {
+            int fromId = challange.getFromId();
+            String quizIdString = challange.getContext();
+            int quizId = Integer.parseInt(quizIdString);
+            String quizName = dbManager.getQuizName(quizId);
+    %>
+    <div class="challenge-box">
+        <p>Challange From <%= fromId %></p>
+        <p>Quiz Name: <%= quizName %></p>
+        <form method="POST" action="challengeServlet">
+            <input type="hidden" name="quizId" value="<%= quizId %>">
+            <input type="hidden" name="requesterId" value="<%= fromId %>">
+            <button type="submit" name="action" value="accept">Accept</button>
+            <button type="submit" name="action" value="decline">Decline</button>
+        </form>
+    </div>
+    <%
+        }
+    %>
+
+</div>
+
+
+
+
 <script>
     function sendMessage() {
         var currentTime = new Date().toISOString();
