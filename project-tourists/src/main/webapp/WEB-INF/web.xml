@@ -13,7 +13,27 @@
     <servlet-name>AnotherUser</servlet-name>
     <servlet-class>javaFiles.AnotherUserServlet</servlet-class>
   </servlet>
+  
+  <servlet>
+    <servlet-name>SendFriendRequestServlet</servlet-name>
+    <servlet-class>javaFiles.SendFriendRequestServlet</servlet-class>
+  </servlet>
+  
+  <servlet>
+    <servlet-name>UnfriendServlet</servlet-name>
+    <servlet-class>javaFiles.UnfriendServlet</servlet-class>
+  </servlet>
 
+  <servlet-mapping>
+    <servlet-name>UnfriendServlet</servlet-name>
+    <url-pattern>/UnfriendServlet</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>SendFriendRequestServlet</servlet-name>
+    <url-pattern>/SendFriendRequestServlet</url-pattern>
+  </servlet-mapping>
+  
   <servlet-mapping>
     <servlet-name>AnotherUser</servlet-name>
     <url-pattern>/AnotherUser</url-pattern>
