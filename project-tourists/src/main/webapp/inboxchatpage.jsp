@@ -30,6 +30,11 @@
         throw new RuntimeException(e);
     }
     String username2 = request.getParameter("username2");
+    if(username2 == null){
+        username2 = (String)request.getSession().getAttribute("inboxactiveusername");
+    }
+    request.getSession().setAttribute("inboxactiveusername", username2);
+
 %>
 
 
@@ -117,7 +122,7 @@
     }
 %>
 <div class="challenges">
-    <h2>Friend Requests</h2>
+    <h2>Challenges</h2>
     <%
         for (Message challange : challenges) {
             int fromId = challange.getFromId();

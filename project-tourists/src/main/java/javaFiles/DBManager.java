@@ -341,6 +341,29 @@ public class DBManager {
         return userId;
     }
 
+    public String getUsernameById(int id) throws SQLException {
+        String username = null;
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+
+        connection = dataSource.getConnection();
+
+        String query = "SELECT username FROM user_table WHERE user_id = ?";
+        statement = connection.prepareStatement(query);
+        statement.setInt(1, id);
+
+        resultSet = statement.executeQuery();
+        if (resultSet.next()) {
+            username = resultSet.getString("username");
+        }
+
+        resultSet.close();
+        statement.close();
+        connection.close();
+
+        return username;
+    }
 
     public List<Message> getMessages(int id1, String username1, String username2) throws SQLException {
         int id2 = getIdByUsername(username2);

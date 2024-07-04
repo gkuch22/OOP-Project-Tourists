@@ -92,7 +92,7 @@
     }
 %>
 <div class="challenges">
-    <h2>Friend Requests</h2>
+    <h2>Challenges</h2>
     <%
         for (Message challange : challenges) {
             int fromId = challange.getFromId();
