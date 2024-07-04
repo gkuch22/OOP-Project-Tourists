@@ -293,15 +293,98 @@ public class DBManager {
         statement.setInt(1,User_id);
         ResultSet resultSet = statement.executeQuery();
 
-        List<User> quizzes = new ArrayList<User>();
+        List<User> friends = new ArrayList<User>();
         while(resultSet.next()) {
             int user_id_2 = resultSet.getInt("user_id_2");
-            quizzes.add(getUserData(user_id_2));
+            friends.add(getUserData(user_id_2));
+        }
+        resultSet.close();
+        statement.close();
+
+        PreparedStatement statement1 = connection.prepareStatement("Select * from friend_table where user_id_2 = ?");
+        statement1.setInt(1,User_id);
+        ResultSet resultSet1 = statement1.executeQuery();
+
+        while(resultSet1.next()) {
+            int user_id_1 = resultSet1.getInt("user_id_1");
+            friends.add(getUserData(user_id_1));
+        }
+        resultSet1.close();
+        statement1.close();
+
+        connection.close();
+        return friends;
+    }
+
+
+
+    public int getIdByUsername(String username) throws SQLException {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+
+        int userId = -1;
+
+        connection = dataSource.getConnection();
+        String query = "SELECT user_id FROM user_table WHERE username = ?";
+        statement = connection.prepareStatement(query);
+        statement.setString(1, username);
+
+        resultSet = statement.executeQuery();
+        if (resultSet.next()) {
+            userId = resultSet.getInt("user_id");
+        }
+
+        resultSet.close();
+        statement.close();
+        connection.close();
+        return userId;
+    }
+
+
+
+    public List<Message> getMessages(int id1, String username1, String username2) throws SQLException {
+        int id2 = getIdByUsername(username2);
+
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        List<Message> messages = new ArrayList<Message>();
+
+        connection = dataSource.getConnection();
+        String query = "SELECT * FROM mail_table WHERE type = 'textmessage' AND ((from_id = ? AND to_id = ?) OR (from_id = ? AND to_id = ?))";
+
+        statement = connection.prepareStatement(query);
+        statement.setInt(1, id1);
+        statement.setInt(2, id2);
+        statement.setInt(3, id2);
+        statement.setInt(4, id1);
+
+        resultSet = statement.executeQuery();
+
+        while (resultSet.next()) {
+            int fromId = resultSet.getInt("from_id");
+            int toId = resultSet.getInt("to_id");
+            String messageType = resultSet.getString("type");
+            String messageText = resultSet.getString("message");
+            Date date = resultSet.getTimestamp("date");
+
+            Message message = new MessageImpl(messageType, fromId, toId, messageText, date);
+            messages.add(message);
         }
         resultSet.close();
         statement.close();
         connection.close();
-        return quizzes;
+
+        Map<Date, Message> mp = new HashMap<Date, Message>();
+        for(Message message : messages){
+            mp.put(message.getDate(), message);
+        }
+        messages.clear();
+        for(Date date : mp.keySet()){
+            messages.add(mp.get(date));
+        }
+        return messages;
     }
 
 
