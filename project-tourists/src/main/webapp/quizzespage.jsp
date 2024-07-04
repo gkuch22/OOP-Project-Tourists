@@ -8,17 +8,19 @@
 <%@ page import="javaFiles.DBManager" %>
 <%@ page import="java.sql.SQLException" %>
 <%@ page import="javaFiles.Quiz" %>
-<%@ page import="java.util.List" %>
-<%@ page import="java.util.ArrayList" %>
+<%@ page import="javafx.util.Pair" %>
+<%@ page import="java.util.*" %>
 
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
     <title>Quizzerinho</title>
+    <link rel="stylesheet" href="quizzespagestyle.css">
 </head>
 
 <body>
+
 <%
     DBManager dbManager = (DBManager) application.getAttribute("db-manager");
     List<Quiz> quizzes = null;
@@ -31,92 +33,105 @@
     List<String> tags = new ArrayList<String>();
     for(Quiz quiz : quizzes) {
         List<String> currTags = quiz.getQuiz_tag();
-        for (String tag : currTags) tags.add(tag);
+        for (String tag : currTags) {
+            if(!tags.contains(tag)) tags.add(tag);
+        }
     }
 %>
 
-<div id="header">
-    <h1><a href="homepage.jsp">Quizzerinho</a></h1>
+<div class="header">
+    <h1><a href="index.jsp">Quizzerinho</a></h1>
 </div>
 
-<div id="search">
-    <form action="index.jsp" method="get">
-        <input type="text" name="quizName" placeholder="Quiz name">
-        <input type="submit" value="Search">
-    </form>
-</div>
 
-<div id="filters">
-    <form method="GET" action="quizzes.jsp">
 
-        <label for="tags">Tags:</label>
-        <select name="tags" id="tags">
+<div class="filters">
+    <form action="filteredquizzes" method="get">
+
+        <input class="searchfield" type="text" name="quizName" placeholder="Quiz name">
+        <input class="searchbutton" type="submit" value="Search">
+
+        <label class="taglabel" for="tags">Tags:</label>
+        <select class="tagcombobox" name="tags" id="tags">
             <option value="none">None</option>
             <%
                 for(String tag : tags){
             %>
-            <option value="<%= tag %>"><%=tag%></option>
+                    <option value="<%= tag %>"><%=tag%></option>
             <%
                 }
             %>
         </select>
 
 
-
-
-        <label for="difficulty">Difficulty:</label>
-        <select name="difficulty" id="difficulty">
+        <label class="difficultylabel" for="difficulty">Difficulty:</label>
+        <select class="difficultycombobox" name="difficulty" id="difficulty">
             <option value="all">All</option>
             <option value="easy">Easy</option>
             <option value="medium">Medium</option>
             <option value="hard">Hard</option>
         </select>
 
-        <label for="orderby">Order By:</label>
-        <select name="orderby" id="orderby">
+        <label class="orderbylabel" for="orderby">Order By:</label>
+        <select class="orderbycombobox" name="orderby" id="orderby">
             <option value="none">None</option>
             <option value="difficulty">Difficulty</option>
             <option value="popularity">Popularity</option>
             <option value="recent">Recent</option>
         </select>
 
-        <button type="submit">Apply</button>
-
+        <button class="applybutton" type="submit">Apply</button>
 
     </form>
 </div>
 
-<div id="quizTable">
+<div class="quiztable">
     <table>
         <thead>
-        <tr>
-            <th>Name</th>
-            <th>Difficulty</th>
-            <th>Quizzes taken</th>
-            <th>Max Score</th>
-            <th>Link to Quiz</th>
-        </tr>
+            <tr>
+                <th>Name</th>
+                <th>Difficulty</th>
+                <th>Taken</th>
+                <th>Max Score</th>
+                <th>Date</th>
+                <th>Link to Quiz</th>
+            </tr>
         </thead>
-        <tbody>
-        <%
-            String[] quizNames = {"Quiz 1", "Quiz 2", "Quiz 3"};
-            String[] difficulties = {"Easy", "Medium", "Hard"};
-            int[] historyCounts = {10, 5, 2};
-            int[] maxScores = {100, 80, 90};
+            <tbody>
+            <%
+                Map<Integer, Pair<Integer, Integer>> mp;
+                try {
+                    mp = dbManager.getStatMap();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
 
-            for (int i = 0; i < quizNames.length; i++) {
-        %>
-        <tr>
-            <td><%= quizNames[i] %></td>
-            <td><%= difficulties[i] %></td>
-            <td><%= historyCounts[i] %></td>
-            <td><%= maxScores[i] %></td>
-            <td><a href="quiz.jsp?id=<%= i %>">Take Quiz</a></td>
-        </tr>
-        <%
-            }
-        %>
-        </tbody>
+
+                for(Quiz quiz : quizzes){
+                    String name = quiz.getQuiz_name();
+                    String difficulty = quiz.getDifficulty();
+                    int quiz_id = quiz.getQuiz_id();
+                    int quizzestaken = 0;
+                    int maxscore = 0;
+                    Date currDate = quiz.getDate();
+                    if(mp.containsKey(quiz_id)){
+                        quizzestaken = mp.get(quiz_id).getKey();
+                        maxscore = mp.get(quiz_id).getValue();
+                    }
+
+            %>
+                    <tr>
+                        <td><%= name %></td>
+                        <td><%= difficulty %></td>
+                        <td><%= quizzestaken %></td>
+                        <td><%= maxscore %></td>
+                        <td><%= currDate %></td>
+                        <td><a href="quiz.jsp?id=<%= quiz.getQuiz_id() %>">Take Quiz</a></td>
+                    </tr>
+            <%
+                }
+            %>
+            </tbody>
     </table>
 </div>
 

@@ -12,9 +12,9 @@ DROP TABLE IF EXISTS user_table;
 DROP TABLE IF EXISTS login_table;
 
 CREATE TABLE login_table (
-    user_id INT AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(50) NOT NULL UNIQUE,
-    password VARCHAR(255) NOT NULL
+     user_id INT AUTO_INCREMENT PRIMARY KEY,
+     username VARCHAR(50) NOT NULL UNIQUE,
+     password VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE user_table (
@@ -30,10 +30,10 @@ CREATE TABLE user_table (
 );
 
 CREATE TABLE ban_table (
-    ban_id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT,
-    expire_date DATE,
-    FOREIGN KEY (user_id) REFERENCES user_table(user_id)
+       ban_id INT AUTO_INCREMENT PRIMARY KEY,
+       user_id INT,
+       expire_date DATE,
+       FOREIGN KEY (user_id) REFERENCES user_table(user_id)
 );
 
 CREATE TABLE achievement_table (
@@ -46,11 +46,11 @@ CREATE TABLE achievement_table (
 );
 
 CREATE TABLE friend_table (
-    friend_id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id_1 INT not null,
-    user_id_2 INT not null,
-    FOREIGN KEY (user_id_1) REFERENCES user_table(user_id),
-    FOREIGN KEY (user_id_2) REFERENCES user_table(user_id)
+      friend_id INT AUTO_INCREMENT PRIMARY KEY,
+      user_id_1 INT not null,
+      user_id_2 INT not null,
+      FOREIGN KEY (user_id_1) REFERENCES user_table(user_id),
+      FOREIGN KEY (user_id_2) REFERENCES user_table(user_id)
 );
 
 CREATE TABLE mail_table (
@@ -73,15 +73,16 @@ CREATE TABLE post_table (
 );
 
 CREATE TABLE quiz_table (
-    quiz_id INT AUTO_INCREMENT PRIMARY KEY,
-    quiz_name TEXT,
-    quiz_tag TEXT,
-    difficulty TEXT,
-    creator_id INT not null,
-    multiple_pages BOOLEAN DEFAULT FALSE,
-    practice_mode BOOLEAN DEFAULT FALSE,
-    gradable BOOLEAN DEFAULT FALSE,
-    FOREIGN KEY (creator_id) REFERENCES user_table(user_id)
+        quiz_id INT AUTO_INCREMENT PRIMARY KEY,
+        quiz_name TEXT,
+        quiz_tag TEXT,
+        difficulty TEXT,
+        creator_id INT not null,
+        date_created DATE,
+        multiple_pages BOOLEAN DEFAULT FALSE,
+        practice_mode BOOLEAN DEFAULT FALSE,
+        gradable BOOLEAN DEFAULT FALSE,
+        FOREIGN KEY (creator_id) REFERENCES user_table(user_id)
 );
 
 CREATE TABLE review_table (
@@ -98,16 +99,58 @@ CREATE TABLE review_table (
 );
 
 CREATE TABLE question_table (
-    question_id INT AUTO_INCREMENT PRIMARY KEY,
-    question TEXT not null,
-    possible_answers TEXT not null,
-    answer TEXT not null,
-    quiz_id INT not null,
-    question_type INT not null,
-    FOREIGN KEY (quiz_id) REFERENCES quiz_table(quiz_id)
+        question_id INT AUTO_INCREMENT PRIMARY KEY,
+        question TEXT not null,
+        possible_answers TEXT not null,
+        answer TEXT not null,
+        quiz_id INT not null,
+        question_type INT not null,
+        FOREIGN KEY (quiz_id) REFERENCES quiz_table(quiz_id)
 );
 
 -- show tables;
+
+
+-- INSERT INTO login_table (username, password) VALUES ("nick", "rume123");
+-- INSERT INTO login_table (username, password) VALUES ("john", "rume123");
+-- INSERT INTO login_table (username, password) VALUES ("bonk", "rume123");
+-- INSERT INTO user_table (user_id, username, is_admin) VALUES (1, 'nick', FALSE);
+-- INSERT INTO user_table (user_id, username, is_admin) VALUES (2, 'john', FALSE);
+-- INSERT INTO user_table (user_id, username, is_admin) VALUES (3, 'bonk', FALSE);
+
+-- INSERT INTO quiz_table (quiz_name, quiz_tag, difficulty, creator_id, date_created, multiple_pages, practice_mode, gradable) VALUES
+-- ('Basic Math Quiz', 'math;3grade', 'Easy', 1, NOW(), FALSE, TRUE, TRUE);
+
+-- INSERT INTO quiz_table (quiz_name, quiz_tag, difficulty, creator_id, date_created, multiple_pages, practice_mode, gradable) VALUES
+-- ('english Quiz', 'english;3grade', 'Medium', 2, NOW(), FALSE, TRUE, TRUE);
+
+-- INSERT INTO quiz_table (quiz_name, quiz_tag, difficulty, creator_id, date_created, multiple_pages, practice_mode, gradable) VALUES
+-- ('fizika qvizi', 'math;pop;english', 'Easy', 1, NOW(), FALSE, TRUE, TRUE);
+
+-- INSERT INTO quiz_table (quiz_name, quiz_tag, difficulty, creator_id, date_created, multiple_pages, practice_mode, gradable) VALUES
+-- ('rame Quiz', 'english;3grade', 'Medium', 3, NOW(), FALSE, TRUE, TRUE);
+
+-- INSERT INTO quiz_table (quiz_name, quiz_tag, difficulty, creator_id, date_created, multiple_pages, practice_mode, gradable) VALUES
+-- ('magari Quiz', 'super;5grade', 'Hard', 3, '2024-08-01', FALSE, TRUE, TRUE);
+
+-- INSERT INTO quiz_table (quiz_name, quiz_tag, difficulty, creator_id, date_created, multiple_pages, practice_mode, gradable) VALUES
+-- ('axali Quiz', 'pop;fast', 'Easy', 3, '2025-02-01', FALSE, TRUE, TRUE);
+
+
+-- INSERT INTO review_table (user_id, quiz_id, score, date, rating, review_text) VALUES
+-- (1, 3, 70, '2024-02-03', 4, 'norm quiz, really enjoyed it!');
+
+-- INSERT INTO review_table (user_id, quiz_id, score, date, rating, review_text) VALUES
+-- 						 (1, 2, 80, '2024-02-03', 4, 'norm quiz, really enjoyed it!');
+
+-- INSERT INTO review_table (user_id, quiz_id, score, date, rating, review_text) VALUES
+-- 						 (3, 1, 95, '2024-03-04', 3, 'good!');
+
+-- select * from quiz_table;
+-- select * from review_table;
+-- select * from user_table;
+-- select * from login_table;
+
 
 INSERT INTO login_table VALUES (1,'bendo','1234');
 INSERT INTO login_table VALUES (2,'Quaggy','1234');
@@ -135,4 +178,5 @@ INSERT INTO review_table(user_id, quiz_id, quiz_name,score, date, review_text) V
 INSERT INTO friend_table(user_id_1, user_id_2) VALUES (1,2);
 INSERT INTO friend_table(user_id_1, user_id_2) VALUES (1,3);
 INSERT INTO friend_table(user_id_1, user_id_2) VALUES (2,3);
+
 
