@@ -82,6 +82,8 @@ CREATE TABLE quiz_table (
         multiple_pages BOOLEAN DEFAULT FALSE,
         practice_mode BOOLEAN DEFAULT FALSE,
         gradable BOOLEAN DEFAULT FALSE,
+        immediate_correction BOOLEAN DEFAULT FALSE,
+        random_questions BOOLEAN DEFAULT FALSE,
         FOREIGN KEY (creator_id) REFERENCES user_table(user_id)
 );
 
@@ -105,6 +107,7 @@ CREATE TABLE question_table (
         answer TEXT not null,
         quiz_id INT not null,
         question_type INT not null,
+        imageURL TEXT not null,
         FOREIGN KEY (quiz_id) REFERENCES quiz_table(quiz_id)
 );
 
@@ -178,5 +181,11 @@ CREATE TABLE question_table (
 # INSERT INTO friend_table(user_id_1, user_id_2) VALUES (1,2);
 # INSERT INTO friend_table(user_id_1, user_id_2) VALUES (1,3);
 # INSERT INTO friend_table(user_id_1, user_id_2) VALUES (2,3);
+
+# Insertions for lsurm 22
+#INSERT into login_table(user_id, username,password) VALUES(1,"luka", "luka");
+
+#INSERT into user_table(user_id, username, is_admin, practiced, created_Quizzes, scored_Highest, profilePhoto)
+ #           VALUES(1, "luka", false, false, false, false, "photo");
 
 

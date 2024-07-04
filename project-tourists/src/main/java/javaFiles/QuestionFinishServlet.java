@@ -6,12 +6,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 @WebServlet(name = "chooseQuestion", urlPatterns = {"/chooseQuestion"})
 public class QuestionFinishServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        DBManager dbManager = (DBManager) getServletContext().getAttribute("db-manager");
         Quiz currQuizz = (QuizImpl)request.getSession().getAttribute("quiz");
         String value = (String)request.getParameter("action");
         System.out.println("value - " + value);
@@ -31,9 +33,16 @@ public class QuestionFinishServlet extends HttpServlet {
         }else if(value.equals("Picture Response")){
             request.getRequestDispatcher("/pictureResponse.jsp").forward(request, response);
         }else if(value.equals("Finish")){
-            ArrayList<Question> questions = currQuizz.getQuestions();
-            for(int i = 0; i < questions.size(); i++){
-                System.out.println(questions.get(i).getQuestionText());
+//            ArrayList<Question> questions = currQuizz.getQuestions();
+//            for(int i = 0; i < questions.size(); i++){
+//                System.out.println(questions.get(i).getQuestionText());
+//            }
+            try {
+                dbManager.addQuiz(currQuizz);
+                dbManager.addQuestions(currQuizz);
+                request.getSession().removeAttribute("quiz");
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
             }
         }
     }

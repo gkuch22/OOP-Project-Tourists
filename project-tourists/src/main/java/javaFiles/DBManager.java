@@ -395,5 +395,83 @@ public class DBManager {
         connection.close();
     }
 
+    public void addQuiz(Quiz quiz) throws SQLException {
+        Connection connection = dataSource.getConnection();
 
+        PreparedStatement statement = connection.prepareStatement("INSERT INTO quiz_table " +
+                "(quiz_name, quiz_tag, difficulty," +
+                "creator_id, date_created, multiple_pages, practice_mode, gradable, immediate_correction, random_questions)" +
+                "VALUES (?, ?, ?, ?, sysdate(), ?, ?, ?, ?, ?);");
+                statement.setString(1, quiz.getQuiz_name());
+                statement.setString(2, quiz.getQuizTagsAsString());
+                statement.setString(3, quiz.getDifficulty());
+                statement.setInt(4, quiz.getCreator_id());
+                statement.setBoolean(5, quiz.isMultiple_pages());
+                statement.setBoolean(6, quiz.isPractice_mode());
+                statement.setBoolean(7, quiz.isGradable());
+                statement.setBoolean(8, quiz.isImmediatelyCorrected());
+                statement.setBoolean(9, quiz.isRandom());
+                statement.executeUpdate();
+                statement.close();
+                connection.close();
+    }
+
+    public void addQuestions(Quiz quiz) throws SQLException {
+        Connection connection = dataSource.getConnection();
+        ArrayList<Question> questions = quiz.getQuestions();
+        for (int i = 0; i < questions.size(); i++) {
+            Question currQuestion = questions.get(i);
+            String questionText = currQuestion.getQuestionText();
+            String answer = currQuestion.getAnswer();
+            String possibleAnswers = "";
+            if(currQuestion instanceof MultipleChoice){
+                possibleAnswers = ((MultipleChoice) currQuestion).getPossibleAnswersAsString();
+            }
+            int quizId = quiz.getQuiz_id();
+            String imageURL = "";
+            if(currQuestion instanceof PictureResponse){
+                imageURL = ((PictureResponse) currQuestion).getImageURL();
+            }
+
+            int questionType = 0;
+            if (currQuestion instanceof QuestionResponse) {
+                questionType = 1;
+            } else if (currQuestion instanceof FillInTheBlank) {
+                questionType = 2;
+            } else if (currQuestion instanceof MultipleChoice) {
+                questionType = 3;
+            }else{
+                questionType = 4;
+            }
+            PreparedStatement statement = connection.prepareStatement("INSERT INTO question_table " +
+                    "(question, possible_answers, answer, quiz_id, question_type, imageURL) " +
+                    "VALUES (?, ?, ?, ?, ?, ?)");
+
+            statement.setString(1, questionText);
+            statement.setString(2, possibleAnswers);
+            statement.setString(3, answer);
+            statement.setInt(4, quizId);
+            statement.setInt(5, questionType);
+            statement.setString(6, imageURL);
+            statement.executeUpdate();
+            statement.close();
+        }
+        connection.close();
+    }
+
+    public int getNextQuizId() throws SQLException {
+        Connection connection = dataSource.getConnection();
+        Statement statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery("SELECT COALESCE(MAX(quiz_id), 0) + 1  AS next_quiz_id FROM quiz_table;");
+        int nextQuizId = 1;
+        while(resultSet.next()){
+            System.out.println("here");
+            nextQuizId = resultSet.getInt("next_quiz_id");
+        }
+
+        resultSet.close();
+        statement.close();
+        connection.close();
+        return nextQuizId;
+    }
 }
