@@ -1,5 +1,6 @@
 package javaFiles;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -17,6 +18,7 @@ public class QuizImpl implements Quiz{
     private boolean isTimed;
     private boolean immediatelyCorrected;
     private Date date_created;
+    private ArrayList<Question> questions = new ArrayList<Question>();
 
     public QuizImpl(int quizId, String quizName, String quizTag, String difficulty, int creatorId,
                         boolean multiplePages, boolean practiceMode, boolean gradable, Date dateCreated) {
@@ -32,9 +34,9 @@ public class QuizImpl implements Quiz{
     }
 
 
-    public QuizImpl(int quizId, String quizName, String quizTag, String difficulty, int creatorId, boolean isRandom, boolean isTimed, boolean multiplePages,
+    public QuizImpl(int quiz_id, String quizName, String quizTag, String difficulty, int creatorId, boolean isRandom, boolean isTimed, boolean multiplePages,
                         boolean immediatelyCorrected, boolean practiceMode, boolean gradable) {
-        this.quiz_id = quizId;
+        this.quiz_id = quiz_id;
         this.quiz_name = quizName;
         this.quiz_tag = quizTag;
         this.difficulty = difficulty;
@@ -52,6 +54,7 @@ public class QuizImpl implements Quiz{
     public int getQuiz_id() {
         return quiz_id;
     }
+
 
     @Override
     public void setQuiz_id(int quiz_id) {
@@ -72,6 +75,10 @@ public class QuizImpl implements Quiz{
     public List<String> getQuiz_tag() {
         List<String> tags = Arrays.asList(quiz_tag.split(";"));
         return tags;
+    }
+    @Override
+    public String getQuizTagsAsString(){
+        return quiz_tag;
     }
 
     @Override
@@ -132,5 +139,24 @@ public class QuizImpl implements Quiz{
     @Override
     public Date getDate(){
         return this.date_created;
+    }
+
+    @Override
+    public void addQuestion(Question question){
+        questions.add(question);
+    }
+    @Override
+    public ArrayList<Question> getQuestions(){
+        return questions;
+    }
+
+    @Override
+    public boolean isRandom(){
+        return isRandom;
+    }
+
+    @Override
+    public boolean isImmediatelyCorrected(){
+        return immediatelyCorrected;
     }
 }

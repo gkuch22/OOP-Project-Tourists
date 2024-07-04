@@ -241,15 +241,46 @@ public class DBManager {
         statement1.close();
         connection.close();
         user.setTakenQuizzes(quizzesTaken);
-        System.out.println(quizzesTaken.size());
         return user;
     }
+
+
+    public List<Quiz> getUserCreatedQuizzes(User user) throws SQLException {
+        List<Quiz> res = new ArrayList<Quiz>();
+
+        Connection connection = dataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement("SELECT * FROM quiz_table where creator_id=? ORDER BY date_created ASC;");
+        statement.setInt(1,user.getUser_id());
+        ResultSet resultSet = statement.executeQuery();
+
+        while(resultSet.next()) {
+            int quiz_id = resultSet.getInt("quiz_id");
+            String quiz_name = resultSet.getString("quiz_name");
+            String quiz_tag = resultSet.getString("quiz_tag");
+            String difficulty = resultSet.getString("difficulty");
+            int creator_id = resultSet.getInt("creator_id");
+            boolean multiple_pages = resultSet.getBoolean("multiple_pages");
+            boolean practice_mode = resultSet.getBoolean("practice_mode");
+            boolean gradable = resultSet.getBoolean("gradable");
+            Date date_created = resultSet.getDate("date_created");
+            Quiz newQuiz = new QuizImpl(quiz_id, quiz_name, quiz_tag, difficulty,
+                    creator_id, multiple_pages, practice_mode, gradable, date_created);
+            res.add(newQuiz);
+        }
+        resultSet.close();
+        statement.close();
+        connection.close();
+
+        return res;
+    }
+
+
 
     public List<String> getAchievements(User user) throws SQLException {
         Connection connection = dataSource.getConnection();
         PreparedStatement statement = connection.prepareStatement("Select * from achievement_table where num_created < ? OR num_taken < ? OR (had_highest_score = true AND ? = true) OR (practiced = true AND ? = true);");
         statement.setInt(1,user.getNumberOfCreatedQuizzes());
-        statement.setInt(2,user.getTakenQuizzes().size());
+        statement.setInt(2,this.getUniqueUserQuizzes(user.getUser_id()).size());
         statement.setBoolean(3,user.scoredHighest());
         statement.setBoolean(4,user.hasPracticed());
         ResultSet resultSet = statement.executeQuery();
@@ -265,7 +296,7 @@ public class DBManager {
 
     public List<QuizPerformance> getUserQuizzes(int User_id) throws SQLException {
         Connection connection = dataSource.getConnection();
-        PreparedStatement statement = connection.prepareStatement("Select * from review_table where user_id = ? ORDER BY review_table.date DESC;");
+        PreparedStatement statement = connection.prepareStatement("Select * from review_table where user_id = ? ORDER BY review_table.date ASC;");
         statement.setInt(1,User_id);
         ResultSet resultSet = statement.executeQuery();
 
@@ -287,6 +318,23 @@ public class DBManager {
         return quizzes;
     }
 
+
+    public List<Integer> getUniqueUserQuizzes(int User_id) throws SQLException {
+        Connection connection = dataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement("Select DISTINCT quiz_id,user_id from review_table where user_id = ?;");
+        statement.setInt(1,User_id);
+        ResultSet resultSet = statement.executeQuery();
+
+        List<Integer> quizzes = new ArrayList<Integer>();
+        while(resultSet.next()) {
+            int quiz_id = resultSet.getInt("quiz_id");
+            quizzes.add(quiz_id);
+        }
+        resultSet.close();
+        statement.close();
+        connection.close();
+        return quizzes;
+    }
     public List<User> getFriends(int User_id) throws SQLException {
         Connection connection = dataSource.getConnection();
         PreparedStatement statement = connection.prepareStatement("Select * from friend_table where user_id_1 = ?");
@@ -315,6 +363,7 @@ public class DBManager {
         connection.close();
         return friends;
     }
+
 
 
 
@@ -537,8 +586,116 @@ public class DBManager {
         statement.executeUpdate();
 
         statement.close();
+
+    public void sendFriendRequest(int user1Id,int user2Id) throws SQLException {
+        Connection connection = dataSource.getConnection();
+        PreparedStatement checker = connection.prepareStatement("Select * from mail_table where from_id=? AND to_id=? AND type='friendrequest'");
+        checker.setInt(1,user1Id);
+        checker.setInt(2,user2Id);
+        ResultSet res = checker.executeQuery();
+        if(res.next()){
+            return;
+        }
+        res.close();
+        checker.close();
+
+
+        PreparedStatement statement = connection.prepareStatement("INSERT INTO mail_table (from_id, to_id, type, message, date) VALUES (?,?,'friendrequest','be my friend',Now())");
+        statement.setInt(1,user1Id);
+        statement.setInt(2,user2Id);
+        statement.executeUpdate();
         connection.close();
     }
 
+    public void unfriend(int user_id_1,int user_id_2) throws SQLException {
+        Connection connection = dataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement("DELETE FROM friend_table WHERE (user_id_1=? AND user_id_2=?) OR (user_id_1=? AND user_id_2=?);");
+        statement.setInt(1,user_id_1);
+        statement.setInt(2,user_id_2);
+        statement.setInt(4,user_id_1);
+        statement.setInt(3,user_id_2);
+        statement.executeUpdate();
 
+        connection.close();
+    }
+
+    public void addQuiz(Quiz quiz) throws SQLException {
+        Connection connection = dataSource.getConnection();
+
+        PreparedStatement statement = connection.prepareStatement("INSERT INTO quiz_table " +
+                "(quiz_name, quiz_tag, difficulty," +
+                "creator_id, date_created, multiple_pages, practice_mode, gradable, immediate_correction, random_questions)" +
+                "VALUES (?, ?, ?, ?, sysdate(), ?, ?, ?, ?, ?);");
+                statement.setString(1, quiz.getQuiz_name());
+                statement.setString(2, quiz.getQuizTagsAsString());
+                statement.setString(3, quiz.getDifficulty());
+                statement.setInt(4, quiz.getCreator_id());
+                statement.setBoolean(5, quiz.isMultiple_pages());
+                statement.setBoolean(6, quiz.isPractice_mode());
+                statement.setBoolean(7, quiz.isGradable());
+                statement.setBoolean(8, quiz.isImmediatelyCorrected());
+                statement.setBoolean(9, quiz.isRandom());
+                statement.executeUpdate();
+                statement.close();
+                connection.close();
+    }
+
+    public void addQuestions(Quiz quiz) throws SQLException {
+        Connection connection = dataSource.getConnection();
+        ArrayList<Question> questions = quiz.getQuestions();
+        for (int i = 0; i < questions.size(); i++) {
+            Question currQuestion = questions.get(i);
+            String questionText = currQuestion.getQuestionText();
+            String answer = currQuestion.getAnswer();
+            String possibleAnswers = "";
+            if(currQuestion instanceof MultipleChoice){
+                possibleAnswers = ((MultipleChoice) currQuestion).getPossibleAnswersAsString();
+            }
+            int quizId = quiz.getQuiz_id();
+            String imageURL = "";
+            if(currQuestion instanceof PictureResponse){
+                imageURL = ((PictureResponse) currQuestion).getImageURL();
+            }
+
+            int questionType = 0;
+            if (currQuestion instanceof QuestionResponse) {
+                questionType = 1;
+            } else if (currQuestion instanceof FillInTheBlank) {
+                questionType = 2;
+            } else if (currQuestion instanceof MultipleChoice) {
+                questionType = 3;
+            }else{
+                questionType = 4;
+            }
+            PreparedStatement statement = connection.prepareStatement("INSERT INTO question_table " +
+                    "(question, possible_answers, answer, quiz_id, question_type, imageURL) " +
+                    "VALUES (?, ?, ?, ?, ?, ?)");
+
+            statement.setString(1, questionText);
+            statement.setString(2, possibleAnswers);
+            statement.setString(3, answer);
+            statement.setInt(4, quizId);
+            statement.setInt(5, questionType);
+            statement.setString(6, imageURL);
+            statement.executeUpdate();
+            statement.close();
+        }
+        connection.close();
+    }
+
+    public int getNextQuizId() throws SQLException {
+        Connection connection = dataSource.getConnection();
+        Statement statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery("SELECT COALESCE(MAX(quiz_id), 0) + 1  AS next_quiz_id FROM quiz_table;");
+        int nextQuizId = 1;
+        while(resultSet.next()){
+            System.out.println("here");
+            nextQuizId = resultSet.getInt("next_quiz_id");
+        }
+
+        resultSet.close();
+        statement.close();
+        connection.close();
+        return nextQuizId;
+    }
 }
