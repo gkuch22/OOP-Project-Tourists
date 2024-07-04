@@ -364,6 +364,229 @@ public class DBManager {
         return friends;
     }
 
+
+
+
+    public int getIdByUsername(String username) throws SQLException {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+
+        int userId = -1;
+
+        connection = dataSource.getConnection();
+        String query = "SELECT user_id FROM user_table WHERE username = ?";
+        statement = connection.prepareStatement(query);
+        statement.setString(1, username);
+
+        resultSet = statement.executeQuery();
+        if (resultSet.next()) {
+            userId = resultSet.getInt("user_id");
+        }
+
+        resultSet.close();
+        statement.close();
+        connection.close();
+        return userId;
+    }
+
+    public String getUsernameById(int id) throws SQLException {
+        String username = null;
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+
+        connection = dataSource.getConnection();
+
+        String query = "SELECT username FROM user_table WHERE user_id = ?";
+        statement = connection.prepareStatement(query);
+        statement.setInt(1, id);
+
+        resultSet = statement.executeQuery();
+        if (resultSet.next()) {
+            username = resultSet.getString("username");
+        }
+
+        resultSet.close();
+        statement.close();
+        connection.close();
+
+        return username;
+    }
+
+    public List<Message> getMessages(int id1, String username1, String username2) throws SQLException {
+        int id2 = getIdByUsername(username2);
+
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        List<Message> messages = new ArrayList<Message>();
+
+        connection = dataSource.getConnection();
+        String query = "SELECT * FROM mail_table WHERE type = 'textmessage' AND ((from_id = ? AND to_id = ?) OR (from_id = ? AND to_id = ?)) ORDER BY date ASC";
+
+        statement = connection.prepareStatement(query);
+        statement.setInt(1, id1);
+        statement.setInt(2, id2);
+        statement.setInt(3, id2);
+        statement.setInt(4, id1);
+
+        resultSet = statement.executeQuery();
+
+        while (resultSet.next()) {
+            int fromId = resultSet.getInt("from_id");
+            int toId = resultSet.getInt("to_id");
+            String messageType = resultSet.getString("type");
+            String messageText = resultSet.getString("message");
+            Date date = resultSet.getTimestamp("date");
+
+            Message message = new MessageImpl(messageType, fromId, toId, messageText, date);
+            messages.add(message);
+        }
+        resultSet.close();
+        statement.close();
+        connection.close();
+
+        return messages;
+    }
+
+    public void saveMessageToDatabase(int fromId, int toId, String message, java.sql.Timestamp timestamp, DBManager dbManager) throws SQLException {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        connection = dataSource.getConnection();
+        String query = "INSERT INTO mail_table (from_id, to_id, type, message, date) VALUES (?, ?, ?, ?, ?)";
+        statement = connection.prepareStatement(query);
+
+        statement.setInt(1, fromId);
+        statement.setInt(2, toId);
+        statement.setString(3, "textmessage");
+        statement.setString(4, message);
+        statement.setTimestamp(5, timestamp);
+
+        statement.executeUpdate();
+
+        statement.close();
+        connection.close();
+    }
+
+
+
+    public List<Integer> getFriendRequests(int id) throws SQLException {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+
+        connection = dataSource.getConnection();
+        String query = "SELECT * FROM mail_table WHERE type = 'friendrequest' AND (to_id = ?) ORDER BY date ASC";
+
+        statement = connection.prepareStatement(query);
+        statement.setInt(1, id);
+
+        resultSet = statement.executeQuery();
+
+        List<Integer> friendRequests = new ArrayList<Integer>();
+        while (resultSet.next()) {
+            int fromId = resultSet.getInt("from_id");
+            friendRequests.add(fromId);
+        }
+        resultSet.close();
+        statement.close();
+        connection.close();
+
+        return friendRequests;
+    }
+
+
+    public void removeFriendRequest(int fromId, int toId) throws SQLException {
+        Connection connection = null;
+        PreparedStatement statement = null;
+
+        connection = dataSource.getConnection();
+        String query = "DELETE FROM mail_table WHERE type = 'friendrequest' AND from_id = ? AND to_id = ?";
+        statement = connection.prepareStatement(query);
+        statement.setInt(1, fromId);
+        statement.setInt(2, toId);
+        statement.executeUpdate();
+
+        statement.close();
+        connection.close();
+    }
+
+    public void addFriendCouple(int fromId, int toId) throws SQLException {
+        Connection connection = dataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement("INSERT INTO friend_table (user_id_1, user_id_2) VALUES (?, ?)");
+
+        statement.setInt(1, fromId);
+        statement.setInt(2, toId);
+
+        statement.executeUpdate();
+
+        statement.close();
+        connection.close();
+    }
+
+
+
+    public List<Message> getChallenges(int id) throws SQLException {
+        List<Message> challenges = new ArrayList<Message>();
+
+        Connection connection = dataSource.getConnection();
+        String query = "SELECT * FROM mail_table WHERE type = 'challenge' AND to_id = ?";
+        PreparedStatement statement = connection.prepareStatement(query);
+        statement.setInt(1, id);
+
+        ResultSet resultSet = statement.executeQuery();
+
+        while (resultSet.next()) {
+            int fromId = resultSet.getInt("from_id");
+            int toId = resultSet.getInt("to_id");
+            String messageType = resultSet.getString("type");
+            String messageText = resultSet.getString("message");
+            Date date = resultSet.getTimestamp("date");
+
+            Message message = new MessageImpl(messageType, fromId, toId, messageText, date);
+            challenges.add(message);
+        }
+
+        resultSet.close();
+        statement.close();
+        connection.close();
+
+        return challenges;
+    }
+
+    public String getQuizName(int quizId) throws SQLException {
+        String quizName = null;
+
+        String query = "SELECT * FROM quiz_table WHERE quiz_id = ?";
+        Connection connection = dataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement(query);
+        statement.setInt(1, quizId);
+        ResultSet resultSet = statement.executeQuery();
+
+        if (resultSet.next()) {
+            quizName = resultSet.getString("quiz_name");
+        }
+
+        resultSet.close();
+        statement.close();
+        connection.close();
+
+        return quizName;
+    }
+
+    public void removeChallengeRequest(int fromId, int toId, int quizId) throws SQLException {
+        String query = "DELETE FROM mail_table WHERE type = 'challenge' AND from_id = ? AND to_id = ? AND message = ?";
+
+        Connection connection = dataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement(query);
+        statement.setInt(1, fromId);
+        statement.setInt(2, toId);
+        statement.setString(3, String.valueOf(quizId));
+        statement.executeUpdate();
+
+        statement.close();
+
     public void sendFriendRequest(int user1Id,int user2Id) throws SQLException {
         Connection connection = dataSource.getConnection();
         PreparedStatement checker = connection.prepareStatement("Select * from mail_table where from_id=? AND to_id=? AND type='friendrequest'");
@@ -392,6 +615,7 @@ public class DBManager {
         statement.setInt(4,user_id_1);
         statement.setInt(3,user_id_2);
         statement.executeUpdate();
+
         connection.close();
     }
 
