@@ -228,7 +228,8 @@ public class DBManager {
             boolean multiple_pages = resultSet2.getBoolean("multiple_pages");
             boolean practice_mode = resultSet2.getBoolean("practice_mode");
             boolean gradable = resultSet2.getBoolean("gradable");
-            Quiz newQuiz = new QuizImpl(quiz_id, quiz_name, quiz_tag, difficulty, creator_id, multiple_pages, practice_mode, gradable);
+            Date date = resultSet2.getDate("date_created");
+            Quiz newQuiz = new QuizImpl(quiz_id, quiz_name, quiz_tag, difficulty, creator_id, multiple_pages, practice_mode, gradable,date);
             quizzesTaken.add(newQuiz);
             resultSet2.close();
             statement2.close();
