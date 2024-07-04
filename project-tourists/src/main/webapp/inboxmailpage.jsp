@@ -53,9 +53,32 @@
 </div>
 
 
+<%
+    List<Integer> friendRequests = null;
+    try {
+        friendRequests = dbManager.getFriendRequests(id1);
+    } catch (SQLException e) {
+        throw new RuntimeException(e);
+    }
+%>
+
 <div class="friend-requests">
+    <h2>Friend Requests</h2>
+    <%
+        for (int requesterId : friendRequests) {
 
-
+    %>
+            <div class="friend-request-box">
+                <p>Friend request from <%= requesterId %></p>
+                <form method="POST" action="friendRequestServlet">
+                    <input type="hidden" name="requesterId" value="<%= requesterId %>">
+                    <button type="submit" name="action" value="accept">+</button>
+                    <button type="submit" name="action" value="decline">-</button>
+                </form>
+            </div>
+    <%
+        }
+    %>
 </div>
 
 

@@ -342,7 +342,6 @@ public class DBManager {
     }
 
 
-
     public List<Message> getMessages(int id1, String username1, String username2) throws SQLException {
         int id2 = getIdByUsername(username2);
 
@@ -398,6 +397,61 @@ public class DBManager {
         connection.close();
     }
 
+
+
+    public List<Integer> getFriendRequests(int id) throws SQLException {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+
+        connection = dataSource.getConnection();
+        String query = "SELECT * FROM mail_table WHERE type = 'friendrequest' AND (to_id = ?) ORDER BY date ASC";
+
+        statement = connection.prepareStatement(query);
+        statement.setInt(1, id);
+
+        resultSet = statement.executeQuery();
+
+        List<Integer> friendRequests = new ArrayList<Integer>();
+        while (resultSet.next()) {
+            int fromId = resultSet.getInt("from_id");
+            friendRequests.add(fromId);
+        }
+        resultSet.close();
+        statement.close();
+        connection.close();
+
+        return friendRequests;
+    }
+
+
+    public void removeFriendRequest(int fromId, int toId) throws SQLException {
+        Connection connection = null;
+        PreparedStatement statement = null;
+
+        connection = dataSource.getConnection();
+        String query = "DELETE FROM mail_table WHERE type = 'friendrequest' AND from_id = ? AND to_id = ?";
+        statement = connection.prepareStatement(query);
+        statement.setInt(1, fromId);
+        statement.setInt(2, toId);
+        statement.executeUpdate();
+
+        statement.close();
+        connection.close();
+    }
+
+    public void addFriendCouple(int fromId, int toId) throws SQLException {
+        Connection connection = dataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement("INSERT INTO friend_table (user_id_1, user_id_2) VALUES (?, ?)");
+
+        statement.setInt(1, fromId);
+        statement.setInt(2, toId);
+
+        statement.executeUpdate();
+
+        statement.close();
+        connection.close();
+    }
 
 
 }
