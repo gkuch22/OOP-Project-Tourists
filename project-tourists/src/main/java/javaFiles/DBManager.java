@@ -352,7 +352,7 @@ public class DBManager {
         List<Message> messages = new ArrayList<Message>();
 
         connection = dataSource.getConnection();
-        String query = "SELECT * FROM mail_table WHERE type = 'textmessage' AND ((from_id = ? AND to_id = ?) OR (from_id = ? AND to_id = ?))";
+        String query = "SELECT * FROM mail_table WHERE type = 'textmessage' AND ((from_id = ? AND to_id = ?) OR (from_id = ? AND to_id = ?)) ORDER BY date ASC";
 
         statement = connection.prepareStatement(query);
         statement.setInt(1, id1);
@@ -376,16 +376,28 @@ public class DBManager {
         statement.close();
         connection.close();
 
-        Map<Date, Message> mp = new HashMap<Date, Message>();
-        for(Message message : messages){
-            mp.put(message.getDate(), message);
-        }
-        messages.clear();
-        for(Date date : mp.keySet()){
-            messages.add(mp.get(date));
-        }
         return messages;
     }
+
+    public void saveMessageToDatabase(int fromId, int toId, String message, java.sql.Timestamp timestamp, DBManager dbManager) throws SQLException {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        connection = dataSource.getConnection();
+        String query = "INSERT INTO mail_table (from_id, to_id, type, message, date) VALUES (?, ?, ?, ?, ?)";
+        statement = connection.prepareStatement(query);
+
+        statement.setInt(1, fromId);
+        statement.setInt(2, toId);
+        statement.setString(3, "textmessage");
+        statement.setString(4, message);
+        statement.setTimestamp(5, timestamp);
+
+        statement.executeUpdate();
+
+        statement.close();
+        connection.close();
+    }
+
 
 
 }

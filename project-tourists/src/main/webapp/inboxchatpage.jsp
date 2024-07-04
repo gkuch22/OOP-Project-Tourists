@@ -46,29 +46,52 @@
     %>
 
 </div>
-<div class="chat-window">
+<div class="chat">
     <h2><%=username2%></h2>
-    <%
-        List<Message> messages = dbManager.getMessages(id1, username, username2);
+    <div class="chat-window">
+        <%
+            List<Message> messages = dbManager.getMessages(id1, username, username2);
 
-        for (Message currMessage : messages) {
-            int fromId = currMessage.getFromId();
-            String currContext = currMessage.getContext();
-            if (fromId == id1) {
-        %>
-                <div class="own-text"><%= currContext %></div>
-        <%
-            }else{
-        %>
-                <div class="other-text"><%= currContext %></div>
-        <%
+            for (Message currMessage : messages) {
+                int fromId = currMessage.getFromId();
+                String currContext = currMessage.getContext();
+                if (fromId == id1) {
+            %>
+                    <div class="own-text"><%= currContext %></div>
+            <%
+                }else{
+            %>
+                    <div class="other-text"><%= currContext %></div>
+            <%
+                }
             }
-        }
-    %>
+        %>
+    </div>
+    <div class="chat-textfield">
+        <form id="sendMessageForm" method="POST" action="sendMessageServlet">
+            <input type="hidden" name="toUsername" value="<%= username2 %>">
+            <input type="text" name="message" id="messageField" placeholder="Type your message here...">
+            <input type="hidden" name="timestamp" id="timestampField">
+            <button type="button" onclick="sendMessage()">Send</button>
+        </form>
+    </div>
+
 </div>
 
 
-
+<script>
+    function sendMessage() {
+        var currentTime = new Date().toISOString();
+        document.getElementById('timestampField').value = currentTime;
+        document.getElementById('sendMessageForm').submit();
+    }
+    document.getElementById('messageField').addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            sendMessage();
+        }
+    });
+</script>
 
 
 

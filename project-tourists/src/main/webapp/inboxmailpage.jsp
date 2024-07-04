@@ -46,10 +46,16 @@
         %>
 
     </div>
-    <div class="chat-window">
+    <div class="chat">
         <h2>Chat</h2>
 
     </div>
+</div>
+
+
+<div class="friend-requests">
+
+
 </div>
 
 
