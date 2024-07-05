@@ -96,10 +96,11 @@
     <h2>Friend Requests</h2>
     <%
         for (int requesterId : friendRequests) {
+            String requesterUsername = dbManager.getUsernameById(requesterId);
 
     %>
             <div class="friend-request-box">
-                <p>Friend request from <%= requesterId %></p>
+                <p>Username: <%= requesterUsername %></p>
                 <form method="POST" action="friendRequestServlet">
                     <input type="hidden" name="requesterId" value="<%= requesterId %>">
                     <button type="submit" name="action" value="accept">+</button>
@@ -126,13 +127,14 @@
     <%
         for (Message challange : challenges) {
             int fromId = challange.getFromId();
+            String fromUsername = dbManager.getUsernameById(fromId);
             String quizIdString = challange.getContext();
             int quizId = Integer.parseInt(quizIdString);
             String quizName = dbManager.getQuizName(quizId);
     %>
     <div class="challenge-box">
-        <p>Challange From <%= fromId %></p>
-        <p>Quiz Name: <%= quizName %></p>
+        <p>Challanger: <%= fromUsername %></p>
+        <p>Title: <%= quizName %></p>
         <form method="POST" action="challengeServlet">
             <input type="hidden" name="quizId" value="<%= quizId %>">
             <input type="hidden" name="requesterId" value="<%= fromId %>">

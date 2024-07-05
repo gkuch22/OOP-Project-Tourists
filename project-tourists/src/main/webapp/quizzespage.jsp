@@ -48,7 +48,7 @@
 <div class="filters">
     <form action="filteredquizzes" method="get">
 
-        <input class="searchfield" type="text" name="quizName" placeholder="Quiz name">
+        <input class="searchfield" type="text" name="quizName" placeholder="Title">
         <input class="searchbutton" type="submit" value="Search">
 
         <label class="taglabel" for="tags">Tags:</label>
@@ -89,7 +89,7 @@
     <table>
         <thead>
             <tr>
-                <th>Name</th>
+                <th>Title</th>
                 <th>Difficulty</th>
                 <th>Taken</th>
                 <th>Max Score</th>
