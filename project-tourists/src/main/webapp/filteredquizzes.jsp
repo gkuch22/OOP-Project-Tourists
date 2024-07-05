@@ -130,7 +130,7 @@
                 <td><%= quizzestaken %></td>
                 <td><%= maxscore %></td>
                 <td><%= currDate %></td>
-                <td><a href="quiz.jsp?id=<%= quiz.getQuiz_id() %>">Take Quiz</a></td>
+                <td><a href="quizStart.jsp?quiz_id=<%= quiz.getQuiz_id() %>">Take Quiz</a></td>
             </tr>
             <%
                 }

@@ -19,14 +19,17 @@
 <body>
 
 <%
-//    User currUser = session.getAttribute("user");
-    int id1 = 1; //currUser.getUser_id()
-    String username = "nick";
+//    int id1 = 1;
+//    String username = "nick";
+    User currUser = (User) request.getSession().getAttribute("user");
+    int id1 = currUser.getUser_id();
+    String username = currUser.getUsername();
+
 
     DBManager dbManager = (DBManager) application.getAttribute("db-manager");
     List<User> friends = null;
     try {
-        friends = dbManager.getFriends(id1); //currUser.getUser_id()
+        friends = dbManager.getFriends(id1);
     } catch (SQLException e) {
         throw new RuntimeException(e);
     }
