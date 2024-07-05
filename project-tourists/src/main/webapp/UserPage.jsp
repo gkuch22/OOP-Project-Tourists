@@ -9,7 +9,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quiz Site - User Page</title>
-    <link rel="stylesheet" href="UserStyle.css">
+    <link rel="stylesheet" href="userStyle.css">
 </head>
 <body>
 <%
@@ -60,21 +60,93 @@
 
 <a href="index.jsp" class="homepage-button">Homepage</a>
 <a href="index.jsp" class="logout-button">Log out</a>
+<div class="UserName">
+    <a><%=user.getUsername()%></a>
+</div>
+
+<div class="PictureUploadButton">
+    <a class="profilePictureChangeLabel">change your profile picture:</a>
+    <form method="post" action="UploadProfilePictureServlet" >
+        <div class="image">
+            <label for="imageURL">Enter image url</label>
+            <input placeholder="ex: https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.smithsonianmag.com%2Fscience-nature%2F14-fun-facts-about-parrots-can-sing-use-tools-and-live-long-time-180957714%2F&psig=AOvVaw2k_fVcL_-d4b2WqlwTi1ir&ust=1720184451651000&source=images&cd=vfe&opi=89978449&ved=0CBAQjRxqFwoTCPj89cm4jYcDFQAAAAAdAAAAABAS" type="text" name="imageURL" id="imageURL">
+        </div>
+        <button type="submit">Upload</button>
+    </form>
+</div>
+
 <img class="UserProfile" src=<%=user.getProfilePhoto()%>>
 <div class="ProblemsSolved">
-    <h1><span class="Number"><%= manager.getUniqueUserQuizzes(user.getUser_id()).size() %></span> <span class="Text">Quizzes Attempted</span></h1>
+    <h1><span class="Number"><%= manager.getUniqueUserQuizzes(user.getUser_id()).size() %></span> <span class="Text">Quizzes Taken</span></h1>
+
 </div>
 <div class="container">
     <div class="left">
-        <div class="Achievements">
-            <h2>Achievements</h2>
-            <ul class="achievements-list">
+        <fieldset>
+            <legend>Achievements</legend>
+            <div class="Achievements">
+                <ul class="achievements-list">
+                    <%
+                        try {
+                            for (String s : manager.getAchievements(user)) {
+                    %>
+                    <li>
+                        <a><%= s %></a>
+                    </li>
+                    <%
+                            }
+                        } catch (SQLException e) {
+                            throw new RuntimeException(e);
+                        }
+                    %>
+                </ul>
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>Tags:</legend>
+            <div class="tags">
+                <ul class="tags-list">
+                    <%
+                        Map<String, Integer> tagCounts = user.getTagCount();
+                        for (Map.Entry<String, Integer> entry : tagCounts.entrySet()) {
+                    %>
+                    <li>
+                        <a><%= entry.getKey() %></a>
+                        <span>(<%= entry.getValue() %> solved)</span>
+                    </li>
+                    <%
+                        }
+                    %>
+                </ul>
+            </div>
+        </fieldset>
+    </div>
+    <div class="middle">
+        <fieldset>
+            <legend>Quizzes</legend>
+            <div class="button-container">
+                <button id="quizzes-taken-btn">Quizzes Taken</button>
+                <button id="quizzes-created-btn">Quizzes Created</button>
+            </div>
+            <div class="table-container">
+                <table id="quiz-table" class="quiz-data"></table>
+            </div>
+        </fieldset>
+    </div>
+    <div class="right">
+        <fieldset>
+            <legend>Friends List</legend>
+            <ul class="friends-list">
                 <%
                     try {
-                        for (String s : manager.getAchievements(user)) {
+                        for (User friend : manager.getFriends(user.getUser_id())) {
                 %>
                 <li>
-                    <a><%= s %></a>
+                    <a href="AnotherUser?AnotherUserId=<%= friend.getUser_id() %>">
+                        <img src="<%= friend.getProfilePhoto() %>">
+                        <span><%= friend.getUsername() %></span>
+                    </a>
                 </li>
                 <%
                         }
@@ -83,55 +155,7 @@
                     }
                 %>
             </ul>
-        </div>
-        <div class="tags">
-            <h2>Tags:</h2>
-            <ul class="tags-list">
-                <%
-                    Map<String, Integer> tagCounts = user.getTagCount();
-                    for (Map.Entry<String, Integer> entry : tagCounts.entrySet()) {
-                %>
-                <li>
-                    <a><%= entry.getKey() %></a>
-                    <span>(<%= entry.getValue() %> solved)</span>
-                </li>
-                <%
-                    }
-                %>
-            </ul>
-        </div>
-    </div>
-    <div class="middle">
-        <div class="button-container">
-            <button id="quizzes-taken-btn">Quizzes Taken</button>
-            <button id="quizzes-created-btn">Quizzes Created</button>
-        </div>
-        <div class="table-container">
-            <table id="quiz-table" class="quiz-data">
-
-            </table>
-        </div>
-    </div>
-    <div class="right">
-        <h2>Friends List</h2>
-        <ul class="friends-list">
-            <%
-                try {
-                    for (User user1 : manager.getFriends(user.getUser_id())) {
-            %>
-            <li>
-                <a href="AnotherUser?AnotherUserId=<%= user1.getUser_id() %>">
-                    <img src="<%= user1.getProfilePhoto() %>">
-                    <span><%= user1.getUsername() %></span>
-                </a>
-            </li>
-            <%
-                    }
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
-            %>
-        </ul>
+        </fieldset>
     </div>
 </div>
 

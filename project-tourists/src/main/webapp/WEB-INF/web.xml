@@ -18,7 +18,12 @@
     <servlet-name>SendFriendRequestServlet</servlet-name>
     <servlet-class>javaFiles.SendFriendRequestServlet</servlet-class>
   </servlet>
-  
+
+  <servlet>
+    <servlet-name>UploadProfilePictureServlet</servlet-name>
+    <servlet-class>javaFiles.UploadProfilePictureServlet</servlet-class>
+  </servlet>
+
   <servlet>
     <servlet-name>UnfriendServlet</servlet-name>
     <servlet-class>javaFiles.UnfriendServlet</servlet-class>
@@ -27,6 +32,11 @@
   <servlet-mapping>
     <servlet-name>UnfriendServlet</servlet-name>
     <url-pattern>/UnfriendServlet</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>UploadProfilePictureServlet</servlet-name>
+    <url-pattern>/UploadProfilePictureServlet</url-pattern>
   </servlet-mapping>
   
   <servlet-mapping>

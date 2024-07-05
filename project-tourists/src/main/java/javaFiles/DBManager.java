@@ -396,4 +396,12 @@ public class DBManager {
     }
 
 
+    public void updateProfilePicture(int userId, String imageURL) throws SQLException {
+        Connection connection = dataSource.getConnection();
+        System.out.println("AAAAAAAAAAAAAAAAAA");
+        PreparedStatement statement = connection.prepareStatement("UPDATE user_table SET profilePhoto = ? WHERE user_id = ?");
+        statement.setString(1, imageURL);
+        statement.setInt(2, userId);
+        statement.executeUpdate();
+    }
 }

@@ -7,29 +7,34 @@
 
 /* Body Styling */
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f5f5f5;
-    color: #333;
-    line-height: 1.6;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
 }
 
-/* Container Styling */
-.container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    margin: 20px;
-    padding: 20px;
-    width: 100%;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    top: 230px;
-    position: absolute;
+fieldset {
+    border: none;
+    margin: 0;
+    position: relative;
+    padding: 30px 0 0;
 }
+
+legend {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #007bff;
+    position: absolute;
+    top: -10px;
+    left: 0;
+    background-color: #fff;
+    padding: 10px 10px 0 0;
+    border: none;
+}
+
 
 /* Header Buttons */
-.homepage-button{
+.homepage-button {
     display: inline-block;
     margin: 10px;
     padding: 10px 20px;
@@ -46,7 +51,8 @@ body {
     top: 5px;
     left: 10px;
 }
-.UserProfile{
+
+.UserProfile {
     top: 80px;
     left: 20px;
     width: 150px;
@@ -54,7 +60,17 @@ body {
     border-radius: 50%;
     position: absolute;
 }
-.unfriend-button{
+
+.UserName {
+    top: 80px;
+    left: 190px;
+    color: #007bff;
+    font-size: 3em;
+    font-weight: bold;
+    position: absolute;
+}
+
+.unfriend-button {
     display: inline-block;
     margin: 10px;
     padding: 10px 20px;
@@ -67,10 +83,11 @@ body {
     text-align: center;
     text-decoration: none;
     transition: background-color 0.3s;
-    top:180px;
-    left:145px;
+    top: 180px;
+    left: 145px;
     position: absolute;
 }
+
 .logout-button {
     display: inline-block;
     margin: 10px;
@@ -88,6 +105,7 @@ body {
     top: 10px;
     right: 20px;
 }
+
 .Userpage-button {
     display: inline-block;
     margin: 10px;
@@ -109,6 +127,7 @@ body {
 .Userpage-button:hover {
     background-color: #0056b3;
 }
+
 .homepage-button:hover,
 .logout-button:hover {
     background-color: #0056b3;
@@ -118,66 +137,128 @@ body {
     width: 40%;
     text-align: center;
     margin-bottom: 20px;
-    left:30%;
-    top: 80px;
+    left: 30%;
+    top: 70px;
     position: absolute;
+    padding: 20px;
+    background-color: #007bff;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }
 
 .ProblemsSolved h1 {
     font-size: 2.5em;
-    color: #007bff;
+    color: #ccc;
+    margin-bottom: 10px;
 }
 
 .ProblemsSolved .Number {
     font-weight: bold;
+    font-size: 3em;
 }
 
-/* Left Section */
-.left {
-    width: 20%;
-}
-
-.Achievements, .tags {
-    margin-bottom: 20px;
-    overflow: auto;
-    max-height: 200px;
-}
-
-.Achievements h2, .tags h2 {
+.ProblemsSolved .Text {
     font-size: 1.5em;
-    color: #007bff;
-    margin-bottom: 10px;
+    color: #555;
 }
 
-.achievements-list, .tags-list {
+.profilePictureChangeLabel {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #007bff;
+}
+
+.PictureUploadButton {
+    position: absolute;
+    top: 160px;
+    left: 190px;
+    font-size: 0.8em;
+}
+
+
+.container {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    grid-gap: 20px;
+    padding: 20px;
+    width: calc(100% - 40px);
+    margin: 0 auto;
+    top: 250px;
+    position: absolute;
+    height: calc(100vh - 400px);
+}
+
+.left{
+    position: relative;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    max-height: 100%;
+}
+
+.middle,
+.right {
+    position: relative;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+    max-height: 100%;
+}
+
+.left::before,
+.middle::before,
+.right::before {
+    content: attr(data-label);
+    position: absolute;
+    top: -15px;
+    left: 20px;
+    background-color: #fff;
+    padding: 0 10px;
+    font-weight: bold;
+    color: #333;
+}
+
+.Achievements,
+.tags {
+    margin-bottom: 20px;
+    max-height: calc((100vh - 420px)/2);
+    overflow-y: auto;
+}
+
+.achievements-list,
+.tags-list,
+.friends-list {
     list-style: none;
     padding: 0;
+    margin: 0;
 }
 
-.achievements-list li, .tags-list li {
+.achievements-list li,
+.tags-list li,
+.friends-list li {
     margin-bottom: 10px;
-    font-size: 1.2em;
-}
-
-/* Middle Section */
-.middle {
-    width: 55%;
+    padding: 2px;
 }
 
 .button-container {
-    text-align: center;
+    display: flex;
+    justify-content: center;
     margin-bottom: 20px;
 }
 
 .button-container button {
-    padding: 12px 24px;
-    font-size: 1.1em;
-    font-weight: bold;
-    color: #fff;
-    background-color: #007bff;
-    border: none;
-    border-radius: 50px;
     margin: 0 10px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: white;
     cursor: pointer;
     transition: background-color 0.3s;
 }
@@ -186,70 +267,51 @@ body {
     background-color: #0056b3;
 }
 
-/* Quiz Table Styling */
 .table-container {
-    max-height: 400px;
-    overflow: auto;
+    overflow-x: auto;
 }
 
 .quiz-data {
     width: 100%;
     border-collapse: collapse;
-    margin-bottom: 20px;
+    margin-top: 20px;
 }
 
-.quiz-data th, .quiz-data td {
-    padding: 12px;
+.quiz-data th,
+.quiz-data td {
     border: 1px solid #ddd;
+    padding: 10px;
     text-align: left;
 }
 
 .quiz-data th {
-    background-color: #007bff;
-    color: #fff;
-}
-
-.quiz-data tr:nth-child(even) {
-    background-color: #f9f9f9;
-}
-
-/* Right Section */
-.right {
-    width: 20%;
-}
-
-.right h2 {
-    font-size: 1.5em;
-    color: #007bff;
-    margin-bottom: 10px;
+    background-color: #f2f2f2;
 }
 
 .friends-list {
-    list-style: none;
-    padding: 0;
-    max-height: 400px;
-    overflow: auto;
+    display: flex;
+    flex-direction: column;
 }
 
 .friends-list li {
     display: flex;
     align-items: center;
-    margin-bottom: 10px;
 }
 
 .friends-list img {
-    width: 40px;
-    height: 40px;
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
     margin-right: 10px;
 }
 
 .friends-list a {
-    color: #007bff;
     text-decoration: none;
-    font-size: 1.2em;
+    color: #007bff;
+    font-weight: bold;
 }
 
 .friends-list a:hover {
-    text-decoration: underline;
+    text-decoration: none;
+    color: red;
 }
