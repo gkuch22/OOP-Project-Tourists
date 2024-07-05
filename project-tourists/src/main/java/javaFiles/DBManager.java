@@ -586,7 +586,7 @@ public class DBManager {
         statement.executeUpdate();
 
         statement.close();
-
+    }
     public void sendFriendRequest(int user1Id,int user2Id) throws SQLException {
         Connection connection = dataSource.getConnection();
         PreparedStatement checker = connection.prepareStatement("Select * from mail_table where from_id=? AND to_id=? AND type='friendrequest'");
