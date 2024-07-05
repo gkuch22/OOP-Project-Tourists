@@ -1,5 +1,6 @@
 use tourists;
 
+
 DROP TABLE IF EXISTS question_table;
 DROP TABLE IF EXISTS review_table;
 DROP TABLE IF EXISTS friend_table;
@@ -82,6 +83,8 @@ CREATE TABLE quiz_table (
         multiple_pages BOOLEAN DEFAULT FALSE,
         practice_mode BOOLEAN DEFAULT FALSE,
         gradable BOOLEAN DEFAULT FALSE,
+        immediate_correction BOOLEAN DEFAULT FALSE,
+        random_questions BOOLEAN DEFAULT FALSE,
         FOREIGN KEY (creator_id) REFERENCES user_table(user_id)
 );
 
@@ -105,8 +108,10 @@ CREATE TABLE question_table (
         answer TEXT not null,
         quiz_id INT not null,
         question_type INT not null,
+        imageURL TEXT not null,
         FOREIGN KEY (quiz_id) REFERENCES quiz_table(quiz_id)
 );
+
 
 -- show tables;
 
@@ -146,6 +151,38 @@ CREATE TABLE question_table (
 -- INSERT INTO review_table (user_id, quiz_id, score, date, rating, review_text) VALUES
 -- 						 (3, 1, 95, '2024-03-04', 3, 'good!');
 
+
+
+-- bendoooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+-- INSERT INTO login_table VALUES (1,'bendo','1234');
+-- INSERT INTO login_table VALUES (2,'Quaggy','1234');
+-- INSERT INTO login_table VALUES (3,'Joe','1234');
+-- INSERT INTO achievement_table(achievement_id, achievement, num_created) VALUES (1,'supreme',10);
+-- INSERT INTO user_table VALUES (1,'bendo',false,false,30,true,'https://i.pinimg.com/736x/64/5f/d9/645fd98adba55582c6851985779fcb0e.jpg');
+-- INSERT INTO user_table VALUES (2,'Quaggy',false,false,20,true,'https://www.watchmojo.com/uploads/thumbs720/Fi-T-Top10-Family-Guy-Characters_I2B8Z1-720p30-1.jpg');
+-- INSERT INTO user_table VALUES (3,'Joe',false,false,14,true,'https://media.entertainmentearth.com/assets/images/fe9f5fc5d21e4c338652f08b5f86b0caxl.jpg');
+-- Insert into achievement_table(achievement_id,achievement,num_created) Values (2,'wowzers',20);
+-- INSERT INTO quiz_table(quiz_id,quiz_name,quiz_tag,difficulty,creator_id) VALUES (1,'ez','history','easy',1);
+-- INSERT INTO quiz_table(quiz_id,quiz_name,quiz_tag,difficulty,creator_id) VALUES (2,'mid','english;history','medium',1);
+-- INSERT INTO quiz_table(quiz_id,quiz_name,quiz_tag,difficulty,creator_id) VALUES (3,'hard','math','hard',1);
+
+-- INSERT INTO review_table(user_id, quiz_id, quiz_name,score, date, review_text) VALUES (1,1,'ez',10,NOW(),'');
+-- INSERT INTO review_table(user_id, quiz_id, quiz_name,score, date, review_text) VALUES (1,2,'mid',8,NOW(),'');
+-- INSERT INTO review_table(user_id, quiz_id, quiz_name,score, date, review_text) VALUES (1,3,'hard',5,NOW(),'');
+
+-- INSERT INTO review_table(user_id, quiz_id, quiz_name,score, date, review_text) VALUES (2,1,'ez',9,NOW(),'');
+-- INSERT INTO review_table(user_id, quiz_id, quiz_name,score, date, review_text) VALUES (2,2,'mid',7,NOW(),'');
+-- INSERT INTO review_table(user_id, quiz_id, quiz_name,score, date, review_text) VALUES (2,3,'hard',4,NOW(),'');
+
+-- INSERT INTO review_table(user_id, quiz_id, quiz_name,score, date, review_text) VALUES (3,1,'ez',8,NOW(),'');
+-- INSERT INTO review_table(user_id, quiz_id, quiz_name,score, date, review_text) VALUES (3,2,'mid',7,NOW(),'');
+-- INSERT INTO review_table(user_id, quiz_id, quiz_name,score, date, review_text) VALUES (3,3,'hard',5,NOW(),'');
+-- INSERT INTO friend_table(user_id_1, user_id_2) VALUES (1,2);
+-- INSERT INTO friend_table(user_id_1, user_id_2) VALUES (1,3);
+-- INSERT INTO friend_table(user_id_1, user_id_2) VALUES (2,3);
+-- bendooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+
 -- select * from quiz_table;
 -- select * from review_table;
 -- select * from user_table;
@@ -179,4 +216,17 @@ CREATE TABLE question_table (
 # INSERT INTO friend_table(user_id_1, user_id_2) VALUES (1,3);
 # INSERT INTO friend_table(user_id_1, user_id_2) VALUES (2,3);
 
+# Insertions for lsurm 22
+#INSERT into login_table(user_id, username,password) VALUES(1,"luka", "luka");
 
+#INSERT into user_table(user_id, username, is_admin, practiced, created_Quizzes, scored_Highest, profilePhoto)
+ #           VALUES(1, "luka", false, false, false, false, "photo");
+
+
+-- select * from quiz_table;
+-- select * from review_table;
+
+-- * from mail_table;
+-- select * from friend_table;
+-- select * from user_table;
+-- select * from login_table;

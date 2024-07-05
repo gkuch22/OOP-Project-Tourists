@@ -1,5 +1,6 @@
 package javaFiles;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -15,6 +16,13 @@ public interface Quiz {
     void setQuiz_tag(String quiz_tag);
 
     String getDifficulty();
+    String getQuizTagsAsString();
+
+
+    boolean isRandom();
+
+    boolean isImmediatelyCorrected();
+
     void setDifficulty(String difficulty);
 
     int getCreator_id();
@@ -28,6 +36,9 @@ public interface Quiz {
 
     boolean isGradable();
     void setGradable(boolean gradable);
+
+    void addQuestion(Question question);
+    ArrayList<Question> getQuestions();
 
     Date getDate();
 

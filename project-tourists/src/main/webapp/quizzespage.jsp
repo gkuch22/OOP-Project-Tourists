@@ -16,7 +16,7 @@
 <html>
 <head>
     <title>Quizzerinho</title>
-    <link rel="stylesheet" href="quizzespagestyle.css">
+    <link rel="stylesheet" href="quizzespageStyle.css">
 </head>
 
 <body>
