@@ -49,7 +49,11 @@
             for(User friend : friends){
                 String currUsername = friend.getUsername();
         %>
+            <div class="friendbox">
+                <img class="profilepicture" src=<%=friend.getProfilePhoto()%>>
                 <div class="friendbox" onclick="window.location.href='inboxchatpage.jsp?username2=<%= currUsername %>'"><%= currUsername %></div>
+            </div>
+
         <%
             }
         %>
