@@ -4,9 +4,11 @@ body{
     margin: 0;
     background-color: #1b1b32;
     color: #f5f6f7;
-    font-family: Tahoma;
+    font-family: Serif;
     font-size: 16px;
 }
+
+
 
 form {
     width: 60vw;

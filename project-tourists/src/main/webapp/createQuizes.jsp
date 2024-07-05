@@ -10,9 +10,11 @@
 <head>
     <title>Create Quiz</title>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="quizzesStyle.css"/>
+    <link rel="stylesheet" href="createQuizzesStyle.css"/>
 </head>
 <body>
+<!-- Include the top bar -->
+<jsp:include page="topBar.jsp" />
 <form method="post" action="/createQuiz">
     <label>Quiz name: <input type = "text" name="quizname" placeholder = "Name" required> </label>
     <label >Description: </label>

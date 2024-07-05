@@ -222,7 +222,8 @@ CREATE TABLE question_table (
 #INSERT into user_table(user_id, username, is_admin, practiced, created_Quizzes, scored_Highest, profilePhoto)
  #           VALUES(1, "luka", false, false, false, false, "photo");
 
-
+# Insert into login_table (user_id,username,password) values(1, "luka", "luka");
+# Insert into user_table (user_id, username) values(1,"luka");
 -- select * from quiz_table;
 -- select * from review_table;
 
