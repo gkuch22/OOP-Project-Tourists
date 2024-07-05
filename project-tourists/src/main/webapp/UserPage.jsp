@@ -9,7 +9,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quiz Site - User Page</title>
-    <link rel="stylesheet" href="userStyle.css">
+    <link rel="stylesheet" href="UserStyle.css">
 </head>
 <body>
 <%
@@ -20,7 +20,7 @@
 
 
     try {
-        user = manager.getUserData(1);
+        user = (User)request.getSession().getAttribute("user");
         quizzesTaken = manager.getUserQuizzes(user.getUser_id());
         quizzesCreated = manager.getUserCreatedQuizzes(user);
     } catch (SQLException e) {
