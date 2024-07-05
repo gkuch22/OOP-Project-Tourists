@@ -12,6 +12,8 @@
     <link rel="stylesheet" href="/chooseQuestionStyle.css">
 </head>
 <body>
+    <!-- Include the top bar -->
+    <jsp:include page="topBar.jsp" />
     <h1>Choose question type or finish</h1>
     <form method="post" action="/chooseQuestion">
         <fieldset class="buttons">

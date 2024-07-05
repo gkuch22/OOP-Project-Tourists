@@ -12,6 +12,8 @@
     <link rel="stylesheet" href="multipleChoiceStyle.css">
 </head>
 <body>
+<!-- Include the top bar -->
+<jsp:include page="topBar.jsp" />
 <h1>Multiple Choice</h1>
     <form method="post" action="/multipleChoice">
         <div class="question">

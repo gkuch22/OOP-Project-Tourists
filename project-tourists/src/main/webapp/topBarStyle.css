@@ -1,0 +1,46 @@
+body{
+    padding-top: 75px;
+}
+
+.homePagePicture{
+    width: 200px;
+    height: 50px;
+    border-radius: 25px;
+    border: 3px solid #f5f6f7;
+    margin-bottom: 15px;
+    margin-left: 10px;
+}
+
+.profilePicture{
+    float:right;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 3px solid #f5f6f7;
+    margin-bottom: 15px;
+    margin-right: 15px;
+}
+
+.inboxPicture{
+    float:right;
+    width: 60px;
+    height: 40px;
+    /*border-radius: 50%;*/
+    /*border: 3px solid #f5f6f7;*/
+    margin-bottom: 15px;
+    margin-right: 25px;
+    margin-top: 10px;
+}
+
+
+.topbar{
+    position: fixed;
+    top: 0;
+    width: 100%;
+    padding-top: 10px;
+    border-bottom: 1px solid #f5f6f7;
+    border-bottom-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+    background-color: #2D2D4B;
+    z-index: 1000;
+}
