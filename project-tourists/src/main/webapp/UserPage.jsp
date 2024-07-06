@@ -21,7 +21,7 @@
 
 
     try {
-        user = manager.getUserData(1);
+        user = (User)request.getSession().getAttribute("user");
         quizzesTaken = manager.getUserQuizzes(user.getUser_id());
         quizzesCreated = manager.getUserCreatedQuizzes(user);
     } catch (SQLException e) {

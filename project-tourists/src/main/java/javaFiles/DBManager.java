@@ -18,7 +18,51 @@ public class DBManager {
         dataSource = new BasicDataSource();
         dataSource.setUrl("jdbc:mysql://localhost:3306/tourists");
         dataSource.setUsername("root");
-        dataSource.setPassword("rootroot");
+        dataSource.setPassword("+qwerty+");
+    }
+
+    public int get_user_id(String name) throws SQLException {
+        Connection connection = dataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement("select user_id from login_table where username = ?");
+        statement.setString(1,name);
+        ResultSet res = statement.executeQuery();
+        ArrayList<Integer> list = new ArrayList<Integer>();
+
+        while(res.next()){
+            int num = res.getInt("user_id");
+            list.add(num);
+        }
+
+        res.close();
+        statement.close();
+        connection.close();
+        if(list.size() == 0) return -1;
+        if(list.size() > 1) return -1;
+        return list.get(0);
+    }
+
+    public int user_password_is_correct(String name, String password) throws SQLException {
+        return -1;
+    }
+
+    public int add_user(String name, String password) throws SQLException {
+        Connection connection = dataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement("insert into login_table (username, password) values (?, ?)");
+        statement.setString(1,name);
+        statement.setString(2,password);
+        statement.executeUpdate();
+        statement.close();
+        int user_id = get_user_id(name);
+
+        if(user_id != -1){
+            statement = connection.prepareStatement("insert into user_table (user_id, username) values (?, ?)");
+            statement.setInt(1,user_id);
+            statement.setString(2,name);
+            statement.executeUpdate();
+            statement.close();
+        }
+        connection.close();
+        return user_id;
     }
 
     public List<Quiz> getQuizzes() throws SQLException {
