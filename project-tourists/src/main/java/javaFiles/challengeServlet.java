@@ -19,9 +19,9 @@ public class challengeServlet extends HttpServlet {
         int quizId = Integer.parseInt(request.getParameter("quizId"));
         int fromId = Integer.parseInt(request.getParameter("requesterId"));
 
-//        int toId = 1; //TODO useer!
-        User currUser = (User) request.getSession().getAttribute("user");
-        int toId = currUser.getUser_id();
+        int toId = 1; //TODO useer!
+//        User currUser = (User) request.getSession().getAttribute("user");
+//        int toId = currUser.getUser_id();
 
         DBManager dbManager = (DBManager) getServletContext().getAttribute("db-manager");
         try {

@@ -18,13 +18,13 @@
 </head>
 
 <body>
-
+<jsp:include page="topBar.jsp" />
 <%
-//    int id1 = 1;
-//    String username = "nick";
-    User currUser = (User) request.getSession().getAttribute("user");
-    int id1 = currUser.getUser_id();
-    String username = currUser.getUsername();
+    int id1 = 1;
+    String username = "nick";
+//    User currUser = (User) request.getSession().getAttribute("user");
+//    int id1 = currUser.getUser_id();
+//    String username = currUser.getUsername();
 
 
     DBManager dbManager = (DBManager) application.getAttribute("db-manager");

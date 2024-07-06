@@ -10,8 +10,8 @@
 <%@ page import="javaFiles.Quiz" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
-    session.setAttribute("quizId", 13);
-    session.setAttribute("user_id", 15);
+//    session.setAttribute("quizId", 1);
+    session.setAttribute("user_id", 1);
 %>
 <html lang="en">
 <head>
@@ -108,7 +108,8 @@
 <body>
 
 <%
-    int quizId = 13;
+//    int quizId = 13;
+    int quizId = Integer.parseInt(request.getParameter("quiz_id"));
     DBManager dbManager = new DBManager();
     Quiz quiz = dbManager.getQuiz(quizId);
     session.setAttribute("quizz", quiz);

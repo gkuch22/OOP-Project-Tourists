@@ -16,7 +16,7 @@ public class DBManager {
 
     public DBManager() throws SQLException {
         dataSource = new BasicDataSource();
-        dataSource.setUrl("jdbc:mysql://localhost:3306/test_db");
+        dataSource.setUrl("jdbc:mysql://localhost:3306/tourists");
         dataSource.setUsername("root");
         dataSource.setPassword("rootroot");
     }
