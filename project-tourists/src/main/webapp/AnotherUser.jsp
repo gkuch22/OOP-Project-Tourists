@@ -5,13 +5,14 @@
 
 <%
     Integer user_id = (Integer) request.getAttribute("current_id");
+    System.out.println(user_id);
 %>
 <html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quiz Site - User Page</title>
-    <link rel="stylesheet" href="userStyle.css">
+    <link rel="stylesheet" href="UserStyle.css">
 </head>
 <body>
 <%
@@ -62,9 +63,12 @@
 <div class="UserName">
     <a><%=user.getUsername()%></a>
 </div>
-<a href="index.jsp" class="homepage-button">Homepage</a>
+<div class="topLine">
+    <a href="index.jsp" class="homepage-button">Homepage</a>
+    <a href="UserPage.jsp" class="Userpage-button">Back to User Page</a>
+</div>>
 <img class="UserProfile" src="<%=user.getProfilePhoto()%>" alt="<%=user.getProfilePhoto()%>">
-<a href="UserPage.jsp" class="Userpage-button">Back to User Page</a>
+
 <%
     try {
         boolean isFriend = false;
@@ -148,9 +152,9 @@
                         for (User user1 : manager.getFriends(user.getUser_id())) {
                 %>
                 <li>
-                    <a href="AnotherUser?AnotherUserId=<%= user1.getUser_id() %>">
-                        <img src="<%= user1.getProfilePhoto() %>" alt="<%=user.getProfilePhoto()%>">
-                        <span><%= user1.getUsername() %></span>
+                    <a href="AnotherUser?name=<%= user1.getUsername() %>">
+                        <img src="<%= user1.getProfilePhoto() %>">
+                        <span class="FriendUserName"><%= user1.getUsername() %></span>
                     </a>
                 </li>
                 <%

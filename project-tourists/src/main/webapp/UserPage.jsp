@@ -9,7 +9,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quiz Site - User Page</title>
-    <link rel="stylesheet" href="userStyle.css">
+    <link rel="stylesheet" href="UserStyle.css">
 </head>
 <body>
 <%
@@ -57,21 +57,23 @@
 %>
 
 
+<div class="topLine">
+    <a href="index.jsp" class="homepage-button">Homepage</a>
+    <a href="index.jsp" class="logout-button">Log out</a>
+</div>
 
-<a href="index.jsp" class="homepage-button">Homepage</a>
-<a href="index.jsp" class="logout-button">Log out</a>
 <div class="UserName">
     <a><%=user.getUsername()%></a>
 </div>
 
-<div class="PictureUploadButton">
+<div class="PictureUpload">
     <a class="profilePictureChangeLabel">change your profile picture:</a>
     <form method="post" action="UploadProfilePictureServlet" >
         <div class="image">
-            <label for="imageURL">Enter image url</label>
-            <input placeholder="ex: https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.smithsonianmag.com%2Fscience-nature%2F14-fun-facts-about-parrots-can-sing-use-tools-and-live-long-time-180957714%2F&psig=AOvVaw2k_fVcL_-d4b2WqlwTi1ir&ust=1720184451651000&source=images&cd=vfe&opi=89978449&ved=0CBAQjRxqFwoTCPj89cm4jYcDFQAAAAAdAAAAABAS" type="text" name="imageURL" id="imageURL">
+            <label for="imageURL" class="profilePictureUploadUrl">Enter image url:</label>
+            <input placeholder="ex: https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.smithsonianmag.com%2Fscience-nature%2F14-fun-facts-about-parrots-can-sing-use-tools-and-live-long-time-180957714%2F&psig=AOvVaw2k_fVcL_-d4b2WqlwTi1ir&ust=1720184451651000&source=images&cd=vfe&opi=89978449&ved=0CBAQjRxqFwoTCPj89cm4jYcDFQAAAAAdAAAAABAS" type="text" name="imageURL" id="imageURL" class="pictureUploadField">
         </div>
-        <button type="submit">Upload</button>
+        <button type="submit" class="PictureUploadButton">Upload</button>
     </form>
 </div>
 
@@ -143,9 +145,9 @@
                         for (User friend : manager.getFriends(user.getUser_id())) {
                 %>
                 <li>
-                    <a href="AnotherUser?AnotherUserId=<%= friend.getUser_id() %>">
+                    <a href="AnotherUser?name=<%= friend.getUsername() %>">
                         <img src="<%= friend.getProfilePhoto() %>">
-                        <span><%= friend.getUsername() %></span>
+                        <span class="FriendUserName"><%= friend.getUsername() %></span>
                     </a>
                 </li>
                 <%

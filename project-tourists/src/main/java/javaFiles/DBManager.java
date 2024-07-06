@@ -202,16 +202,16 @@ public class DBManager {
         ResultSet resultSet = statement.executeQuery();
         List<Quiz> quizzesTaken = new ArrayList<Quiz>();
         User user = null;
-        if(resultSet.next()) {
-            int User_id = resultSet.getInt("user_id");
-            String username = resultSet.getString("username");
-            boolean is_admin = resultSet.getBoolean("is_admin");
-            boolean practiced = resultSet.getBoolean("practiced");
-            int created_quizzes = resultSet.getInt("created_Quizzes");
-            boolean scoredHighest = resultSet.getBoolean("scored_Highest");
-            String profilePhoto = resultSet.getString("profilePhoto");
-            user = new UserImpl(User_id,username,is_admin,practiced,created_quizzes,scoredHighest,profilePhoto,quizzesTaken);
-        }
+        resultSet.next();
+        int User_id = resultSet.getInt("user_id");
+        String username = resultSet.getString("username");
+        boolean is_admin = resultSet.getBoolean("is_admin");
+        boolean practiced = resultSet.getBoolean("practiced");
+        int created_quizzes = resultSet.getInt("created_Quizzes");
+        boolean scoredHighest = resultSet.getBoolean("scored_Highest");
+        String profilePhoto = resultSet.getString("profilePhoto");
+        user = new UserImpl(User_id,username,is_admin,practiced,created_quizzes,scoredHighest,profilePhoto,quizzesTaken);
+
         resultSet.close();
         statement.close();
         PreparedStatement statement1 = connection.prepareStatement("Select * from review_table where user_id = ?;");
@@ -249,7 +249,7 @@ public class DBManager {
         List<Quiz> res = new ArrayList<Quiz>();
 
         Connection connection = dataSource.getConnection();
-        PreparedStatement statement = connection.prepareStatement("SELECT * FROM quiz_table where creator_id=? ORDER BY date_created ASC;");
+        PreparedStatement statement = connection.prepareStatement("SELECT * FROM quiz_table where creator_id=? ORDER BY date_created DESC;");
         statement.setInt(1,user.getUser_id());
         ResultSet resultSet = statement.executeQuery();
 
@@ -296,7 +296,7 @@ public class DBManager {
 
     public List<QuizPerformance> getUserQuizzes(int User_id) throws SQLException {
         Connection connection = dataSource.getConnection();
-        PreparedStatement statement = connection.prepareStatement("Select * from review_table where user_id = ? ORDER BY review_table.date ASC;");
+        PreparedStatement statement = connection.prepareStatement("Select * from review_table where user_id = ? ORDER BY review_table.date DESC;");
         statement.setInt(1,User_id);
         ResultSet resultSet = statement.executeQuery();
 
@@ -620,7 +620,6 @@ public class DBManager {
     }
     public void updateProfilePicture(int userId, String imageURL) throws SQLException {
         Connection connection = dataSource.getConnection();
-        System.out.println("AAAAAAAAAAAAAAAAAA");
         PreparedStatement statement = connection.prepareStatement("UPDATE user_table SET profilePhoto = ? WHERE user_id = ?");
         statement.setString(1, imageURL);
         statement.setInt(2, userId);

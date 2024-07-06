@@ -329,13 +329,11 @@ legend {
     text-decoration: none;
     color: white;
     font-weight: bold;
-}
-.friends-list span{
-    position: relative;
     top:-18px;
     left:-5px;
     font-size:1.3em;
 }
+
 .friends-list a:hover {
     text-decoration: none;
     color: #3A3A5F;
