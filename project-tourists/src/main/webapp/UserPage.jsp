@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="UserStyle.css">
 </head>
 <body>
+<jsp:include page="topBar.jsp" />
 <%
     DBManager manager = (DBManager) application.getAttribute("db-manager");
     User user;
@@ -55,12 +56,6 @@
     }
     quizzesCreatedJson.append("]");
 %>
-
-
-<div class="topLine">
-    <a href="index.jsp" class="homepage-button">Homepage</a>
-    <a href="index.jsp" class="logout-button">Log out</a>
-</div>
 
 <div class="UserName">
     <a><%=user.getUsername()%></a>

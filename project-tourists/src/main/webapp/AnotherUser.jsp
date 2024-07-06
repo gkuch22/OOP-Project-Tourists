@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="UserStyle.css">
 </head>
 <body>
+<jsp:include page="topBar.jsp" />
 <%
     DBManager manager = (DBManager) application.getAttribute("db-manager");
     List<QuizPerformance> quizzesTaken;
@@ -63,10 +64,6 @@
 <div class="UserName">
     <a><%=user.getUsername()%></a>
 </div>
-<div class="topLine">
-    <a href="index.jsp" class="homepage-button">Homepage</a>
-    <a href="UserPage.jsp" class="Userpage-button">Back to User Page</a>
-</div>>
 <img class="UserProfile" src="<%=user.getProfilePhoto()%>" alt="<%=user.getProfilePhoto()%>">
 
 <%
