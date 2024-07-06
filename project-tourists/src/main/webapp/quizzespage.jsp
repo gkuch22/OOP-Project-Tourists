@@ -97,8 +97,8 @@
                 <th>Date</th>
                 <th>Link to Quiz</th>
                 <%
-//                    int id = (int) request.getSession().getAttribute("user_id");
-                    int id = 1;
+                    int id = (int) request.getSession().getAttribute("user_id");
+//                    int id = 1;
                     User user = dbManager.getUserData(id);
                     if(user.isAdmin()){
                 %>

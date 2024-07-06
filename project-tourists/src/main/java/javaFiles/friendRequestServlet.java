@@ -19,10 +19,10 @@ public class friendRequestServlet extends HttpServlet {
         int fromId = Integer.parseInt(request.getParameter("requesterId"));
 
 //        int toId = 1; //TODO userid get parameter
-        User currUser = (User) request.getSession().getAttribute("user");
-        int toId = currUser.getUser_id();
-
         DBManager dbManager = (DBManager) getServletContext().getAttribute("db-manager");
+        int toId = (int) request.getSession().getAttribute("user_id");
+
+
         try {
             dbManager.removeFriendRequest(fromId, toId);
         } catch (SQLException e) {

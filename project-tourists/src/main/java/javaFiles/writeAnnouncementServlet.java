@@ -15,9 +15,10 @@ public class writeAnnouncementServlet extends HttpServlet {
         String title = request.getParameter("titleText");
         String context = request.getParameter("contextText");
 //        int userId = (int) request.getSession().getAttribute("user_id");
-        int userId = 1;
-
+//        int userId = 1;
         DBManager dbManager = (DBManager) getServletContext().getAttribute("db-manager");
+        int userId = (int) request.getSession().getAttribute("user_id");
+
         try {
             dbManager.addAnnouncement(title, context, userId);
         } catch (SQLException e) {
