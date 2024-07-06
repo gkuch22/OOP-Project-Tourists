@@ -18,15 +18,15 @@
     <form method="post" action="/multipleChoice">
         <div class="question">
             <label for="question">Type question</label>
-            <textarea placeholder="ex: How many goals did Mikautadze score?" name="question" id="question" rows="5" cols="40"></textarea>
+            <textarea required placeholder="ex: How many goals did Mikautadze score?" name="question" id="question" rows="5" cols="40"></textarea>
         </div>
         <div class="possibleAnswers">
             <label for="possAnswers">Enter possible answers</label>
-            <textarea placeholder="ex: 15,3,4,11" name="possAnswers" id="possAnswers" rows="3" cols="30"></textarea>
+            <textarea required placeholder="ex: 15,3,4,11" name="possAnswers" id="possAnswers" rows="3" cols="30"></textarea>
         </div>
         <div class="answer">
             <label for="answer">Enter correct answer</label>
-            <input name="answer" id="answer" type="text" placeholder="ex: 3">
+            <input required name="answer" id="answer" type="text" placeholder="ex: 3">
         </div>
         <input type="submit" value="Add Question">
     </form>

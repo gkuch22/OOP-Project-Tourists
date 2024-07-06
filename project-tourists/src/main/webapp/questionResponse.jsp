@@ -18,11 +18,11 @@
     <form method="post" action="/questionResponse">
         <div class="questionText">
           <label for="question">Type question </label>
-            <textarea name="question" id="question" rows="5" cols="40" placeholder="ex:What year did Stalin..."></textarea>
+            <textarea required name="question" id="question" rows="5" cols="40" placeholder="ex:What year did Stalin..."></textarea>
         </div>
         <div class="answerText">
             <label for="answer">Enter answer</label>
-            <textarea name="answer" id="answer" rows = "3" cols = "32" placeholder="ex:1922"></textarea>
+            <textarea required name="answer" id="answer" rows = "3" cols = "32" placeholder="ex:1922"></textarea>
         </div>
         <input type="submit" value="Add Question">
     </form>

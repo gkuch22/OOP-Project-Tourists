@@ -19,7 +19,7 @@ public class UploadProfilePictureServlet extends HttpServlet {
         String imageURL = (String)request.getParameter("imageURL");
         DBManager manager = (DBManager) getServletContext().getAttribute("db-manager");
         try {
-            manager.updateProfilePicture(1,imageURL);
+            manager.updateProfilePicture((Integer) request.getSession().getAttribute("user_id"),imageURL);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

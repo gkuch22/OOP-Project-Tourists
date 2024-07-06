@@ -10,7 +10,7 @@ import java.sql.SQLException;
 
 public class UnfriendServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int loggedInUserId = 1;
+        int loggedInUserId = (Integer)request.getSession().getAttribute("user_id");
         int userId = Integer.parseInt(request.getParameter("userId"));
         request.setAttribute("current_id", userId);
         DBManager manager = (DBManager) getServletContext().getAttribute("db-manager");

@@ -73,6 +73,6 @@ public class CreateQuizServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 //        System.out.println("get");
-        getServletContext().getRequestDispatcher("/createQuizes.jsp").forward(request,response);
+        request.getRequestDispatcher("/createQuizes.jsp").forward(request,response);
     }
 }

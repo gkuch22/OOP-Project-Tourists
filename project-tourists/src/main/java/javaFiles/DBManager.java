@@ -1,14 +1,21 @@
 package javaFiles;
 
+//import javafx.util.Pair;
 import javafx.util.Pair;
 import org.apache.commons.dbcp2.BasicDataSource;
 
+//import javax.jms.Connection;
 import java.sql.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
+//import java.sql.Date;
 import java.util.Date;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+
 
 public class DBManager {
 
@@ -18,7 +25,7 @@ public class DBManager {
         dataSource = new BasicDataSource();
         dataSource.setUrl("jdbc:mysql://localhost:3306/tourists");
         dataSource.setUsername("root");
-        dataSource.setPassword("+qwerty+");
+        dataSource.setPassword("rootroot");
     }
 
     public int get_user_id(String name) throws SQLException {
@@ -273,6 +280,7 @@ public class DBManager {
         List<Quiz> quizzesTaken = new ArrayList<Quiz>();
         User user = null;
         resultSet.next();
+        System.out.println(user_id);
         int User_id = resultSet.getInt("user_id");
         String username = resultSet.getString("username");
         boolean is_admin = resultSet.getBoolean("is_admin");
@@ -364,6 +372,28 @@ public class DBManager {
         return result;
     }
 
+    public void deleteUser(int user_id) throws SQLException {
+        Connection connection = dataSource.getConnection();
+
+        PreparedStatement statement8 = connection.prepareStatement("DELETE FROM login_table where user_id=?;");
+        statement8.setInt(1,user_id);
+        statement8.executeUpdate();
+        statement8.close();
+
+        connection.close();
+    }
+
+    public int getReviewCount() throws SQLException {
+        Connection connection = dataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement("Select * from review_table");
+        ResultSet resultSet = statement.executeQuery();
+        int cnt=0;
+        while(resultSet.next()){
+            cnt++;
+        }
+        return cnt;
+    }
+
     public List<String> searchUsersByPartialUsername(String partialUsername) throws SQLException {
         Connection connection = dataSource.getConnection();
         PreparedStatement statement = connection.prepareStatement("Select username from user_table where username Like ?");
@@ -444,6 +474,24 @@ public class DBManager {
         connection.close();
         return quizzes;
     }
+
+    public boolean userExists(String name) throws SQLException {
+        Connection connection = dataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement("Select * from user_table where username = ?");
+        statement.setString(1,name);
+        ResultSet resultSet = statement.executeQuery();
+
+        int cnt = 0;
+        while(resultSet.next()){
+            cnt++;
+        }
+
+        resultSet.close();
+        statement.close();
+        connection.close();
+        return cnt>0;
+    }
+
     public List<User> getFriends(int User_id) throws SQLException {
         Connection connection = dataSource.getConnection();
         PreparedStatement statement = connection.prepareStatement("Select * from friend_table where user_id_1 = ?");
@@ -635,7 +683,6 @@ public class DBManager {
     }
 
 
-
     public List<Message> getChallenges(int id) throws SQLException {
         List<Message> challenges = new ArrayList<Message>();
 
@@ -695,7 +742,34 @@ public class DBManager {
         statement.executeUpdate();
 
         statement.close();
+        connection.close();
     }
+
+    public void removeQuiz(int quizId) throws SQLException{
+        String query = "DELETE FROM quiz_table WHERE quiz_id = ?";
+        Connection connection = dataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement(query);
+        statement.setInt(1, quizId);
+        statement.executeUpdate();
+        statement.close();
+        connection.close();
+    }
+
+    public void addAnnouncement(String title, String context, int userId) throws SQLException{
+        String query = "INSERT INTO post_table (post_title, post_text, user_id, date) VALUES (?, ?, ?, NOW())";
+        Connection connection = dataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement(query);
+
+        statement.setString(1, title);
+        statement.setString(2, context);
+        statement.setInt(3, userId);
+
+        statement.executeUpdate();
+        statement.close();
+        connection.close();
+    }
+
+
     public void sendFriendRequest(int user1Id,int user2Id) throws SQLException {
         Connection connection = dataSource.getConnection();
         PreparedStatement checker = connection.prepareStatement("Select * from mail_table where from_id=? AND to_id=? AND type='friendrequest'");
@@ -808,7 +882,7 @@ public class DBManager {
 
     public Quiz getQuiz(int quizId) throws SQLException {
         String name = "", diff = "", quizTag = "", practice = "";
-        String query = "SELECT quiz_name, quiz_tag, difficulty, creator_id, date_created, multiple_pages, practice_mode, gradable, immediate_correction, random_questions FROM quiz_table WHERE quiz_id = ?";
+        String query = "SELECT quiz_name, quiz_description, quiz_tag,difficulty, creator_id, date_created, multiple_pages, practice_mode, gradable, immediate_correction, random_questions, timed, duration_time FROM quiz_table WHERE quiz_id = ?";
         Quiz quiz = null;
         // System.out.println(query);
         Connection connection = dataSource.getConnection();
@@ -828,9 +902,9 @@ public class DBManager {
             }
             quiz = new QuizImpl(quizId, rs.getString("quiz_name"), rs.getString("quiz_tag"),
                     rs.getString("difficulty"), rs.getInt("creator_id"), rs.getBoolean("random_questions"),
-                    rs.getBoolean("gradable"), rs.getBoolean("multiple_pages"), rs.getBoolean("immediate_correction"),
+                    rs.getBoolean("timed"), rs.getBoolean("multiple_pages"), rs.getBoolean("immediate_correction"),
                     rs.getBoolean("practice_mode"), rs.getBoolean("gradable"),
-            "description", 1);
+                    rs.getString("quiz_description"), rs.getInt("duration_time"));
 
         }
 
@@ -1030,7 +1104,33 @@ public class DBManager {
         statement.close();
         connection.close();
         return nextQuizId;
-
-
     }
+
+    public void banUser(int user_id, String date, String reason) throws SQLException, ParseException {
+        Connection connection = dataSource.getConnection();
+
+        PreparedStatement statement = connection.prepareStatement("INSERT INTO ban_table " +
+                "(user_id, expire_date, reason) " +
+                "VALUES (?, ?, ?)");
+
+//        SqlDate sqlDate = new SqlDate(utilDate.getTime());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+
+        Date parsedDate = dateFormat.parse(date);
+        Timestamp sqlDate = new Timestamp(parsedDate.getTime());
+
+        // Step 2: Convert LocalDate to java.sql.Date
+//        Date sqlDate = Date.valueOf(localDate);
+        statement.setInt(1,user_id);
+        statement.setTimestamp(2,sqlDate);
+        statement.setString(3, reason);
+        statement.executeUpdate();
+        statement.close();
+        connection.close();
+    }
+
+
+
+
 }

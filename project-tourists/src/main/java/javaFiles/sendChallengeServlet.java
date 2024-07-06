@@ -17,7 +17,7 @@ public class sendChallengeServlet extends HttpServlet {
 
         HttpSession session = request.getSession();
         int fromId = (Integer) session.getAttribute("user_id");
-
+        boolean submissionSuccess = false;
         try {
             DBManager dbManager = new DBManager();
             int toId = dbManager.getUserIdByName(friendName);
@@ -26,10 +26,11 @@ public class sendChallengeServlet extends HttpServlet {
                 Integer tmp = (Integer) session.getAttribute("quizId");
                 String tmp2 = tmp.toString();
                 dbManager.sendMail(fromId, toId, "challenge", tmp2);
-                response.sendRedirect("review.jsp");
-            } else {
-                response.sendRedirect("review.jsp");
+                submissionSuccess = true;
+
             }
+            request.setAttribute("submissionStatus", submissionSuccess ? "success" : "failure");
+            request.getRequestDispatcher("review.jsp").forward(request, response);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
