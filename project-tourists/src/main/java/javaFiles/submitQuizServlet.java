@@ -80,9 +80,13 @@ public class submitQuizServlet extends HttpServlet {
                 }
             }
         }
+        System.out.println(correctAnswers + " correctAnswer");
 
-
-
+        System.out.println(startTime + " startTime");
+        System.out.println(endTime + " endTime");
+        session.setAttribute("score", correctAnswers);
+        session.setAttribute("timeTaken", endTime - startTime);
+        session.setAttribute("totalQuestions", questions.size());
         request.setAttribute("correctAnswers", correctAnswers);
         request.setAttribute("totalQuestions", questions.size());
         request.setAttribute("timeTaken", endTime - startTime);

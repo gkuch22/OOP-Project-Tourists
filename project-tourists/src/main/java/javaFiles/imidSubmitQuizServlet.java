@@ -25,6 +25,8 @@ public class imidSubmitQuizServlet extends HttpServlet {
         long startTime = Long.parseLong(request.getParameter("startTime"));
         long endTime = System.currentTimeMillis();
         long duration = endTime - startTime;
+        System.out.println(startTime + " startTime");
+        System.out.println(endTime + " endTime");
 
         int correctCount = Integer.parseInt(request.getParameter("correctCount"));
         int incorrectCount = Integer.parseInt(request.getParameter("incorrectCount"));

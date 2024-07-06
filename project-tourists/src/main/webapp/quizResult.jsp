@@ -9,21 +9,22 @@
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f0f2f5;
+            background-color: #1B1B32;
             margin: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             height: 100vh;
-            color: #333;
+            color: white;
         }
         .result-container {
-            background-color: #ffffff;
+            background-color: #2D2D4B;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             text-align: center;
+            color: white;
         }
         .result {
             font-size: 1.5em;
@@ -31,7 +32,7 @@
         }
         .review-button {
             padding: 10px 20px;
-            background-color: #007bff;
+            background-color: #0A0A23;
             color: white;
             border: none;
             cursor: pointer;
@@ -43,14 +44,36 @@
             transition: background-color 0.3s;
             margin-top: 10px;
         }
+        .review-button:hover {
+            background-color: #0056b3;
+        }
+        .button {
+            padding: 10px 20px;
+            background-color: #0A0A23;
+            color: white;
+            border: none;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
     </style>
+
 </head>
 <body>
+<jsp:include page="topBar.jsp" />
 <div class="result-container">
     <div class="result">
         Correct Answers: <%= request.getAttribute("correctAnswers") %> / <%= request.getAttribute("totalQuestions") %>
     </div>
-    <% if ( ((Quiz) session.getAttribute("quizz")).isGradable() ){%>
+
     <div class="result">
         <%
             Object timeTakenObj = request.getAttribute("timeTaken");
@@ -62,7 +85,10 @@
             }
         %>
     </div>
-    <%}%>
+    <div>
+        <a href="homePage.jsp" class="button">Return to Home</a>
+    </div>
+
 </div>
 </body>
 </html>

@@ -1,13 +1,4 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: User
-  Date: 30.06.2024
-  Time: 14:58
-  To change this template use File | Settings | File Templates.
---%>
-
 <%@ page import="java.sql.*, java.util.*" %>
-<%--<%@ page import="javaFiles.Question" %>--%>
 <%@ page import="java.util.Date" %>
 <%@ page import="javaFiles.*" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -19,24 +10,33 @@
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f0f2f5;
+            background-color: #1B1B32;
             margin: 0;
+            padding-top: 100px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: flex-start;
             height: 100vh;
-            color: #333;
+            color: #ffffff;
         }
         .quiz-container {
-            background-color: #ffffff;
-            padding: 20px;
+            background-color: #2D2D4B;
+            color: #ffffff;
+            padding: 40px;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             width: 100%;
             max-width: 800px;
             margin-top: 20px;
             overflow-y: auto;
+        }
+        .question-container {
+            background-color: #3A3A5F;
+            color: #ffffff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
         }
         .question {
             font-size: 1.2em;
@@ -45,14 +45,14 @@
         .answers {
             list-style: none;
             padding: 0;
-            margin: 0 0 20px 0;
+            margin: 0;
         }
         .answers li {
             margin-bottom: 10px;
         }
         .submit-button {
             padding: 10px 20px;
-            background-color: #007bff;
+            background-color: #0A0A23;
             color: white;
             border: none;
             cursor: pointer;
@@ -63,20 +63,41 @@
             border-radius: 4px;
             transition: background-color 0.3s;
         }
+        .submit-button:hover {
+            background-color: #07071a;
+        }
+        #timer {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            color: white;
+        }
+        .text-area {
+            width: 100%;
+            height: 100px;
+            background-color: #3A3A5F;
+            color: #ffffff;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 10px;
+            resize: vertical;
+        }
+        .image-container {
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
+<jsp:include page="topBar.jsp" />
 <%
-//    session = request.getSession();
-//    Integer tmp = (Integer) session.getAttribute("quizId");
-//    int quizId = tmp.intValue();
-
     String quizIdStr = request.getParameter("quiz_id");
     int quizId = Integer.parseInt(quizIdStr);
-    // System.out.println("fuuuuuuuuck");
+
     DBManager dbManager = new DBManager();
     List<Question> questions = dbManager.getQuestions(quizId);
     Quiz quiz = (Quiz) session.getAttribute("quizz");
+    boolean isTimed = quiz.isTimed();
+    int duration = quiz.getDurationTime();
+
     if (quiz.isRandom()) {
         Collections.shuffle(questions);
     }
@@ -84,50 +105,57 @@
         long startTime = System.currentTimeMillis();
 %>
 <div class="quiz-container">
+    <% if (isTimed) { %>
+    <div id="timer">Time left: <span id="timeLeft"><%= duration %></span> minutes</div>
+    <% } %>
     <form id="quizForm" action="submitQuizServlet" method="post">
-<%--        <input type="hidden" name="quiz_id" value="<%= quizId %>">--%>
+        <input type="hidden" name="quiz_id" value="<%= quizId %>">
         <input type="hidden" name="startTime" value="<%= startTime %>">
-    <% for (Question question : questions) { %>
-    <div class="question">
-        <%= question.getQuestionText() %>
-    </div>
-    <ul class="answers">
-        <% if (question instanceof MultipleChoice) {
-            MultipleChoice mcQuestion = (MultipleChoice) question;
-            String[] answers = mcQuestion.getPossibleAnswers();
-            for (String answer : answers) { %>
+        <input type="hidden" name="isTimed" value="<%= isTimed %>">
+        <input type="hidden" name="duration" value="<%= duration %>">
+        <% for (Question question : questions) { %>
+        <div class="question-container">
+            <div class="question">
+                <%= question.getQuestionText() %>
+            </div>
+            <ul class="answers">
+                <% if (question instanceof MultipleChoice) {
+                    MultipleChoice mcQuestion = (MultipleChoice) question;
+                    String[] answers = mcQuestion.getPossibleAnswers();
+                    for (String answer : answers) { %>
                 <li>
                     <input type="radio" name="question_<%= question.getQuestionText() %>" value="<%= answer %>">
                     <%= answer %>
                 </li>
-        <% }
-        }
-        if (question instanceof QuestionResponse) {
-            QuestionResponse qrQuestion = (QuestionResponse) question; %>
+                <% }
+                }
+                    if (question instanceof QuestionResponse) {
+                        QuestionResponse qrQuestion = (QuestionResponse) question; %>
                 <li>
                     <textarea name="question_<%= question.getQuestionText() %>" class="text-area"></textarea>
                 </li>
-        <%} %>
+                <%} %>
 
-        <% if (question instanceof FillInTheBlank) {
-            FillInTheBlank qrQuestion = (FillInTheBlank) question; %>
-            <li>
-                <textarea name="question_<%= question.getQuestionText() %>" class="text-area"></textarea>
-            </li>
-        <%}%>
+                <% if (question instanceof FillInTheBlank) {
+                    FillInTheBlank qrQuestion = (FillInTheBlank) question; %>
+                <li>
+                    <textarea name="question_<%= question.getQuestionText() %>" class="text-area"></textarea>
+                </li>
+                <%}%>
 
-        <% if (question instanceof PictureResponse) {
-            PictureResponse prQuestion = (PictureResponse) question;%>
-        <li>
-            <div class="image-container">
-                <img src="<%= prQuestion.getImageURL() %>" alt="Question Image">
-            </div>
-            <textarea name="question_<%= question.getQuestionText() %>" class="text-area"></textarea>
-        </li>
-        <%}%>
-    </ul>
-    <% } %>
-    <button type="submit" class="submit-button">Submit Quiz</button>
+                <% if (question instanceof PictureResponse) {
+                    PictureResponse prQuestion = (PictureResponse) question;%>
+                <li>
+                    <div class="image-container">
+                        <img src="<%= prQuestion.getImageURL() %>" alt="Question Image">
+                    </div>
+                    <textarea name="question_<%= question.getQuestionText() %>" class="text-area"></textarea>
+                </li>
+                <%}%>
+            </ul>
+        </div>
+        <% } %>
+        <button type="submit" class="submit-button">Submit Quiz</button>
     </form>
 </div>
 <%
@@ -135,8 +163,30 @@
 %>
 <p>Quiz not found or no questions available.</p>
 <%
-}
+    }
 %>
+<script>
+    <% if (isTimed) { %>
+    const duration = <%= duration %> * 60; // duration in seconds
+    let timeLeft = duration;
+
+    const timerElement = document.getElementById('timeLeft');
+
+    const interval = setInterval(() => {
+        timeLeft--;
+
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+
+        timerElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
+        if (timeLeft <= 0) {
+            clearInterval(interval);
+            alert('Sorry, time is up!');
+            window.location.href = 'timesUp.jsp';
+        }
+    }, 1000);
+    <% } %>
+</script>
 </body>
 </html>
-
