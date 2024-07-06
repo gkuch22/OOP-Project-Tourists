@@ -11,7 +11,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
 //    session.setAttribute("quizId", 1);
-    session.setAttribute("user_id", 30);
+//    session.setAttribute("user_id", 30);
 %>
 <html lang="en">
 <head>
@@ -107,9 +107,12 @@
 //    int quizId = 18;
 //    session.setAttribute("quizId", 18);
     int quizId = Integer.parseInt(request.getParameter("quiz_id"));
+    System.out.println("quiz id - " + quizId);
     session.setAttribute("quizId", quizId);
     DBManager dbManager = new DBManager();
+//    DBManager dbManager = (DBManager) application.getAttribute("db-manager");
     Quiz quiz = dbManager.getQuiz(quizId);
+    System.out.println("same quiz id - " + quiz.getQuiz_id());
     session.setAttribute("quizz", quiz);
     session.setAttribute("quizName", quiz.getQuiz_name());
     session.setAttribute("practiceMode", quiz.isPractice_mode());

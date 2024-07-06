@@ -23,7 +23,7 @@
 //    int id1 = 1;
 //    String username = "nick";
     DBManager dbManager = (DBManager) application.getAttribute("db-manager");
-    int id1 = (int) request.getSession().getAttribute("user_id");
+    int id1 = (Integer) request.getSession().getAttribute("user_id");
     User currUser = (User) dbManager.getUserData(id1);
     String username = currUser.getUsername();
 

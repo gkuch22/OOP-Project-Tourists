@@ -19,6 +19,6 @@ public class DeleteUserServlet extends HttpServlet {
             throw new ServletException("Failed to delete user", e);
         }
 
-        response.sendRedirect("UserPage.jsp");
+        response.sendRedirect("homePage.jsp");
     }
 }

@@ -17,7 +17,7 @@ public class writeAnnouncementServlet extends HttpServlet {
 //        int userId = (int) request.getSession().getAttribute("user_id");
 //        int userId = 1;
         DBManager dbManager = (DBManager) getServletContext().getAttribute("db-manager");
-        int userId = (int) request.getSession().getAttribute("user_id");
+        int userId = (Integer) request.getSession().getAttribute("user_id");
 
         try {
             dbManager.addAnnouncement(title, context, userId);

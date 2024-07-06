@@ -90,11 +90,12 @@ public class DBManager {
 
     public List<Announcement> get_Announcement_List(){
         List<Announcement> list = new ArrayList<Announcement>();
-
+        System.out.println("here");
         for(int i=0;i<10;i++) {
             Announcement announcement = new AnnouncementImpl(i, "welcome people, it is our new site, nice to meet you, have fun. " + Integer.toString(i), 10, new Date());
             list.add(announcement);
         }
+//        System.out.println("here");
         return list;
     }
 
@@ -957,15 +958,15 @@ public class DBManager {
                 QuestionResponse question = new QuestionResponse(text, answer);
                 questions.add(question);
             }
-            if (questionType == 2) {
+            if (questionType == 3) {
                 MultipleChoice question = new MultipleChoice(text, answer, possibleAnswers.split(";"));
                 questions.add(question);
             }
-            if (questionType == 3) {
+            if (questionType == 4) {
                 PictureResponse question = new PictureResponse(text, answer, imageURL);
                 questions.add(question);
             }
-            if (questionType == 4) {
+            if (questionType == 2) {
                 FillInTheBlank question = new FillInTheBlank(text, answer);
                 questions.add(question);
             }

@@ -23,7 +23,7 @@ public class challengeServlet extends HttpServlet {
 //        User currUser = (User) request.getSession().getAttribute("user");
 //        int toId = currUser.getUser_id();
         DBManager dbManager = (DBManager) getServletContext().getAttribute("db-manager");
-        int toId = (int) request.getSession().getAttribute("user_id");
+        int toId = (Integer) request.getSession().getAttribute("user_id");
 
 
         try {

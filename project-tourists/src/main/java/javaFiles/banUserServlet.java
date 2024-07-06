@@ -33,12 +33,13 @@ public class banUserServlet extends HttpServlet {
             throw new RuntimeException(e);
         }
 
-        request.getRequestDispatcher("/index.jsp").forward(request, response);
+        request.getRequestDispatcher("/homePage.jsp").forward(request, response);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int id = 1;
-//        id = Integer.parseInt(request.getParameter("user_ban_id"));
+        String idInStr = request.getParameter("ban_user_id");
+        System.out.println("id in banUser - " + idInStr);
+        int id = Integer.parseInt(request.getParameter("ban_user_id"));
         request.getSession().setAttribute("ban_user_id", id);
         request.getRequestDispatcher("/banUser.jsp").forward(request,response);
     }

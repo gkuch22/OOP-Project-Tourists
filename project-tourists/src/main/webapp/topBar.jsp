@@ -16,7 +16,7 @@
 </head>
 <body>
 <% DBManager dbManager = (DBManager) application.getAttribute("db-manager");
-    int userId = 10;
+    int userId = (Integer)request.getSession().getAttribute("user_id");
 //    userId = (int)request.getSession().getAttribute("userId");
     User user = null;
     try {

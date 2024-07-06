@@ -35,10 +35,14 @@ public class imidSubmitQuizServlet extends HttpServlet {
 
         // Process correctCount and incorrectCount as needed
 
-        request.setAttribute("correctAnswers", correctCount);
-        request.setAttribute("totalQuestions", incorrectCount + correctCount);
-        //session.setAttribute("quizId", quizId);
-        request.setAttribute("timeTaken", duration);
+//        request.setAttribute("correctAnswers", correctCount);
+//        request.setAttribute("totalQuestions", incorrectCount + correctCount);
+//        //session.setAttribute("quizId", quizId);
+//        request.setAttribute("timeTaken", duration);
+        HttpSession session = request.getSession();
+        session.setAttribute("score", correctCount);
+        session.setAttribute("timeTaken", duration);
+        session.setAttribute("totalQuestions", incorrectCount + correctCount);
 
         // Redirect to the review page
         request.getRequestDispatcher("review.jsp").forward(request, response);
