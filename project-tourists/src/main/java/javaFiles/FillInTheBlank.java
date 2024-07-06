@@ -10,10 +10,16 @@ public class FillInTheBlank extends Question{
     }
 
     public String getAnswer(){
-        return super.getAnswer();
+        String answers = super.getAnswer();
+        answers  = answers.replaceAll("\\s*,\\s*", ",");
+        answers = answers.replace(',',';');
+        System.out.println(answers);
+        return answers;
     }
 
     public String[] getAnswers(){
-        return answer.split(",");
+        String answers = super.getAnswer();
+        answers  = answers.replaceAll("\\s*,\\s*", ",");
+        return answers.split(",");
     }
 }

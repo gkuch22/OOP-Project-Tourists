@@ -19,7 +19,9 @@ public class MultipleChoice extends Question{
     }
 
     public String[] getPossibleAnswers(){
-        return possibleAnswers;
+        String answers = getPossibleAnswersAsString();
+
+        return answers.split(";");
     }
 
     public String getPossibleAnswersAsString(){
@@ -30,6 +32,8 @@ public class MultipleChoice extends Question{
                 answ += ';';
             }
         }
+        answ = answ.replaceAll("\\s*;\\s*", ";");
+        System.out.println(answ);
         return answ;
     }
 }
