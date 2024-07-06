@@ -41,6 +41,10 @@ public class DBManager {
         return list.get(0);
     }
 
+    public int user_password_is_correct(String name, String password) throws SQLException {
+        return -1;
+    }
+
     public int add_user(String name, String password) throws SQLException {
         Connection connection = dataSource.getConnection();
         PreparedStatement statement = connection.prepareStatement("insert into login_table (username, password) values (?, ?)");

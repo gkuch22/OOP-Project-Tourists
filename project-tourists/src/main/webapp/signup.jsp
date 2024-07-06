@@ -9,7 +9,7 @@
 <div class="left_container">
     <nav class="left_nav">
         <div class="left_div login">
-            <a class="left_href login_href" href = "login.jsp"> LOGIN </a>
+            <a class="left_href login_href" href = "signin.jsp"> LOGIN </a>
         </div>
         <div class="left_div signup active">
             <a class="left_href signup_href" href = "signup.jsp"> SIGN UP </a>
@@ -28,7 +28,7 @@
         <p>Quizerinio</p>
     </div>
 
-    <form method="get" action="signup">
+    <form method="post" action="signup">
         <div class = "form">
             <div class = "fillers">
                 <input type="text" placeholder="USERNAME" class = "username" name = "username"/>

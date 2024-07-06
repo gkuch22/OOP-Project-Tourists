@@ -9,7 +9,7 @@
 <div class="left_container">
     <nav class="left_nav">
         <div class="left_div login active">
-            <a class="left_href login_href" href = "login.jsp"> LOGIN </a>
+            <a class="left_href login_href" href = "signin.jsp"> LOGIN </a>
         </div>
         <div class="left_div signup">
             <a class="left_href signup_href" href = "signup.jsp"> SIGN UP </a>
