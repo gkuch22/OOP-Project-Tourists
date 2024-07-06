@@ -1,0 +1,32 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background-color: #1B1B32;
+}
+
+.message{
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    background-color: #3A3A5F;
+    margin-top:10%;
+    word-break: break-word;
+    height: 30%;
+}
+
+.message a{
+    color: white;
+    font-size: 3em;
+}
+
+.message p{
+    color: white;
+    font-size: 3em;
+}
+

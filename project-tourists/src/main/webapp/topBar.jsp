@@ -57,6 +57,15 @@
             }
         });
 
+        searchBar.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                const query = searchBar.value;
+                if (query.length > 0) {
+                    window.location.href = 'AnotherUser?name=' + encodeURIComponent(query);
+                }
+            }
+        });
+
         document.addEventListener('click', function(event) {
             if (!searchBar.contains(event.target) && !searchResults.contains(event.target)) {
                 searchResults.style.display = 'none';

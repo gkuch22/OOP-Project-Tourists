@@ -359,7 +359,171 @@ public class DBManagerTESTER extends TestCase {
         removePeople();
     }
 
+    public void addTestUserData() throws SQLException {
+        init();
+        removeTestUserData();
+        Connection connection = dataSource.getConnection();
+        Statement statement = connection.createStatement();
+        statement.executeUpdate("INSERT INTO login_table VALUES (1,'bendo','1234');");
+        statement.executeUpdate("INSERT INTO login_table VALUES (2,'Quaggy','1234');");
+        statement.executeUpdate("INSERT INTO login_table VALUES (3,'Joe','1234');");
+        statement.executeUpdate("INSERT INTO login_table VALUES (4,'Bob','1234');");
 
+        statement.executeUpdate("INSERT INTO user_table VALUES (1,'bendo',false,false,30,true,'https://i.pinimg.com/736x/64/5f/d9/645fd98adba55582c6851985779fcb0e.jpg');");
+        statement.executeUpdate("INSERT INTO user_table VALUES (2,'Quaggy',false,false,20,true,'https://www.watchmojo.com/uploads/thumbs720/Fi-T-Top10-Family-Guy-Characters_I2B8Z1-720p30-1.jpg');");
+        statement.executeUpdate("INSERT INTO user_table VALUES (3,'Joe',false,false,14,true,'https://media.entertainmentearth.com/assets/images/fe9f5fc5d21e4c338652f08b5f86b0caxl.jpg');");
+        statement.executeUpdate("INSERT INTO user_table VALUES (4,'Bob',false,false,14,true,'https://media.entertainmentearth.com/assets/images/fe9f5fc5d21e4c338652f08b5f86b0caxl.jpg');");
+
+        statement.executeUpdate("INSERT INTO achievement_table(achievement_id, achievement, num_created) VALUES (1,'supreme',10);");
+        statement.executeUpdate("Insert into achievement_table(achievement_id,achievement,num_created) Values (2,'wowzers',20);");
+
+        statement.executeUpdate("INSERT INTO quiz_table(quiz_id,quiz_name,quiz_tag,difficulty,creator_id) VALUES (1,'ez','history','easy',1);");
+        statement.executeUpdate("INSERT INTO quiz_table(quiz_id,quiz_name,quiz_tag,difficulty,creator_id) VALUES (2,'mid','english;history','medium',1);");
+        statement.executeUpdate("INSERT INTO quiz_table(quiz_id,quiz_name,quiz_tag,difficulty,creator_id) VALUES (3,'hard','math','hard',1);");
+
+        statement.executeUpdate("INSERT INTO review_table(user_id, quiz_id, quiz_name,score, date, review_text) VALUES (1,1,'ez',10,NOW(),'');");
+        statement.executeUpdate("INSERT INTO review_table(user_id, quiz_id, quiz_name,score, date, review_text) VALUES (1,2,'mid',8,NOW(),'');");
+        statement.executeUpdate("INSERT INTO review_table(user_id, quiz_id, quiz_name,score, date, review_text) VALUES (1,3,'hard',5,NOW(),'');");
+
+        statement.executeUpdate("INSERT INTO friend_table(user_id_1, user_id_2) VALUES (1,2);");
+        statement.executeUpdate("INSERT INTO friend_table(user_id_1, user_id_2) VALUES (1,3);");
+        statement.executeUpdate("INSERT INTO friend_table(user_id_1, user_id_2) VALUES (2,3);");
+
+        statement.close();
+        connection.close();
+    }
+
+    public void removeTestUserData() throws SQLException {
+        init();
+        Connection connection = dataSource.getConnection();
+        Statement statement = connection.createStatement();
+        statement.executeUpdate("DELETE FROM login_table WHERE 1=1");
+        statement.executeUpdate("DELETE FROM achievement_table WHERE 1=1");
+        statement.close();
+        connection.close();
+    }
+
+    public void testGetUserCreatedQuizzes() throws SQLException {
+        addTestUserData();
+
+        User temp = dbManager.getUserData(1);
+        List<Quiz> quizzes = dbManager.getUserCreatedQuizzes(temp);
+        assertEquals("ez",quizzes.get(0).getQuiz_name());
+        assertEquals("mid",quizzes.get(1).getQuiz_name());
+        assertEquals("hard",quizzes.get(2).getQuiz_name());
+
+        removeTestUserData();
+    }
+
+    public void testGetAchievments() throws SQLException {
+        addTestUserData();
+
+        User temp = dbManager.getUserData(1);
+        List<String> achievements = dbManager.getAchievements(temp);
+        assertEquals("supreme",achievements.get(0));
+        assertEquals("wowzers",achievements.get(1));
+
+        removeTestUserData();
+    }
+
+    public void testDeleteUser() throws SQLException {
+        addTestUserData();
+
+        dbManager.deleteUser(1);
+        List<User> friends = dbManager.getFriends(dbManager.getUserData(2).getUser_id());
+        assertEquals(1,friends.size());
+
+        removeTestUserData();
+    }
+
+    public void testPartialUsernameSearch() throws SQLException {
+        addTestUserData();
+
+        List<String> users = dbManager.searchUsersByPartialUsername("q");
+        assertEquals(1,users.size());
+
+        removeTestUserData();
+    }
+
+    public void testAdminPromotion() throws SQLException {
+        addTestUserData();
+
+        dbManager.promoteUserToAdmin(1);
+        assertTrue(dbManager.getUserData(1).isAdmin());
+
+        removeTestUserData();
+    }
+
+    public void testAdminDemotion() throws SQLException {
+        addTestUserData();
+
+        dbManager.promoteUserToAdmin(1);
+        dbManager.demoteUserFromAdmin(1);
+        assertFalse(dbManager.getUserData(1).isAdmin());
+
+        removeTestUserData();
+    }
+
+    public void testUserQuizzes() throws SQLException {
+        addTestUserData();
+
+        List<QuizPerformance> quizzes = dbManager.getUserQuizzes(1);
+        assertEquals(10,quizzes.get(0).getScore());
+        assertEquals(8,quizzes.get(1).getScore());
+        assertEquals(5,quizzes.get(2).getScore());
+
+        removeTestUserData();
+    }
+
+    public void testUniqueUserQuizzes() throws SQLException {
+        addTestUserData();
+
+        List<Integer> quizzes = dbManager.getUniqueUserQuizzes(1);
+        assertEquals(3,quizzes.size());
+
+        removeTestUserData();
+    }
+
+    public void testUnfriend() throws SQLException {
+        addTestUserData();
+
+        dbManager.unfriend(1,2);
+        List<User> friends = dbManager.getFriends(1);
+        assertEquals(1,friends.size());
+
+        removeTestUserData();
+    }
+
+    public void testUpdateProfilePicture() throws SQLException {
+        addTestUserData();
+
+        dbManager.updateProfilePicture(1,"https://i.natgeofe.com/k/75ac774d-e6c7-44fa-b787-d0e20742f797/giant-panda-eating_2x3.jpg");
+        User user = dbManager.getUserData(1);
+        assertEquals("https://i.natgeofe.com/k/75ac774d-e6c7-44fa-b787-d0e20742f797/giant-panda-eating_2x3.jpg",user.getProfilePhoto());
+
+        removeTestUserData();
+    }
+
+    public void testFriendRequest() throws SQLException {
+        addTestUserData();
+
+        dbManager.sendFriendRequest(1,4);
+        List<Integer> reqs = dbManager.getFriendRequests(4);
+        assertEquals(1,reqs.size());
+
+        removeTestUserData();
+    }
+
+    public void testSearchIfUserExists() throws SQLException {
+        addTestUserData();
+
+        boolean val = dbManager.userExists("Joe");
+        assertTrue(val);
+        val = dbManager.userExists("Johnathan");
+        assertFalse(val);
+
+        removeTestUserData();
+    }
 
 
 

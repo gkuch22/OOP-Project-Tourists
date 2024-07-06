@@ -14,11 +14,18 @@ public class AnotherUserServlet extends HttpServlet {
         try {
             String visitingName = request.getParameter("name");
             DBManager manager = (DBManager) getServletContext().getAttribute("db-manager");
+            if(!manager.userExists(visitingName)){
+                request.setAttribute("current_name",visitingName);
+                RequestDispatcher dispatcher = request.getRequestDispatcher("UnknownUser.jsp");
+                dispatcher.forward(request,response);
+                return;
+            }
+
             int visitingId = manager.getIdByUsername(visitingName);
 
             request.setAttribute("current_id", visitingId);
             RequestDispatcher dispatcher=null;
-            if(visitingId==1){
+            if(visitingId==(Integer)request.getSession().getAttribute("user_id")){
                 dispatcher = request.getRequestDispatcher("UserPage.jsp");
             }else{
                 System.out.println(visitingId);

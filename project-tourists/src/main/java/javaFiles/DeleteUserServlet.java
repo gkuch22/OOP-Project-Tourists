@@ -1,28 +1,24 @@
 package javaFiles;
 
-import java.io.IOException;
-import java.sql.SQLException;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.sql.SQLException;
 
-@WebServlet("/DemoteUserServlet")
-public class DemoteUserServlet extends HttpServlet {
+@WebServlet("/DeleteUserServlet")
+public class DeleteUserServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int userId = Integer.parseInt(request.getParameter("userId"));
-        String name = "";
         try {
             DBManager manager = (DBManager) getServletContext().getAttribute("db-manager");
-            manager.demoteUserFromAdmin(userId);
-            name = manager.getUsernameById(userId);
+            manager.deleteUser(userId);
         } catch (SQLException e) {
-            throw new ServletException("Failed to demote user from admin", e);
+            throw new ServletException("Failed to delete user", e);
         }
 
-        response.sendRedirect("AnotherUser?name="+name);
+        response.sendRedirect("UserPage.jsp");
     }
 }
-

@@ -252,6 +252,7 @@ public class DBManager {
         List<Quiz> quizzesTaken = new ArrayList<Quiz>();
         User user = null;
         resultSet.next();
+        System.out.println(user_id);
         int User_id = resultSet.getInt("user_id");
         String username = resultSet.getString("username");
         boolean is_admin = resultSet.getBoolean("is_admin");
@@ -343,6 +344,28 @@ public class DBManager {
         return result;
     }
 
+    public void deleteUser(int user_id) throws SQLException {
+        Connection connection = dataSource.getConnection();
+
+        PreparedStatement statement8 = connection.prepareStatement("DELETE FROM login_table where user_id=?;");
+        statement8.setInt(1,user_id);
+        statement8.executeUpdate();
+        statement8.close();
+
+        connection.close();
+    }
+
+    public int getReviewCount() throws SQLException {
+        Connection connection = dataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement("Select * from review_table");
+        ResultSet resultSet = statement.executeQuery();
+        int cnt=0;
+        while(resultSet.next()){
+            cnt++;
+        }
+        return cnt;
+    }
+
     public List<String> searchUsersByPartialUsername(String partialUsername) throws SQLException {
         Connection connection = dataSource.getConnection();
         PreparedStatement statement = connection.prepareStatement("Select username from user_table where username Like ?");
@@ -423,6 +446,24 @@ public class DBManager {
         connection.close();
         return quizzes;
     }
+
+    public boolean userExists(String name) throws SQLException {
+        Connection connection = dataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement("Select * from user_table where username = ?");
+        statement.setString(1,name);
+        ResultSet resultSet = statement.executeQuery();
+
+        int cnt = 0;
+        while(resultSet.next()){
+            cnt++;
+        }
+
+        resultSet.close();
+        statement.close();
+        connection.close();
+        return cnt>0;
+    }
+
     public List<User> getFriends(int User_id) throws SQLException {
         Connection connection = dataSource.getConnection();
         PreparedStatement statement = connection.prepareStatement("Select * from friend_table where user_id_1 = ?");
