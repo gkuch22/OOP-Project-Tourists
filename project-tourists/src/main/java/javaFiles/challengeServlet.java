@@ -19,11 +19,13 @@ public class challengeServlet extends HttpServlet {
         int quizId = Integer.parseInt(request.getParameter("quizId"));
         int fromId = Integer.parseInt(request.getParameter("requesterId"));
 
-        int toId = 1; //TODO useer!
+//        int toId = 1; //TODO useer!
 //        User currUser = (User) request.getSession().getAttribute("user");
 //        int toId = currUser.getUser_id();
-
         DBManager dbManager = (DBManager) getServletContext().getAttribute("db-manager");
+        int toId = (int) request.getSession().getAttribute("user_id");
+
+
         try {
             dbManager.removeChallengeRequest(fromId, toId, quizId);
         } catch (SQLException e) {

@@ -32,10 +32,19 @@ public class sendMessageServlet extends HttpServlet {
         }
 
         //TODO getuserid
-        int fromId = 1;
-        String fromUsername = "nick";
-
+//        int fromId = 1;
+//        String fromUsername = "nick";
         DBManager dbManager = (DBManager) getServletContext().getAttribute("db-manager");
+        int fromId = (int) request.getSession().getAttribute("user_id");
+        User currUser = null;
+        try {
+            currUser = (User) dbManager.getUserData(fromId);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        String fromUsername = currUser.getUsername();
+
+
 
         int toId = 0;
         try {

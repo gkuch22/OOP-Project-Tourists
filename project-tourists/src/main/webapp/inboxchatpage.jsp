@@ -20,13 +20,13 @@
 <body>
 <jsp:include page="topBar.jsp" />
 <%
-    int id1 = 1; //currUser.getUser_id()
-    String username = "nick";
-//    User currUser = (User) request.getSession().getAttribute("user");
-//    int id1 = currUser.getUser_id();
-//    String username = currUser.getUsername();
-
+//    int id1 = 1; //currUser.getUser_id()
+//    String username = "nick";
     DBManager dbManager = (DBManager) application.getAttribute("db-manager");
+    int id1 = (int) request.getSession().getAttribute("user_id");
+    User currUser = (User) dbManager.getUserData(id1);
+    String username = currUser.getUsername();
+
     List<User> friends = null;
     try {
         friends = dbManager.getFriends(id1);

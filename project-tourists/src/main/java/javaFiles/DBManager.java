@@ -23,7 +23,7 @@ public class DBManager {
         dataSource = new BasicDataSource();
         dataSource.setUrl("jdbc:mysql://localhost:3306/tourists");
         dataSource.setUsername("root");
-        dataSource.setPassword("+qwerty+");
+        dataSource.setPassword("rootroot");
     }
 
     public int get_user_id(String name) throws SQLException {
@@ -614,7 +614,6 @@ public class DBManager {
     }
 
 
-
     public List<Message> getChallenges(int id) throws SQLException {
         List<Message> challenges = new ArrayList<Message>();
 
@@ -674,7 +673,34 @@ public class DBManager {
         statement.executeUpdate();
 
         statement.close();
+        connection.close();
     }
+
+    public void removeQuiz(int quizId) throws SQLException{
+        String query = "DELETE FROM quiz_table WHERE quiz_id = ?";
+        Connection connection = dataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement(query);
+        statement.setInt(1, quizId);
+        statement.executeUpdate();
+        statement.close();
+        connection.close();
+    }
+
+    public void addAnnouncement(String title, String context, int userId) throws SQLException{
+        String query = "INSERT INTO post_table (post_title, post_text, user_id, date) VALUES (?, ?, ?, NOW())";
+        Connection connection = dataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement(query);
+
+        statement.setString(1, title);
+        statement.setString(2, context);
+        statement.setInt(3, userId);
+
+        statement.executeUpdate();
+        statement.close();
+        connection.close();
+    }
+
+
     public void sendFriendRequest(int user1Id,int user2Id) throws SQLException {
         Connection connection = dataSource.getConnection();
         PreparedStatement checker = connection.prepareStatement("Select * from mail_table where from_id=? AND to_id=? AND type='friendrequest'");
@@ -1034,4 +1060,8 @@ public class DBManager {
         statement.close();
         connection.close();
     }
+
+
+
+
 }
