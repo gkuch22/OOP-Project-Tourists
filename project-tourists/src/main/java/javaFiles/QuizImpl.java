@@ -132,6 +132,18 @@ public class QuizImpl implements Quiz{
     }
 
     @Override
+    public boolean isRandom() {
+        return isRandom;
+    }
+
+    @Override
+    public boolean isImmediatelyCorrected() {
+        return immediatelyCorrected;
+    }
+
+
+
+    @Override
     public void setGradable(boolean gradable) {
         this.gradable = gradable;
     }
