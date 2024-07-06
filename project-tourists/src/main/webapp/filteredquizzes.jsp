@@ -11,6 +11,7 @@
 <%@ page import="javaFiles.Quiz" %>
 <%@ page import="javafx.util.Pair" %>
 <%@ page import="java.util.*" %>
+<%@ page import="javaFiles.User" %>
 
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -101,6 +102,17 @@
                 <th>Max Score</th>
                 <th>Date</th>
                 <th>Link to Quiz</th>
+                <%
+                    //int id = (int) request.getSession().getAttribute("user_id");
+                    int id = 1;
+                    User user = dbManager.getUserData(id);
+                    if(user.isAdmin()){
+                %>
+                        <th>Remove Quiz</th>
+                <%
+                    }
+                %>
+
             </tr>
             </thead>
             <tbody>
@@ -132,6 +144,19 @@
                 <td><%= maxscore %></td>
                 <td><%= currDate %></td>
                 <td><a href="quizStart.jsp?quiz_id=<%= quiz.getQuiz_id() %>">Take Quiz</a></td>
+                <%
+                    if(user.isAdmin()){
+                %>
+                    <td>
+                        <form action="removeQuiz" method="post">
+                            <input type="hidden" name="removequizId" value="<%=quiz_id%>">
+                            <button class="removequizbutton" type="submit">X</button>
+                        </form>
+                    </td>
+                <%
+                    }
+                %>
+
             </tr>
             <%
                 }
