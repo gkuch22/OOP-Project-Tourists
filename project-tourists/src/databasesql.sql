@@ -1,6 +1,5 @@
 use tourists;
 
-
 DROP TABLE IF EXISTS question_table;
 DROP TABLE IF EXISTS review_table;
 DROP TABLE IF EXISTS friend_table;
