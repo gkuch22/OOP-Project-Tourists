@@ -1,5 +1,4 @@
-use test_db;
-
+use tourists;
 
 DROP TABLE IF EXISTS question_table;
 DROP TABLE IF EXISTS review_table;
