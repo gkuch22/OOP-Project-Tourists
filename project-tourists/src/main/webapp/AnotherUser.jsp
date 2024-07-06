@@ -5,13 +5,12 @@
 
 <%
     Integer user_id = (Integer) request.getAttribute("current_id");
-    System.out.println(user_id);
 %>
 <html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz Site - User Page</title>
+    <title>Another User Page</title>
     <link rel="stylesheet" href="UserStyle.css">
 </head>
 <body>
@@ -26,7 +25,7 @@
     boolean isVisitedUserAdmin = false;
     try {
         user = manager.getUserData(user_id);
-        mainUser = manager.getUserData(1);
+        mainUser = manager.getUserData((Integer) request.getSession().getAttribute("user_id"));
         quizzesTaken = manager.getUserQuizzes(user.getUser_id());
         quizzesCreated = manager.getUserCreatedQuizzes(user);
         isCurrentUserAdmin = mainUser.isAdmin();
@@ -76,7 +75,7 @@
     try {
         boolean isFriend = false;
         for(User user1 : manager.getFriends(user.getUser_id())){
-            if(user1.getUser_id()==1) isFriend=true;
+            if(user1.getUser_id()==mainUser.getUser_id()) isFriend=true;
         }
         if(isFriend){
 %>
@@ -94,7 +93,7 @@
     <% if (isCurrentUserAdmin && isVisitedUserAdmin) { %>
     <form action="DemoteUserServlet" method="post">
         <input type="hidden" name="userId" value="<%=user.getUser_id()%>">
-        <button type="submit">Demote</button>
+        <button type="submit" class="demote-button">Demote</button>
     </form>
     <% } else if (isCurrentUserAdmin && !isVisitedUserAdmin) { %>
     <form action="PromoteUserServlet" method="post">
@@ -102,6 +101,16 @@
         <button type="submit" class="promote-button">Promote</button>
     </form>
     <% } %>
+    <%  if(isCurrentUserAdmin){ %>
+    <form action="DeleteUserServlet" method="post">
+        <input type="hidden" name="userId" value="<%=user.getUser_id()%>">
+        <button type="submit" class="delete-button">Delete User</button>
+    </form>
+    <form action="banUser" method="get">
+        <input type="hidden" name="ban_user_id" value="<%=user.getUser_id()%>">
+        <button type="submit" class="ban-button">Ban User</button>
+    </form>
+    <%}%>
 </div>
 <div class="container">
     <div class="left">

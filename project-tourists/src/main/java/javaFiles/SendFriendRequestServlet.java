@@ -8,7 +8,7 @@ import java.sql.SQLException;
 
 public class SendFriendRequestServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException {
-        int loggedInUserId = 1;
+        int loggedInUserId = (Integer)request.getSession().getAttribute("user_id");
         int userId = Integer.parseInt(request.getParameter("userId"));
         DBManager manager = (DBManager) getServletContext().getAttribute("db-manager");
         try {

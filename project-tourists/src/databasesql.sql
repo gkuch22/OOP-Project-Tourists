@@ -26,14 +26,14 @@ CREATE TABLE user_table (
         scored_Highest BOOLEAN DEFAULT FALSE,
         profilePhoto VARCHAR(500) DEFAULT 'https://i.pinimg.com/736x/64/5f/d9/645fd98adba55582c6851985779fcb0e.jpg',
         PRIMARY KEY (user_id),
-        FOREIGN KEY (user_id) REFERENCES login_table(user_id)
+        FOREIGN KEY (user_id) REFERENCES login_table(user_id) ON DELETE CASCADE
 );
 
 CREATE TABLE ban_table (
        ban_id INT AUTO_INCREMENT PRIMARY KEY,
        user_id INT,
        expire_date DATE,
-       FOREIGN KEY (user_id) REFERENCES user_table(user_id)
+       FOREIGN KEY (user_id) REFERENCES user_table(user_id) ON DELETE CASCADE
 );
 
 CREATE TABLE achievement_table (
@@ -49,8 +49,8 @@ CREATE TABLE friend_table (
       friend_id INT AUTO_INCREMENT PRIMARY KEY,
       user_id_1 INT not null,
       user_id_2 INT not null,
-      FOREIGN KEY (user_id_1) REFERENCES user_table(user_id),
-      FOREIGN KEY (user_id_2) REFERENCES user_table(user_id)
+      FOREIGN KEY (user_id_1) REFERENCES user_table(user_id) ON DELETE CASCADE,
+      FOREIGN KEY (user_id_2) REFERENCES user_table(user_id) ON DELETE CASCADE
 );
 
 CREATE TABLE mail_table (
@@ -60,8 +60,8 @@ CREATE TABLE mail_table (
         type VARCHAR(50),
         message TEXT,
         date DATETIME,
-        FOREIGN KEY (from_id) REFERENCES user_table(user_id),
-        FOREIGN KEY (to_id) REFERENCES user_table(user_id)
+        FOREIGN KEY (from_id) REFERENCES user_table(user_id) ON DELETE CASCADE,
+        FOREIGN KEY (to_id) REFERENCES user_table(user_id) ON DELETE CASCADE
 );
 
 CREATE TABLE post_table (
@@ -69,7 +69,7 @@ CREATE TABLE post_table (
         post_text TEXT,
         user_id INT,
         date DATETIME,
-        FOREIGN KEY (user_id) REFERENCES user_table(user_id)
+        FOREIGN KEY (user_id) REFERENCES user_table(user_id) ON DELETE CASCADE
 );
 
 CREATE TABLE quiz_table(
@@ -87,7 +87,7 @@ CREATE TABLE quiz_table(
         random_questions BOOLEAN DEFAULT FALSE,
         timed BOOLEAN DEFAULT FALSE,
         duration_time INT default -1,
-        FOREIGN KEY (creator_id) REFERENCES user_table(user_id)
+        FOREIGN KEY (creator_id) REFERENCES user_table(user_id) ON DELETE CASCADE
 );
 
 CREATE TABLE review_table (
@@ -99,8 +99,8 @@ CREATE TABLE review_table (
           date date not null,
           rating int default 0,
           review_text TEXT,
-          FOREIGN KEY (quiz_id) REFERENCES quiz_table(quiz_id),
-          FOREIGN KEY (user_id) REFERENCES user_table(user_id)
+          FOREIGN KEY (quiz_id) REFERENCES quiz_table(quiz_id) ON DELETE CASCADE,
+          FOREIGN KEY (user_id) REFERENCES user_table(user_id) ON DELETE CASCADE
 );
 
 CREATE TABLE question_table (
@@ -111,7 +111,7 @@ CREATE TABLE question_table (
         quiz_id INT not null,
         question_type INT not null,
         imageURL TEXT not null,
-        FOREIGN KEY (quiz_id) REFERENCES quiz_table(quiz_id)
+        FOREIGN KEY (quiz_id) REFERENCES quiz_table(quiz_id) ON DELETE CASCADE
 );
 
 

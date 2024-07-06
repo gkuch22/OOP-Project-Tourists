@@ -8,7 +8,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz Site - User Page</title>
+    <title>User Page</title>
     <link rel="stylesheet" href="UserStyle.css">
 </head>
 <body>
@@ -21,7 +21,7 @@
 
 
     try {
-        user = manager.getUserData(1);
+        user = manager.getUserData((Integer) request.getSession().getAttribute("user_id"));
         quizzesTaken = manager.getUserQuizzes(user.getUser_id());
         quizzesCreated = manager.getUserCreatedQuizzes(user);
     } catch (SQLException e) {
@@ -76,6 +76,11 @@
 <div class="ProblemsSolved">
     <h1><span class="Number"><%= manager.getUniqueUserQuizzes(user.getUser_id()).size() %></span> <span class="Text">Quizzes Taken</span></h1>
 
+</div>
+<div class="admin-buttons">
+    <%  if(user.isAdmin()){ %>
+    <a href="SiteData.jsp" class = "ban-button">See Site Data</a>
+    <%}%>
 </div>
 <div class="container">
     <div class="left">
