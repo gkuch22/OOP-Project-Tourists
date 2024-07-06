@@ -450,7 +450,7 @@ public class DBManager {
         return messages;
     }
 
-    public void saveMessageToDatabase(int fromId, int toId, String message, java.sql.Timestamp timestamp, DBManager dbManager) throws SQLException {
+    public void saveMessageToDatabase(int fromId, int toId, String message, java.sql.Timestamp timestamp) throws SQLException {
         Connection connection = null;
         PreparedStatement statement = null;
         connection = dataSource.getConnection();

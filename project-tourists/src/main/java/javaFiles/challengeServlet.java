@@ -19,7 +19,9 @@ public class challengeServlet extends HttpServlet {
         int quizId = Integer.parseInt(request.getParameter("quizId"));
         int fromId = Integer.parseInt(request.getParameter("requesterId"));
 
-        int toId = 1; //TODO useer!
+//        int toId = 1; //TODO useer!
+        User currUser = (User) request.getSession().getAttribute("user");
+        int toId = currUser.getUser_id();
 
         DBManager dbManager = (DBManager) getServletContext().getAttribute("db-manager");
         try {
@@ -29,8 +31,9 @@ public class challengeServlet extends HttpServlet {
         }
 
         if("accept".equals(action)) {
-            //TODO challengze gadaxtoma
-            
+            //TODO challenge quizze gadaxtoma
+            String path = "quizStart.jsp?quiz_id=" + quizId;
+            response.sendRedirect(path);
 
         }else{
             if (referer.contains("inboxmailpage.jsp")) {

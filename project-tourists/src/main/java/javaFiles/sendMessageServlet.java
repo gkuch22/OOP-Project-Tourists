@@ -47,7 +47,7 @@ public class sendMessageServlet extends HttpServlet {
         java.sql.Timestamp sqlTimestamp = convertToServerTimeZone(timestamp);
 
         try {
-            dbManager.saveMessageToDatabase(fromId, toId, message, sqlTimestamp, dbManager);
+            dbManager.saveMessageToDatabase(fromId, toId, message, sqlTimestamp);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
