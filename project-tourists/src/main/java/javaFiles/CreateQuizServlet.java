@@ -35,17 +35,26 @@ public class CreateQuizServlet extends HttpServlet {
             System.out.println(tagsArr[i]);
         }
 
-        // we should get from dataBase
-        int id = 0;
         //we should get from user attribute
+        User user = (UserImpl) getServletContext().getAttribute("user");
         int creatorId = 1;
-        boolean isRandom = Arrays.asList(boxes).contains("random");
-        boolean isTimed = Arrays.asList(boxes).contains("timed");
-        boolean multiplePages = Arrays.asList(boxes).contains("multiplePages");
-        boolean immediatelyCorrected = Arrays.asList(boxes).contains("immediateCorrection");
-        boolean practiceMode = Arrays.asList(boxes).contains("practiceMode");
+        boolean isRandom = false;
+        boolean isTimed = false;
+        boolean multiplePages = false;
+        boolean immediatelyCorrected = false;
+        boolean practiceMode = false;
+        if(boxes != null){
+            isRandom = Arrays.asList(boxes).contains("random");
+            isTimed = Arrays.asList(boxes).contains("timed");
+            multiplePages = Arrays.asList(boxes).contains("multiplePages");
+            immediatelyCorrected = Arrays.asList(boxes).contains("immediateCorrection");
+            practiceMode = Arrays.asList(boxes).contains("practiceMode");
+        }
+
+        int durationTime = -1;
         //should add this input in createQuizzes;
         boolean gradable = false;
+
         int nextQuizId = 0;
         try {
             nextQuizId = dbManager.getNextQuizId();
@@ -54,7 +63,7 @@ public class CreateQuizServlet extends HttpServlet {
         }
         Quiz quiz = new QuizImpl(nextQuizId, name, tagsFixed,difficulty, creatorId,
                 isRandom, isTimed, multiplePages, immediatelyCorrected,
-                practiceMode, gradable);
+                practiceMode, gradable, description,durationTime);
         HttpSession session = request.getSession();
         session.setAttribute("quiz", quiz);
         //response.sendRedirect(request.getContextPath() + "/chooseQuestion");

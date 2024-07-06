@@ -5,24 +5,32 @@
 
 <%
     Integer user_id = (Integer) request.getAttribute("current_id");
+    System.out.println(user_id);
 %>
 <html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quiz Site - User Page</title>
-    <link rel="stylesheet" href="userStyle.css">
+    <link rel="stylesheet" href="UserStyle.css">
 </head>
 <body>
+<jsp:include page="topBar.jsp" />
 <%
     DBManager manager = (DBManager) application.getAttribute("db-manager");
     List<QuizPerformance> quizzesTaken;
     List<Quiz> quizzesCreated;
     User user;
+    User mainUser;
+    boolean isCurrentUserAdmin = false;
+    boolean isVisitedUserAdmin = false;
     try {
         user = manager.getUserData(user_id);
+        mainUser = manager.getUserData(1);
         quizzesTaken = manager.getUserQuizzes(user.getUser_id());
         quizzesCreated = manager.getUserCreatedQuizzes(user);
+        isCurrentUserAdmin = mainUser.isAdmin();
+        isVisitedUserAdmin = user.isAdmin();
     } catch (SQLException e) {
         throw new RuntimeException(e);
     }
@@ -62,9 +70,8 @@
 <div class="UserName">
     <a><%=user.getUsername()%></a>
 </div>
-<a href="index.jsp" class="homepage-button">Homepage</a>
 <img class="UserProfile" src="<%=user.getProfilePhoto()%>" alt="<%=user.getProfilePhoto()%>">
-<a href="UserPage.jsp" class="Userpage-button">Back to User Page</a>
+
 <%
     try {
         boolean isFriend = false;
@@ -83,7 +90,19 @@
         throw new RuntimeException(e);
     }
 %>
-
+<div class="admin-buttons">
+    <% if (isCurrentUserAdmin && isVisitedUserAdmin) { %>
+    <form action="DemoteUserServlet" method="post">
+        <input type="hidden" name="userId" value="<%=user.getUser_id()%>">
+        <button type="submit">Demote</button>
+    </form>
+    <% } else if (isCurrentUserAdmin && !isVisitedUserAdmin) { %>
+    <form action="PromoteUserServlet" method="post">
+        <input type="hidden" name="userId" value="<%=user.getUser_id()%>">
+        <button type="submit" class="promote-button">Promote</button>
+    </form>
+    <% } %>
+</div>
 <div class="container">
     <div class="left">
         <fieldset>
@@ -148,9 +167,9 @@
                         for (User user1 : manager.getFriends(user.getUser_id())) {
                 %>
                 <li>
-                    <a href="AnotherUser?AnotherUserId=<%= user1.getUser_id() %>">
-                        <img src="<%= user1.getProfilePhoto() %>" alt="<%=user.getProfilePhoto()%>">
-                        <span><%= user1.getUsername() %></span>
+                    <a href="AnotherUser?name=<%= user1.getUsername() %>">
+                        <img src="<%= user1.getProfilePhoto() %>">
+                        <span class="FriendUserName"><%= user1.getUsername() %></span>
                     </a>
                 </li>
                 <%
@@ -220,7 +239,7 @@
                         <tr>
                             <td>${quiz.quizName}</td>
                             <td>${quiz.dateCreated}</td>
-                            <td><a href="QuizPage?id=${quiz.quizId}">Link</a></td>
+                            <td><a href="quizStart.jsp?quiz_id=${quiz.quizId}">Link</a></td>
                         </tr>
                     `;
                 }

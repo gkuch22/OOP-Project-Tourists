@@ -18,7 +18,9 @@ public class QuizImpl implements Quiz{
     private boolean isTimed;
     private boolean immediatelyCorrected;
     private Date date_created;
+    private String description;
     private ArrayList<Question> questions = new ArrayList<Question>();
+    private int durationTime;
 
     public QuizImpl(int quizId, String quizName, String quizTag, String difficulty, int creatorId,
                         boolean multiplePages, boolean practiceMode, boolean gradable, Date dateCreated) {
@@ -35,7 +37,7 @@ public class QuizImpl implements Quiz{
 
 
     public QuizImpl(int quiz_id, String quizName, String quizTag, String difficulty, int creatorId, boolean isRandom, boolean isTimed, boolean multiplePages,
-                        boolean immediatelyCorrected, boolean practiceMode, boolean gradable) {
+                        boolean immediatelyCorrected, boolean practiceMode, boolean gradable, String description, int durationTime) {
         this.quiz_id = quiz_id;
         this.quiz_name = quizName;
         this.quiz_tag = quizTag;
@@ -47,6 +49,9 @@ public class QuizImpl implements Quiz{
         this.immediatelyCorrected = immediatelyCorrected;
         this.practice_mode = practiceMode;
         this.gradable = gradable;
+        this.description = description;
+        this.durationTime = durationTime;
+        this.isTimed = isTimed;
     }
 
 
@@ -132,6 +137,18 @@ public class QuizImpl implements Quiz{
     }
 
     @Override
+    public boolean isRandom() {
+        return isRandom;
+    }
+
+    @Override
+    public boolean isImmediatelyCorrected() {
+        return immediatelyCorrected;
+    }
+
+
+
+    @Override
     public void setGradable(boolean gradable) {
         this.gradable = gradable;
     }
@@ -150,13 +167,24 @@ public class QuizImpl implements Quiz{
         return questions;
     }
 
+
     @Override
-    public boolean isRandom(){
-        return isRandom;
+    public String getDescription(){
+        return description;
     }
 
     @Override
-    public boolean isImmediatelyCorrected(){
-        return immediatelyCorrected;
+    public void setDescription(String description){
+        this.description = description;
+    }
+
+    @Override
+    public int getDurationTime(){
+        return durationTime;
+    }
+
+    @Override
+    public boolean isTimed(){
+        return isTimed;
     }
 }
