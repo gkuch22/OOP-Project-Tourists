@@ -28,6 +28,11 @@ public interface Quiz {
     void setPractice_mode(boolean practice_mode);
 
     boolean isGradable();
+
+    boolean isRandom();
+
+    boolean isImmediatelyCorrected();
+
     void setGradable(boolean gradable);
 
     void addQuestion(Question question);
