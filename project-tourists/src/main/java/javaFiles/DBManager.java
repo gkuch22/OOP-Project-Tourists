@@ -4,11 +4,16 @@ import javafx.util.Pair;
 import org.apache.commons.dbcp2.BasicDataSource;
 
 import java.sql.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
+//import java.sql.Date;
 import java.util.Date;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+
 
 public class DBManager {
 
@@ -960,7 +965,29 @@ public class DBManager {
         statement.close();
         connection.close();
         return nextQuizId;
+    }
 
+    public void banUser(int user_id, String date, String reason) throws SQLException, ParseException {
+        Connection connection = dataSource.getConnection();
 
+        PreparedStatement statement = connection.prepareStatement("INSERT INTO ban_table " +
+                "(user_id, expire_date, reason) " +
+                "VALUES (?, ?, ?)");
+
+//        SqlDate sqlDate = new SqlDate(utilDate.getTime());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+
+        Date parsedDate = dateFormat.parse(date);
+        Timestamp sqlDate = new Timestamp(parsedDate.getTime());
+
+        // Step 2: Convert LocalDate to java.sql.Date
+//        Date sqlDate = Date.valueOf(localDate);
+        statement.setInt(1,user_id);
+        statement.setTimestamp(2,sqlDate);
+        statement.setString(3, reason);
+        statement.executeUpdate();
+        statement.close();
+        connection.close();
     }
 }

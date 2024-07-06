@@ -33,6 +33,7 @@ CREATE TABLE ban_table (
        ban_id INT AUTO_INCREMENT PRIMARY KEY,
        user_id INT,
        expire_date DATE,
+       reason TEXT not null,
        FOREIGN KEY (user_id) REFERENCES user_table(user_id)
 );
 
