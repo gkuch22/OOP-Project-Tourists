@@ -4,11 +4,16 @@ import javafx.util.Pair;
 import org.apache.commons.dbcp2.BasicDataSource;
 
 import java.sql.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
+//import java.sql.Date;
 import java.util.Date;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+
 
 public class DBManager {
 
@@ -19,6 +24,50 @@ public class DBManager {
         dataSource.setUrl("jdbc:mysql://localhost:3306/tourists");
         dataSource.setUsername("root");
         dataSource.setPassword("rootroot");
+    }
+
+    public int get_user_id(String name) throws SQLException {
+        Connection connection = dataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement("select user_id from login_table where username = ?");
+        statement.setString(1,name);
+        ResultSet res = statement.executeQuery();
+        ArrayList<Integer> list = new ArrayList<Integer>();
+
+        while(res.next()){
+            int num = res.getInt("user_id");
+            list.add(num);
+        }
+
+        res.close();
+        statement.close();
+        connection.close();
+        if(list.size() == 0) return -1;
+        if(list.size() > 1) return -1;
+        return list.get(0);
+    }
+
+    public int user_password_is_correct(String name, String password) throws SQLException {
+        return -1;
+    }
+
+    public int add_user(String name, String password) throws SQLException {
+        Connection connection = dataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement("insert into login_table (username, password) values (?, ?)");
+        statement.setString(1,name);
+        statement.setString(2,password);
+        statement.executeUpdate();
+        statement.close();
+        int user_id = get_user_id(name);
+
+        if(user_id != -1){
+            statement = connection.prepareStatement("insert into user_table (user_id, username) values (?, ?)");
+            statement.setInt(1,user_id);
+            statement.setString(2,name);
+            statement.executeUpdate();
+            statement.close();
+        }
+        connection.close();
+        return user_id;
     }
 
     public List<Quiz> getQuizzes() throws SQLException {
@@ -606,7 +655,6 @@ public class DBManager {
     }
 
 
-
     public List<Message> getChallenges(int id) throws SQLException {
         List<Message> challenges = new ArrayList<Message>();
 
@@ -666,7 +714,34 @@ public class DBManager {
         statement.executeUpdate();
 
         statement.close();
+        connection.close();
     }
+
+    public void removeQuiz(int quizId) throws SQLException{
+        String query = "DELETE FROM quiz_table WHERE quiz_id = ?";
+        Connection connection = dataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement(query);
+        statement.setInt(1, quizId);
+        statement.executeUpdate();
+        statement.close();
+        connection.close();
+    }
+
+    public void addAnnouncement(String title, String context, int userId) throws SQLException{
+        String query = "INSERT INTO post_table (post_title, post_text, user_id, date) VALUES (?, ?, ?, NOW())";
+        Connection connection = dataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement(query);
+
+        statement.setString(1, title);
+        statement.setString(2, context);
+        statement.setInt(3, userId);
+
+        statement.executeUpdate();
+        statement.close();
+        connection.close();
+    }
+
+
     public void sendFriendRequest(int user1Id,int user2Id) throws SQLException {
         Connection connection = dataSource.getConnection();
         PreparedStatement checker = connection.prepareStatement("Select * from mail_table where from_id=? AND to_id=? AND type='friendrequest'");
@@ -1001,7 +1076,33 @@ public class DBManager {
         statement.close();
         connection.close();
         return nextQuizId;
-
-
     }
+
+    public void banUser(int user_id, String date, String reason) throws SQLException, ParseException {
+        Connection connection = dataSource.getConnection();
+
+        PreparedStatement statement = connection.prepareStatement("INSERT INTO ban_table " +
+                "(user_id, expire_date, reason) " +
+                "VALUES (?, ?, ?)");
+
+//        SqlDate sqlDate = new SqlDate(utilDate.getTime());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+
+        Date parsedDate = dateFormat.parse(date);
+        Timestamp sqlDate = new Timestamp(parsedDate.getTime());
+
+        // Step 2: Convert LocalDate to java.sql.Date
+//        Date sqlDate = Date.valueOf(localDate);
+        statement.setInt(1,user_id);
+        statement.setTimestamp(2,sqlDate);
+        statement.setString(3, reason);
+        statement.executeUpdate();
+        statement.close();
+        connection.close();
+    }
+
+
+
+
 }

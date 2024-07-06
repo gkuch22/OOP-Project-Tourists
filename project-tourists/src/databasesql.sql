@@ -34,6 +34,8 @@ CREATE TABLE ban_table (
        user_id INT,
        expire_date DATE,
        FOREIGN KEY (user_id) REFERENCES user_table(user_id) ON DELETE CASCADE
+       reason TEXT not null,
+       FOREIGN KEY (user_id) REFERENCES user_table(user_id)
 );
 
 CREATE TABLE achievement_table (
@@ -66,6 +68,7 @@ CREATE TABLE mail_table (
 
 CREATE TABLE post_table (
         post_id INT AUTO_INCREMENT PRIMARY KEY,
+        post_title TEXT,
         post_text TEXT,
         user_id INT,
         date DATETIME,
