@@ -337,3 +337,46 @@ legend {
     text-decoration: none;
     color: #3A3A5F;
 }
+
+
+.admin-buttons form {
+    display: inline-block; /* Ensures forms/buttons are inline */
+    background-color: #0A0A23;
+    color: #0A0A23;
+    margin: 0 10px; /* Adjust spacing between buttons */
+}
+
+.admin-buttons{
+    margin-top: 20px; /* Adjust margin as needed */
+    right:50px;
+    text-align: center;
+    color: #fff;
+    border: none;
+    font-size: 14px;
+    position:absolute;
+
+}
+
+
+
+.promote-button{
+    background:transparent;
+    color:white;
+    width:120%;
+    align-self:center;
+    justify-self:center;
+    tranform:translate(10px);
+    position:relative;
+    left:-5px;
+    height:100%;
+    cursor:pointer;
+}
+
+.admin-buttons form:hover{
+    background-color: #3A3A5F;
+}
+
+.admin-buttons form{
+    background-color: #0A0A23;
+    margin-right:20px;
+}

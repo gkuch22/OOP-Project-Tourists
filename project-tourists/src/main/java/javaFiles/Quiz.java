@@ -36,9 +36,6 @@ public interface Quiz {
 
     boolean isGradable();
 
-    boolean isRandom();
-
-    boolean isImmediatelyCorrected();
 
     void setGradable(boolean gradable);
 

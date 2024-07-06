@@ -212,7 +212,7 @@
                         <tr>
                             <td>${quiz.quizName}</td>
                             <td>${quiz.dateCreated}</td>
-                            <td><a href="QuizPage?id=${quiz.quizId}">Link</a></td>
+                            <td><a href="quizStart.jsp?quiz_id=${quiz.quizId}">Link</a></td>
                         </tr>
                     `;
                 }

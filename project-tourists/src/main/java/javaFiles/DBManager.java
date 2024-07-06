@@ -16,7 +16,7 @@ public class DBManager {
 
     public DBManager() throws SQLException {
         dataSource = new BasicDataSource();
-        dataSource.setUrl("jdbc:mysql://localhost:3306/test_db");
+        dataSource.setUrl("jdbc:mysql://localhost:3306/tourists");
         dataSource.setUsername("root");
         dataSource.setPassword("rootroot");
     }
@@ -292,6 +292,45 @@ public class DBManager {
         statement.close();
         connection.close();
         return result;
+    }
+
+    public List<String> searchUsersByPartialUsername(String partialUsername) throws SQLException {
+        Connection connection = dataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement("Select username from user_table where username Like ?");
+        statement.setString(1,partialUsername+"%");
+        ResultSet resultSet = statement.executeQuery();
+        List<String> res = new ArrayList<>();
+        while (resultSet.next()){
+            res.add(resultSet.getString("username"));
+        }
+        resultSet.close();
+        statement.close();
+        connection.close();
+        return res;
+    }
+
+    public void promoteUserToAdmin(int userid) throws SQLException {
+        Connection connection = dataSource.getConnection();
+
+        PreparedStatement statement = connection.prepareStatement("UPDATE user_table Set is_admin=true where user_id=?");
+        statement.setInt(1,userid);
+
+        statement.executeUpdate();
+
+        statement.close();
+        connection.close();
+    }
+
+    public void demoteUserFromAdmin(int userid) throws SQLException {
+        Connection connection = dataSource.getConnection();
+
+        PreparedStatement statement = connection.prepareStatement("UPDATE user_table Set is_admin=false where user_id=?");
+        statement.setInt(1,userid);
+
+        statement.executeUpdate();
+
+        statement.close();
+        connection.close();
     }
 
     public List<QuizPerformance> getUserQuizzes(int User_id) throws SQLException {
