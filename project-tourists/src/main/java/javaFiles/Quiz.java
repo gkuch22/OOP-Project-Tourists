@@ -36,12 +36,15 @@ public interface Quiz {
 
     boolean isGradable();
 
-
     void setGradable(boolean gradable);
 
     void addQuestion(Question question);
     ArrayList<Question> getQuestions();
 
     Date getDate();
+    String getDescription();
+    void setDescription(String description);
+    int getDurationTime();
+    boolean isTimed();
 
 }

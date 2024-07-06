@@ -37,7 +37,7 @@ public class CreateQuizServlet extends HttpServlet {
 
         //we should get from user attribute
         User user = (UserImpl) getServletContext().getAttribute("user");
-        int creatorId = 0;
+        int creatorId = 1;
         boolean isRandom = false;
         boolean isTimed = false;
         boolean multiplePages = false;
@@ -51,6 +51,7 @@ public class CreateQuizServlet extends HttpServlet {
             practiceMode = Arrays.asList(boxes).contains("practiceMode");
         }
 
+        int durationTime = -1;
         //should add this input in createQuizzes;
         boolean gradable = false;
 
@@ -62,7 +63,7 @@ public class CreateQuizServlet extends HttpServlet {
         }
         Quiz quiz = new QuizImpl(nextQuizId, name, tagsFixed,difficulty, creatorId,
                 isRandom, isTimed, multiplePages, immediatelyCorrected,
-                practiceMode, gradable);
+                practiceMode, gradable, description,durationTime);
         HttpSession session = request.getSession();
         session.setAttribute("quiz", quiz);
         //response.sendRedirect(request.getContextPath() + "/chooseQuestion");

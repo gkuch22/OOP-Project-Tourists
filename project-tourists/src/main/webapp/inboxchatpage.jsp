@@ -18,12 +18,13 @@
 
 
 <body>
+<jsp:include page="topBar.jsp" />
 <%
-//    int id1 = 1; //currUser.getUser_id()
-//    String username = "nick";
-    User currUser = (User) request.getSession().getAttribute("user");
-    int id1 = currUser.getUser_id();
-    String username = currUser.getUsername();
+    int id1 = 1; //currUser.getUser_id()
+    String username = "nick";
+//    User currUser = (User) request.getSession().getAttribute("user");
+//    int id1 = currUser.getUser_id();
+//    String username = currUser.getUsername();
 
     DBManager dbManager = (DBManager) application.getAttribute("db-manager");
     List<User> friends = null;
@@ -49,9 +50,9 @@
             for(User friend : friends){
                 String currUsername = friend.getUsername();
         %>
-            <div class="friendbox">
+            <div class="friendboxbig" onclick="window.location.href='inboxchatpage.jsp?username2=<%= currUsername %>'">
                 <img class="profilepicture" src=<%=friend.getProfilePhoto()%>>
-                <div class="friendbox" onclick="window.location.href='inboxchatpage.jsp?username2=<%= currUsername %>'"><%= currUsername %></div>
+                <div class="friendbox" ><%= currUsername %></div>
             </div>
 
         <%
