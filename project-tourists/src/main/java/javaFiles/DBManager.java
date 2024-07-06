@@ -609,7 +609,6 @@ public class DBManager {
     }
 
 
-
     public List<Message> getChallenges(int id) throws SQLException {
         List<Message> challenges = new ArrayList<Message>();
 
@@ -682,6 +681,19 @@ public class DBManager {
         connection.close();
     }
 
+    public void addAnnouncement(String title, String context, int userId) throws SQLException{
+        String query = "INSERT INTO post_table (post_title, post_text, user_id, date) VALUES (?, ?, ?, NOW())";
+        Connection connection = dataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement(query);
+
+        statement.setString(1, title);
+        statement.setString(2, context);
+        statement.setInt(3, userId);
+
+        statement.executeUpdate();
+        statement.close();
+        connection.close();
+    }
 
 
     public void sendFriendRequest(int user1Id,int user2Id) throws SQLException {
