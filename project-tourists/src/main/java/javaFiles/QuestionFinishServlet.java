@@ -41,6 +41,7 @@ public class QuestionFinishServlet extends HttpServlet {
                 dbManager.addQuiz(currQuizz);
                 dbManager.addQuestions(currQuizz);
                 request.getSession().removeAttribute("quiz");
+                request.getRequestDispatcher("/index.jsp").forward(request, response);
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }

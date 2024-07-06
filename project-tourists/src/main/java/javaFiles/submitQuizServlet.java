@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.awt.*;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -26,6 +27,8 @@ public class submitQuizServlet extends HttpServlet {
 
         HttpSession session = request.getSession();
         Integer tmp = (Integer) session.getAttribute("quizId");
+//        Integer tmp = (Integer)(request.getAttribute("quiz_id"));
+        System.out.println(tmp);
         int quizId = tmp.intValue();
         // String quizIdStr = request.getParameter("quiz_id");
 //        if (quizIdStr == null) {
