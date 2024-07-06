@@ -1,8 +1,10 @@
 package javaFiles;
 
+//import javafx.util.Pair;
 import javafx.util.Pair;
 import org.apache.commons.dbcp2.BasicDataSource;
 
+//import javax.jms.Connection;
 import java.sql.*;
 import java.util.*;
 import java.util.Date;
@@ -18,7 +20,7 @@ public class DBManager {
         dataSource = new BasicDataSource();
         dataSource.setUrl("jdbc:mysql://localhost:3306/tourists");
         dataSource.setUsername("root");
-        dataSource.setPassword("+qwerty+");
+        dataSource.setPassword("rootroot");
     }
 
     public int get_user_id(String name) throws SQLException {
@@ -782,7 +784,7 @@ public class DBManager {
 
     public Quiz getQuiz(int quizId) throws SQLException {
         String name = "", diff = "", quizTag = "", practice = "";
-        String query = "SELECT quiz_name, quiz_tag, difficulty, creator_id, date_created, multiple_pages, practice_mode, gradable, immediate_correction, random_questions FROM quiz_table WHERE quiz_id = ?";
+        String query = "SELECT quiz_name, quiz_description, quiz_tag,difficulty, creator_id, date_created, multiple_pages, practice_mode, gradable, immediate_correction, random_questions, timed, duration_time FROM quiz_table WHERE quiz_id = ?";
         Quiz quiz = null;
         // System.out.println(query);
         Connection connection = dataSource.getConnection();
@@ -802,9 +804,9 @@ public class DBManager {
             }
             quiz = new QuizImpl(quizId, rs.getString("quiz_name"), rs.getString("quiz_tag"),
                     rs.getString("difficulty"), rs.getInt("creator_id"), rs.getBoolean("random_questions"),
-                    rs.getBoolean("gradable"), rs.getBoolean("multiple_pages"), rs.getBoolean("immediate_correction"),
+                    rs.getBoolean("timed"), rs.getBoolean("multiple_pages"), rs.getBoolean("immediate_correction"),
                     rs.getBoolean("practice_mode"), rs.getBoolean("gradable"),
-            "description", 1);
+                    rs.getString("quiz_description"), rs.getInt("duration_time"));
 
         }
 

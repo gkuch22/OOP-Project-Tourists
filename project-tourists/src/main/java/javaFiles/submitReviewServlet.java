@@ -34,8 +34,11 @@ public class submitReviewServlet extends HttpServlet {
         System.out.println(review + " review");
         System.out.println(date + " date");
 
-        int score = Integer.parseInt(request.getParameter("score"));
-        long time = Long.parseLong(request.getParameter("timeTaken"));
+        int score = (Integer) session.getAttribute("score");
+        //int score = Integer.parseInt(request.getParameter("score"));
+        long time = (Long) session.getAttribute("timeTaken");
+        //long time = Long.parseLong(request.getParameter("timeTaken"));
+        System.out.println(score + " score");
 
         DBManager dbManager;
 
@@ -71,6 +74,6 @@ public class submitReviewServlet extends HttpServlet {
 
 
 
-        response.sendRedirect("quizStart.jsp");
+        response.sendRedirect("homePage.jsp");
     }
 }

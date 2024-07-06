@@ -11,7 +11,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
 //    session.setAttribute("quizId", 1);
-    session.setAttribute("user_id", 1);
+    session.setAttribute("user_id", 30);
 %>
 <html lang="en">
 <head>
@@ -21,40 +21,32 @@
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f0f2f5;
+            background-color: #1B1B32;
             margin: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             height: 100vh;
-            color: #333;
+            color: #ffffff;
         }
-        .header {
-            display: flex;
-            justify-content: space-between;
+        .header, .tags {
+            background-color: #3A3A5F;
+            color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             width: 100%;
             max-width: 800px;
-            padding: 20px;
-            background-color: #ffffff;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
             margin-bottom: 20px;
-            margin-top: 20px;
         }
         .header div {
             font-weight: bold;
             font-size: 1.2em;
+            margin-bottom: 10px;
         }
         .tags {
             text-align: center;
-            background-color: #ffffff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 800px;
-            margin-bottom: 20px;
         }
         .tags p {
             margin: 0;
@@ -65,13 +57,17 @@
             list-style: none;
             padding: 0;
             margin: 0;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
         }
         #tag-list li {
             display: inline-block;
-            background-color: #9FCC2E;
+            background-color: #2D2D4B;
             padding: 5px 10px;
             margin: 5px;
             border-radius: 20px;
+            color: #ffffff;
         }
         .buttons {
             display: flex;
@@ -92,23 +88,24 @@
             transition: background-color 0.3s;
         }
         .button.start-quiz {
-            background-color: #0E402D;
+            background-color: #0A0A23;
         }
         .button.start-quiz:hover {
-            background-color: #0B2F21;
+            background-color: #07071a;
         }
         .button.start-practice {
-            background-color: #295135;
+            background-color: #0A0A23;
         }
         .button.start-practice:hover {
-            background-color: #1F3A27;
+            background-color: #07071a;
         }
     </style>
 </head>
 <body>
-
+<jsp:include page="topBar.jsp" />
 <%
-//    int quizId = 13;
+//    int quizId = 18;
+//    session.setAttribute("quizId", 18);
     int quizId = Integer.parseInt(request.getParameter("quiz_id"));
     session.setAttribute("quizId", quizId);
     DBManager dbManager = new DBManager();
@@ -122,6 +119,7 @@
 <div class="header">
     <div id="name"><%= quiz.getQuiz_name() %></div>
     <div id="difficulty"><%= quiz.getDifficulty() %></div>
+    <div class="description">Description: <%= quiz.getDescription() %></div>
 </div>
 <div class="tags">
     <p>Tags:</p>

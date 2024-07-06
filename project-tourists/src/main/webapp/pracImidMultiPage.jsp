@@ -17,18 +17,19 @@
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f0f2f5;
+            background-color: #1B1B32;
             margin: 0;
+            padding-top: 100px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: flex-start;
             height: 100vh;
-            color: #333;
+            color: white;
         }
         .quiz-container {
-            background-color: #ffffff;
-            padding: 20px;
+            background-color: #2D2D4B;
+            padding: 40px;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             width: 100%;
@@ -37,7 +38,16 @@
             overflow-y: auto;
         }
         .question {
-            font-size: 1.2em;
+            background-color: #3A3A5F;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        .question-text {
+            background-color: #3A3A5F;
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
             margin-bottom: 10px;
         }
         .answers {
@@ -48,26 +58,13 @@
         .answers li {
             margin-bottom: 10px;
         }
-        .feedback {
-            margin: 10px 0;
-            padding: 10px;
-            border-radius: 4px;
-        }
-        .feedback.correct {
-            background-color: #d4edda;
-            color: #155724;
-        }
-        .feedback.incorrect {
-            background-color: #f8d7da;
-            color: #721c24;
-        }
         .navigation-buttons {
             display: flex;
             justify-content: space-between;
         }
         .nav-button {
             padding: 10px 20px;
-            background-color: #007bff;
+            background-color: #0A0A23;
             color: white;
             border: none;
             cursor: pointer;
@@ -81,9 +78,48 @@
         .nav-button:hover {
             background-color: #0056b3;
         }
+        #timer {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            color: white;
+        }
+        .text-area {
+            background-color: #3A3A5F;
+            color: white;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .image-container {
+            margin-bottom: 20px; /* Increase margin below image */
+        }
     </style>
+    <script>
+        function startTimer(duration) {
+            let timer = duration, minutes, seconds;
+            const timerDisplay = document.getElementById('timer');
+            const interval = setInterval(() => {
+                minutes = parseInt(timer / 60, 10);
+                seconds = parseInt(timer % 60, 10);
+
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                timerDisplay.textContent = minutes + ":" + seconds;
+
+                if (--timer < 0) {
+                    clearInterval(interval);
+                    document.getElementById('quizForm').submit();
+                    window.location.href = 'timesUp.jsp';
+                }
+            }, 1000);
+        }
+    </script>
 </head>
 <body>
+<jsp:include page="topBar.jsp" />
 <%
     session = request.getSession();
     Integer tmp = (Integer) session.getAttribute("quizId");
@@ -91,6 +127,9 @@
     DBManager dbManager = new DBManager();
     List<Question> questions = dbManager.getQuestions(quizId);
     Quiz quiz = (Quiz) session.getAttribute("quizz");
+    boolean isTimed = quiz.isTimed();
+
+    int durationTime = quiz.isTimed() ? quiz.getDurationTime() : -1;
     if (quiz.isRandom()) {
         Collections.shuffle(questions);
     }
@@ -98,6 +137,9 @@
         long startTime = System.currentTimeMillis();
 %>
 <div class="quiz-container">
+    <% if (isTimed) { %>
+    <div id="timer">Time left: <span id="timeLeft"><%= durationTime %></span> minutes</div>
+    <% } %>
     <form id="quizForm" action="pracImidSubmitQuizServlet" method="post">
         <input type="hidden" name="quiz_id" value="<%= quizId %>">
         <input type="hidden" name="startTime" value="<%= startTime %>">
@@ -229,6 +271,11 @@
             isFeedbackShown = false;
         }
     }
+    <% if (quiz.isTimed()) { %>
+    window.onload = function() {
+        startTimer(<%= durationTime * 60 %>);
+    };
+    <% } %>
 </script>
 </body>
 </html>
