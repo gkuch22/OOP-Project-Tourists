@@ -2,24 +2,28 @@ package javaFiles;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
+import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.nio.file.Paths;
 
-public class UnfriendServlet extends HttpServlet {
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int loggedInUserId = 1;
-        int userId = Integer.parseInt(request.getParameter("userId"));
-        request.setAttribute("current_id", userId);
+public class UploadProfilePictureServlet extends HttpServlet {
+
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String imageURL = (String)request.getParameter("imageURL");
         DBManager manager = (DBManager) getServletContext().getAttribute("db-manager");
         try {
-            manager.unfriend(loggedInUserId, userId);
+            manager.updateProfilePicture(1,imageURL);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        RequestDispatcher dispatcher=request.getRequestDispatcher("AnotherUser.jsp");
+        RequestDispatcher dispatcher=request.getRequestDispatcher("UserPage.jsp");
         dispatcher.forward(request,response);
     }
 }

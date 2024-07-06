@@ -16,7 +16,7 @@
 <html>
 <head>
     <title>Quizzerinho</title>
-    <link rel="stylesheet" href="quizzespagestyle.css">
+    <link rel="stylesheet" href="quizzespageStyle.css">
 </head>
 
 <body>
@@ -43,60 +43,60 @@
     <h1><a href="index.jsp">Quizzerinho</a></h1>
 </div>
 
+<div class="container">
 
+    <div class="filters">
+        <h2>Filters</h2>
+        <form action="filteredquizzes" method="get">
 
-<div class="filters">
-    <form action="filteredquizzes" method="get">
+            <input class="searchfield" type="text" name="quizName" placeholder="Title">
+            <input class="searchbutton" type="submit" value="Search">
 
-        <input class="searchfield" type="text" name="quizName" placeholder="Quiz name">
-        <input class="searchbutton" type="submit" value="Search">
+            <label class="taglabel" for="tags">Tags:</label>
+            <select class="tagcombobox" name="tags" id="tags">
+                <option value="none">None</option>
+                <%
+                    for(String tag : tags){
+                %>
+                        <option value="<%= tag %>"><%=tag%></option>
+                <%
+                    }
+                %>
+            </select>
 
-        <label class="taglabel" for="tags">Tags:</label>
-        <select class="tagcombobox" name="tags" id="tags">
-            <option value="none">None</option>
-            <%
-                for(String tag : tags){
-            %>
-                    <option value="<%= tag %>"><%=tag%></option>
-            <%
-                }
-            %>
-        </select>
+            <label class="difficultylabel" for="difficulty">Difficulty:</label>
+            <select class="difficultycombobox" name="difficulty" id="difficulty">
+                <option value="all">All</option>
+                <option value="easy">Easy</option>
+                <option value="medium">Medium</option>
+                <option value="hard">Hard</option>
+            </select>
 
+            <label class="orderbylabel" for="orderby">Order By:</label>
+            <select class="orderbycombobox" name="orderby" id="orderby">
+                <option value="none">None</option>
+                <option value="difficulty">Difficulty</option>
+                <option value="popularity">Popularity</option>
+                <option value="recent">Recent</option>
+            </select>
 
-        <label class="difficultylabel" for="difficulty">Difficulty:</label>
-        <select class="difficultycombobox" name="difficulty" id="difficulty">
-            <option value="all">All</option>
-            <option value="easy">Easy</option>
-            <option value="medium">Medium</option>
-            <option value="hard">Hard</option>
-        </select>
+            <button class="applybutton" type="submit">Apply</button>
 
-        <label class="orderbylabel" for="orderby">Order By:</label>
-        <select class="orderbycombobox" name="orderby" id="orderby">
-            <option value="none">None</option>
-            <option value="difficulty">Difficulty</option>
-            <option value="popularity">Popularity</option>
-            <option value="recent">Recent</option>
-        </select>
+        </form>
+    </div>
 
-        <button class="applybutton" type="submit">Apply</button>
-
-    </form>
-</div>
-
-<div class="quiztable">
-    <table>
-        <thead>
+    <div class="quiztable">
+        <table>
+            <thead>
             <tr>
-                <th>Name</th>
+                <th>Title</th>
                 <th>Difficulty</th>
                 <th>Taken</th>
                 <th>Max Score</th>
                 <th>Date</th>
                 <th>Link to Quiz</th>
             </tr>
-        </thead>
+            </thead>
             <tbody>
             <%
                 Map<Integer, Pair<Integer, Integer>> mp;
@@ -105,7 +105,6 @@
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
-
 
                 for(Quiz quiz : quizzes){
                     String name = quiz.getQuiz_name();
@@ -126,15 +125,16 @@
                         <td><%= quizzestaken %></td>
                         <td><%= maxscore %></td>
                         <td><%= currDate %></td>
-                        <td><a href="quiz.jsp?id=<%= quiz.getQuiz_id() %>">Take Quiz</a></td>
+                        <td><a href="quizStart.jsp?quiz_id=<%= quiz.getQuiz_id() %>">Take Quiz</a></td>
                     </tr>
             <%
                 }
             %>
             </tbody>
-    </table>
-</div>
+        </table>
+    </div>
 
+</div>
 
 </body>
 

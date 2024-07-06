@@ -5,48 +5,63 @@
     box-sizing: border-box;
 }
 
+.topLine{
+    left:0;
+    top:0;
+    width: 100%;
+    height: 70px;
+    background-color: #2D2D4B;
+    position: absolute;
+}
+
 /* Body Styling */
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f5f5f5;
-    color: #333;
-    line-height: 1.6;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background-color: #1B1B32;
 }
 
-/* Container Styling */
-.container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    margin: 20px;
-    padding: 20px;
-    width: 100%;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    top: 230px;
-    position: absolute;
-}
-
-/* Header Buttons */
-.homepage-button{
-    display: inline-block;
-    margin: 10px;
-    padding: 10px 20px;
-    font-size: 1.2em;
-    font-weight: bold;
-    color: #fff;
-    background-color: #007bff;
+fieldset {
     border: none;
-    border-radius: 50px;
-    text-align: center;
-    text-decoration: none;
-    transition: background-color 0.3s;
-    position: absolute;
-    top: 5px;
-    left: 10px;
+    margin: 0;
+    position: relative;
+    background-color: #1B1B32;
+    padding: 30px 0 0;
 }
-.UserProfile{
+
+legend {
+    font-size: 1.5em;
+    font-weight: bold;
+    position: absolute;
+    top: -10px;
+    left: 0;
+    color: white;
+    background-color: #1B1B32;
+    padding: 10px 10px 0 0;
+    border: none;
+}
+
+
+/*!* Header Buttons *!*/
+/*.homepage-button {*/
+/*    display: inline-block;*/
+/*    margin: 10px;*/
+/*    padding: 10px 20px;*/
+/*    font-size: 1.2em;*/
+/*    font-weight: bold;*/
+/*    color: #fff;*/
+/*    background-color: #0A0A23;*/
+/*    border: none;*/
+/*    border-radius: 50px;*/
+/*    text-align: center;*/
+/*    text-decoration: none;*/
+/*    transition: background-color 0.3s;*/
+/*    position: absolute;*/
+/*    top: 5px;*/
+/*    left: 10px;*/
+/*}*/
+
+.UserProfile {
     top: 80px;
     left: 20px;
     width: 150px;
@@ -54,23 +69,34 @@ body {
     border-radius: 50%;
     position: absolute;
 }
-.unfriend-button{
+
+.UserName {
+    top: 80px;
+    left: 190px;
+    color: white;
+    font-size: 3em;
+    font-weight: bold;
+    position: absolute;
+}
+
+.unfriend-button {
     display: inline-block;
     margin: 10px;
     padding: 10px 20px;
     font-size: 1.2em;
     font-weight: bold;
     color: #fff;
-    background-color: #007bff;
+    background-color: #0A0A23;
     border: none;
     border-radius: 50px;
     text-align: center;
     text-decoration: none;
     transition: background-color 0.3s;
-    top:180px;
-    left:145px;
+    top: 180px;
+    left: 145px;
     position: absolute;
 }
+
 .logout-button {
     display: inline-block;
     margin: 10px;
@@ -78,7 +104,7 @@ body {
     font-size: 1.2em;
     font-weight: bold;
     color: #fff;
-    background-color: #007bff;
+    background-color: #0A0A23;
     border: none;
     border-radius: 50px;
     text-align: center;
@@ -88,6 +114,7 @@ body {
     top: 10px;
     right: 20px;
 }
+
 .Userpage-button {
     display: inline-block;
     margin: 10px;
@@ -95,7 +122,7 @@ body {
     font-size: 1.2em;
     font-weight: bold;
     color: #fff;
-    background-color: #007bff;
+    background-color: #0A0A23;
     border: none;
     border-radius: 50px;
     text-align: center;
@@ -106,150 +133,207 @@ body {
     right: 20px;
 }
 
-.Userpage-button:hover {
-    background-color: #0056b3;
-}
-.homepage-button:hover,
-.logout-button:hover {
-    background-color: #0056b3;
-}
 
 .ProblemsSolved {
     width: 40%;
     text-align: center;
     margin-bottom: 20px;
-    left:30%;
+    left: 30%;
     top: 80px;
     position: absolute;
+    padding: 20px;
+    background-color: #3A3A5F;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }
 
 .ProblemsSolved h1 {
     font-size: 2.5em;
-    color: #007bff;
+    color: #ccc;
+    margin-bottom: 10px;
 }
 
 .ProblemsSolved .Number {
     font-weight: bold;
+    font-size: 3em;
 }
 
-/* Left Section */
-.left {
-    width: 20%;
-}
-
-.Achievements, .tags {
-    margin-bottom: 20px;
-    overflow: auto;
-    max-height: 200px;
-}
-
-.Achievements h2, .tags h2 {
+.ProblemsSolved .Text {
     font-size: 1.5em;
-    color: #007bff;
-    margin-bottom: 10px;
+    color: white;
 }
 
-.achievements-list, .tags-list {
-    list-style: none;
-    padding: 0;
+.profilePictureChangeLabel {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: white;
 }
-
-.achievements-list li, .tags-list li {
-    margin-bottom: 10px;
+.pictureUploadField{
+    background-color: #3A3A5F;
+    width: 50px;
+}
+.profilePictureUploadUrl{
     font-size: 1.2em;
 }
+.PictureUploadButton{
+    width: 100px;
+    height: 30px;
+    color:white;
+    border-radius: 15px;
+    background-color: #0A0A23;
+}
 
-/* Middle Section */
-.middle {
-    width: 55%;
+.PictureUpload {
+    position: absolute;
+    color: white;
+    top: 160px;
+    left: 190px;
+    font-size: 0.8em;
+}
+
+
+.container {
+    display: grid;
+    grid-template-columns: 1.25fr 2.5fr 1.25fr;
+    grid-gap: 20px;
+    padding: 20px 0 20px 20px;
+    width: calc(100% - 40px);
+    margin: 0 auto;
+    top: 275px;
+    position: absolute;
+    background-color: #1B1B32;
+    height: 300px;
+}
+
+.left{
+    position: relative;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 20px;
+    background-color: #1B1B32;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    max-height: 100%;
+}
+
+.middle,
+.right {
+    position: relative;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 20px;
+    background-color: #1B1B32;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+    max-height: 100%;
+}
+
+.left::before,
+.middle::before,
+.right::before {
+    content: attr(data-label);
+    position: absolute;
+    top: -15px;
+    left: 20px;
+    background-color: #fff;
+    padding: 0 10px;
+    font-weight: bold;
+}
+
+.Achievements,
+.tags {
+    margin-bottom: 20px;
+    max-height: 125px;
+    overflow-y: auto;
+}
+
+.achievements-list,
+.tags-list,
+.friends-list {
+    list-style: none;
+    color:white;
+    padding: 0;
+    margin: 0;
+}
+
+.achievements-list li,
+.tags-list li,
+.friends-list li {
+    margin-bottom: 10px;
+    padding: 2px;
 }
 
 .button-container {
-    text-align: center;
+    display: flex;
+    justify-content: center;
     margin-bottom: 20px;
 }
 
 .button-container button {
-    padding: 12px 24px;
-    font-size: 1.1em;
-    font-weight: bold;
-    color: #fff;
-    background-color: #007bff;
-    border: none;
-    border-radius: 50px;
     margin: 0 10px;
+    padding: 10px 20px;
+    width: 200px;
+    height: 50px;
+    border: none;
+    border-radius: 15px;
+    background-color: #0A0A23;
+    color: white;
     cursor: pointer;
     transition: background-color 0.3s;
 }
 
-.button-container button:hover {
-    background-color: #0056b3;
-}
 
-/* Quiz Table Styling */
 .table-container {
-    max-height: 400px;
-    overflow: auto;
+    overflow-x: auto;
 }
 
 .quiz-data {
     width: 100%;
     border-collapse: collapse;
-    margin-bottom: 20px;
+    margin-top: 20px;
+    background-color: #3A3A5F;
 }
 
-.quiz-data th, .quiz-data td {
-    padding: 12px;
-    border: 1px solid #ddd;
+.quiz-data th,
+.quiz-data td {
+    padding: 10px;
     text-align: left;
+    background-color: #2A2A4F;
+    color:white;
 }
 
 .quiz-data th {
-    background-color: #007bff;
-    color: #fff;
-}
-
-.quiz-data tr:nth-child(even) {
-    background-color: #f9f9f9;
-}
-
-/* Right Section */
-.right {
-    width: 20%;
-}
-
-.right h2 {
-    font-size: 1.5em;
-    color: #007bff;
-    margin-bottom: 10px;
+    background-color: #3A3A5F;
+    border-radius: 5px 5px 0 0;
 }
 
 .friends-list {
-    list-style: none;
-    padding: 0;
-    max-height: 400px;
-    overflow: auto;
+    display: flex;
+    flex-direction: column;
 }
 
 .friends-list li {
     display: flex;
     align-items: center;
-    margin-bottom: 10px;
 }
 
 .friends-list img {
-    width: 40px;
-    height: 40px;
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
     margin-right: 10px;
 }
 
 .friends-list a {
-    color: #007bff;
     text-decoration: none;
-    font-size: 1.2em;
+    color: white;
+    font-weight: bold;
+    top:-18px;
+    left:-5px;
+    font-size:1.3em;
 }
 
 .friends-list a:hover {
-    text-decoration: underline;
+    text-decoration: none;
+    color: #3A3A5F;
 }

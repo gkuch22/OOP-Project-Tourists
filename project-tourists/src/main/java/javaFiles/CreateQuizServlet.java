@@ -8,21 +8,23 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Arrays;
 
 @WebServlet(name = "createQuiz", urlPatterns = {"/createQuiz"})
 public class CreateQuizServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        DBManager dbManager = (DBManager) getServletContext().getAttribute("db-manager");
         String name = (String)request.getParameter("quizname");
         String description = (String)request.getParameter("description");
         String tags = (String)request.getParameter("tags");
         String difficulty = (String)request.getParameter("difficulty");
         String[] boxes = (String[])request.getParameterValues("checkbox");
-        System.out.println("name - " + name);
-        System.out.println("description - " + description);
-        System.out.println("tags - " + tags);
-        System.out.println("diff - " + difficulty);
+//        System.out.println("name - " + name);
+//        System.out.println("description - " + description);
+//        System.out.println("tags - " + tags);
+//        System.out.println("diff - " + difficulty);
         String tagsFixed = "";
         String[] tagsArr = tags.split(",");
         for(int i = 0; i < tagsArr.length; i++){
@@ -33,18 +35,32 @@ public class CreateQuizServlet extends HttpServlet {
             System.out.println(tagsArr[i]);
         }
 
-        // we should get from dataBase
-        int id = 0;
         //we should get from user attribute
+        User user = (UserImpl) getServletContext().getAttribute("user");
         int creatorId = 0;
-        boolean isRandom = Arrays.asList(boxes).contains("random");
-        boolean isTimed = Arrays.asList(boxes).contains("timed");
-        boolean multiplePages = Arrays.asList(boxes).contains("multiplePages");
-        boolean immediatelyCorrected = Arrays.asList(boxes).contains("immediateCorrection");
-        boolean practiceMode = Arrays.asList(boxes).contains("practiceMode");
+        boolean isRandom = false;
+        boolean isTimed = false;
+        boolean multiplePages = false;
+        boolean immediatelyCorrected = false;
+        boolean practiceMode = false;
+        if(boxes != null){
+            isRandom = Arrays.asList(boxes).contains("random");
+            isTimed = Arrays.asList(boxes).contains("timed");
+            multiplePages = Arrays.asList(boxes).contains("multiplePages");
+            immediatelyCorrected = Arrays.asList(boxes).contains("immediateCorrection");
+            practiceMode = Arrays.asList(boxes).contains("practiceMode");
+        }
+
         //should add this input in createQuizzes;
         boolean gradable = false;
-        Quiz quiz = new QuizImpl(id, name, tagsFixed,difficulty, creatorId,
+
+        int nextQuizId = 0;
+        try {
+            nextQuizId = dbManager.getNextQuizId();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        Quiz quiz = new QuizImpl(nextQuizId, name, tagsFixed,difficulty, creatorId,
                 isRandom, isTimed, multiplePages, immediatelyCorrected,
                 practiceMode, gradable);
         HttpSession session = request.getSession();

@@ -1,11 +1,11 @@
 <%@ page import="java.sql.SQLException" %>
-<%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.List" %>
 <%@ page import="javaFiles.*" %>
 <%@ page import="java.util.Map" %>
 
 <%
     Integer user_id = (Integer) request.getAttribute("current_id");
+    System.out.println(user_id);
 %>
 <html>
 <head>
@@ -15,10 +15,11 @@
     <link rel="stylesheet" href="UserStyle.css">
 </head>
 <body>
+<jsp:include page="topBar.jsp" />
 <%
     DBManager manager = (DBManager) application.getAttribute("db-manager");
-    List<QuizPerformance> quizzesTaken = new ArrayList<QuizPerformance>();
-    List<Quiz> quizzesCreated = new ArrayList<Quiz>();
+    List<QuizPerformance> quizzesTaken;
+    List<Quiz> quizzesCreated;
     User user;
     try {
         user = manager.getUserData(user_id);
@@ -58,12 +59,13 @@
 %>
 
 <div class="ProblemsSolved">
-    <h1><span class="Number"><%= manager.getUniqueUserQuizzes(user.getUser_id()).size() %></span> <span class="Text">Quizzes Attempted</span></h1>
+    <h1><span class="Number"><%= manager.getUniqueUserQuizzes(user.getUser_id()).size() %></span> <span class="Text">Quizzes Taken</span></h1>
 </div>
+<div class="UserName">
+    <a><%=user.getUsername()%></a>
+</div>
+<img class="UserProfile" src="<%=user.getProfilePhoto()%>" alt="<%=user.getProfilePhoto()%>">
 
-<a href="index.jsp" class="homepage-button">Homepage</a>
-<img class="UserProfile" src=<%=user.getProfilePhoto()%>>
-<a href="UserPage.jsp" class="Userpage-button">Back to User Page</a>
 <%
     try {
         boolean isFriend = false;
@@ -71,12 +73,12 @@
             if(user1.getUser_id()==1) isFriend=true;
         }
         if(isFriend){
-    %>
-    <button id="unfriend" class="unfriend-button"> Unfriend </button>
-        <%}else{%>
+%>
+<a id="unfriend" class="unfriend-button" href="UnfriendServlet?userId=<%= user.getUser_id() %>"> Unfriend </a>
+<%}else{%>
 
-    <button id="sendRequestBtn" class="unfriend-button">Send Friend Request</button>
-    <%
+<button id="sendRequestBtn" class="unfriend-button">Send Friend Request</button>
+<%
         }
     } catch (SQLException e) {
         throw new RuntimeException(e);
@@ -85,15 +87,72 @@
 
 <div class="container">
     <div class="left">
-        <div class="Achievements">
-            <h2>Achievements</h2>
-            <ul class="achievements-list">
+        <fieldset>
+            <legend>Achievements</legend>
+            <div class="Achievements">
+                <ul class="achievements-list">
+                    <%
+                        try {
+                            for (String s : manager.getAchievements(user)) {
+                    %>
+                    <li>
+                        <a><%= s %></a>
+                    </li>
+                    <%
+                            }
+                        } catch (SQLException e) {
+                            throw new RuntimeException(e);
+                        }
+                    %>
+                </ul>
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend>Tags</legend>
+            <div class="tags">
+                <ul class="tags-list">
+                    <%
+                        Map<String, Integer> tagCounts = user.getTagCount();
+                        for (Map.Entry<String, Integer> entry : tagCounts.entrySet()) {
+                    %>
+                    <li>
+                        <a><%= entry.getKey() %></a>
+                        <span>(<%= entry.getValue() %> solved)</span>
+                    </li>
+                    <%
+                        }
+                    %>
+                </ul>
+            </div>
+        </fieldset>
+    </div>
+    <div class="middle">
+        <fieldset>
+            <legend>Quizzes</legend>
+            <div class="button-container">
+                <button id="quizzes-taken-btn">Quizzes Taken</button>
+                <button id="quizzes-created-btn">Quizzes Created</button>
+            </div>
+            <div class="table-container">
+                <table id="quiz-table" class="quiz-data">
+
+                </table>
+            </div>
+        </fieldset>
+    </div>
+    <div class="right">
+        <fieldset>
+            <legend>Friends List</legend>
+            <ul class="friends-list">
                 <%
                     try {
-                        for (String s : manager.getAchievements(user)) {
+                        for (User user1 : manager.getFriends(user.getUser_id())) {
                 %>
                 <li>
-                    <a><%= s %></a>
+                    <a href="AnotherUser?name=<%= user1.getUsername() %>">
+                        <img src="<%= user1.getProfilePhoto() %>">
+                        <span class="FriendUserName"><%= user1.getUsername() %></span>
+                    </a>
                 </li>
                 <%
                         }
@@ -102,55 +161,7 @@
                     }
                 %>
             </ul>
-        </div>
-        <div class="tags">
-            <h2>Tags:</h2>
-            <ul class="tags-list">
-                <%
-                    Map<String, Integer> tagCounts = user.getTagCount();
-                    for (Map.Entry<String, Integer> entry : tagCounts.entrySet()) {
-                %>
-                <li>
-                    <a><%= entry.getKey() %></a>
-                    <span>(<%= entry.getValue() %> solved)</span>
-                </li>
-                <%
-                    }
-                %>
-            </ul>
-        </div>
-    </div>
-    <div class="middle">
-        <div class="button-container">
-            <button id="quizzes-taken-btn">Quizzes Taken</button>
-            <button id="quizzes-created-btn">Quizzes Created</button>
-        </div>
-        <div class="table-container">
-            <table id="quiz-table" class="quiz-data">
-
-            </table>
-        </div>
-    </div>
-    <div class="right">
-        <h2>Friends List</h2>
-        <ul class="friends-list">
-            <%
-                try {
-                    for (User user1 : manager.getFriends(user.getUser_id())) {
-            %>
-            <li>
-                <a href="AnotherUser?AnotherUserId=<%= user1.getUser_id() %>">
-                    <img src="<%= user1.getProfilePhoto() %>">
-                    <span><%= user1.getUsername() %>></span>
-                </a>
-            </li>
-            <%
-                    }
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
-            %>
-        </ul>
+        </fieldset>
     </div>
 </div>
 
@@ -225,14 +236,6 @@
     document.getElementById('sendRequestBtn').addEventListener('click', function() {
         var xhr = new XMLHttpRequest();
         xhr.open('POST', 'SendFriendRequestServlet', true);
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        xhr.send('userId=<%= user.getUser_id() %>');
-    });
-</script>
-<script>
-    document.getElementById('unfriend').addEventListener('click', function () {
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST', 'UnfriendServlet', true);
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         xhr.send('userId=<%= user.getUser_id() %>');
     });
