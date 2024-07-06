@@ -72,7 +72,7 @@ CREATE TABLE post_table (
         FOREIGN KEY (user_id) REFERENCES user_table(user_id)
 );
 
-CREATE TABLE quiz_table (
+CREATE TABLE quiz_table(
         quiz_id INT AUTO_INCREMENT PRIMARY KEY,
         quiz_name TEXT,
         quiz_description TEXT,
@@ -86,7 +86,7 @@ CREATE TABLE quiz_table (
         immediate_correction BOOLEAN DEFAULT FALSE,
         random_questions BOOLEAN DEFAULT FALSE,
         timed BOOLEAN DEFAULT FALSE,
-        duration_time INT,
+        duration_time INT default -1,
         FOREIGN KEY (creator_id) REFERENCES user_table(user_id)
 );
 

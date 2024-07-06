@@ -632,18 +632,22 @@ public class DBManager {
         Connection connection = dataSource.getConnection();
 
         PreparedStatement statement = connection.prepareStatement("INSERT INTO quiz_table " +
-                "(quiz_name, quiz_tag, difficulty," +
-                "creator_id, date_created, multiple_pages, practice_mode, gradable, immediate_correction, random_questions)" +
-                "VALUES (?, ?, ?, ?, sysdate(), ?, ?, ?, ?, ?);");
+                "(quiz_name, quiz_description, quiz_tag, difficulty," +
+                "creator_id, date_created, multiple_pages, practice_mode, gradable, immediate_correction, random_questions," +
+                "timed, duration_time)" +
+                "VALUES (?, ?, ?, ?, ?, sysdate(), ?, ?, ?, ?, ?,?,?);");
                 statement.setString(1, quiz.getQuiz_name());
-                statement.setString(2, quiz.getQuizTagsAsString());
-                statement.setString(3, quiz.getDifficulty());
-                statement.setInt(4, quiz.getCreator_id());
-                statement.setBoolean(5, quiz.isMultiple_pages());
-                statement.setBoolean(6, quiz.isPractice_mode());
-                statement.setBoolean(7, quiz.isGradable());
-                statement.setBoolean(8, quiz.isImmediatelyCorrected());
-                statement.setBoolean(9, quiz.isRandom());
+                statement.setString(2, quiz.getDescription());
+                statement.setString(3, quiz.getQuizTagsAsString());
+                statement.setString(4, quiz.getDifficulty());
+                statement.setInt(5, quiz.getCreator_id());
+                statement.setBoolean(6, quiz.isMultiple_pages());
+                statement.setBoolean(7, quiz.isPractice_mode());
+                statement.setBoolean(8, quiz.isGradable());
+                statement.setBoolean(9, quiz.isImmediatelyCorrected());
+                statement.setBoolean(10, quiz.isRandom());
+                statement.setBoolean(11, quiz.isTimed());
+                statement.setInt(12, quiz.getDurationTime());
                 statement.executeUpdate();
                 statement.close();
                 connection.close();
@@ -716,7 +720,8 @@ public class DBManager {
             quiz = new QuizImpl(quizId, rs.getString("quiz_name"), rs.getString("quiz_tag"),
                     rs.getString("difficulty"), rs.getInt("creator_id"), rs.getBoolean("random_questions"),
                     rs.getBoolean("gradable"), rs.getBoolean("multiple_pages"), rs.getBoolean("immediate_correction"),
-                    rs.getBoolean("practice_mode"), rs.getBoolean("gradable"));
+                    rs.getBoolean("practice_mode"), rs.getBoolean("gradable"),
+            "description", 1);
 
         }
 

@@ -21,7 +21,7 @@
     String pictureURL = user.getProfilePhoto();
 %>
 <div class="topbar">
-    <a href="/homePage.jsp"><img class="homePagePicture" src="logo1.png"></a>
+    <a href="/index.jsp"><img class="homePagePicture" src="logo1.png"></a>
     <a href="/UserPage.jsp"><img class="profilePicture" src="<%=pictureURL%>"></a>
     <a href="inboxmailpage.jsp"><img class="inboxPicture" src="mail.png"></a>
 </div>

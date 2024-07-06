@@ -110,6 +110,7 @@
 <%
 //    int quizId = 13;
     int quizId = Integer.parseInt(request.getParameter("quiz_id"));
+    session.setAttribute("quizId", quizId);
     DBManager dbManager = new DBManager();
     Quiz quiz = dbManager.getQuiz(quizId);
     session.setAttribute("quizz", quiz);

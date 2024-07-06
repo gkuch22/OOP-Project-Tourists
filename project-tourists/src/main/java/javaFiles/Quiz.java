@@ -42,5 +42,9 @@ public interface Quiz {
     ArrayList<Question> getQuestions();
 
     Date getDate();
+    String getDescription();
+    void setDescription(String description);
+    int getDurationTime();
+    boolean isTimed();
 
 }
