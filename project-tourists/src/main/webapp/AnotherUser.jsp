@@ -21,10 +21,16 @@
     List<QuizPerformance> quizzesTaken;
     List<Quiz> quizzesCreated;
     User user;
+    User mainUser;
+    boolean isCurrentUserAdmin = false;
+    boolean isVisitedUserAdmin = false;
     try {
         user = manager.getUserData(user_id);
+        mainUser = manager.getUserData(1);
         quizzesTaken = manager.getUserQuizzes(user.getUser_id());
         quizzesCreated = manager.getUserCreatedQuizzes(user);
+        isCurrentUserAdmin = mainUser.isAdmin();
+        isVisitedUserAdmin = user.isAdmin();
     } catch (SQLException e) {
         throw new RuntimeException(e);
     }
@@ -84,7 +90,19 @@
         throw new RuntimeException(e);
     }
 %>
-
+<div class="admin-buttons">
+    <% if (isCurrentUserAdmin && isVisitedUserAdmin) { %>
+    <form action="DemoteUserServlet" method="post">
+        <input type="hidden" name="userId" value="<%=user.getUser_id()%>">
+        <button type="submit">Demote</button>
+    </form>
+    <% } else if (isCurrentUserAdmin && !isVisitedUserAdmin) { %>
+    <form action="PromoteUserServlet" method="post">
+        <input type="hidden" name="userId" value="<%=user.getUser_id()%>">
+        <button type="submit" class="promote-button">Promote</button>
+    </form>
+    <% } %>
+</div>
 <div class="container">
     <div class="left">
         <fieldset>
@@ -221,7 +239,7 @@
                         <tr>
                             <td>${quiz.quizName}</td>
                             <td>${quiz.dateCreated}</td>
-                            <td><a href="QuizPage?id=${quiz.quizId}">Link</a></td>
+                            <td><a href="quizStart.jsp?quiz_id=${quiz.quizId}">Link</a></td>
                         </tr>
                     `;
                 }

@@ -294,6 +294,45 @@ public class DBManager {
         return result;
     }
 
+    public List<String> searchUsersByPartialUsername(String partialUsername) throws SQLException {
+        Connection connection = dataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement("Select username from user_table where username Like ?");
+        statement.setString(1,partialUsername+"%");
+        ResultSet resultSet = statement.executeQuery();
+        List<String> res = new ArrayList<>();
+        while (resultSet.next()){
+            res.add(resultSet.getString("username"));
+        }
+        resultSet.close();
+        statement.close();
+        connection.close();
+        return res;
+    }
+
+    public void promoteUserToAdmin(int userid) throws SQLException {
+        Connection connection = dataSource.getConnection();
+
+        PreparedStatement statement = connection.prepareStatement("UPDATE user_table Set is_admin=true where user_id=?");
+        statement.setInt(1,userid);
+
+        statement.executeUpdate();
+
+        statement.close();
+        connection.close();
+    }
+
+    public void demoteUserFromAdmin(int userid) throws SQLException {
+        Connection connection = dataSource.getConnection();
+
+        PreparedStatement statement = connection.prepareStatement("UPDATE user_table Set is_admin=false where user_id=?");
+        statement.setInt(1,userid);
+
+        statement.executeUpdate();
+
+        statement.close();
+        connection.close();
+    }
+
     public List<QuizPerformance> getUserQuizzes(int User_id) throws SQLException {
         Connection connection = dataSource.getConnection();
         PreparedStatement statement = connection.prepareStatement("Select * from review_table where user_id = ? ORDER BY review_table.date DESC;");
