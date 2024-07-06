@@ -14,6 +14,8 @@
 
 
 <body>
+<jsp:include page="topBar.jsp" />
+
     <div class="container">
         <form class="announcementbox" action="writeAnnouncement" method="post">
             <h2 class="titlebox">Title</h2>
