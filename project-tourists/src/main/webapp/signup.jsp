@@ -25,7 +25,7 @@
 
 <div class="right_container">
     <div class = "head">
-        <p>Quizerinio</p>
+        <img class="homePagePicture" src="logo1.png">
     </div>
 
     <form method="post" action="signup">

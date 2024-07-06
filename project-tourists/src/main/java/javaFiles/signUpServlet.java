@@ -21,9 +21,10 @@ public class signUpServlet extends HttpServlet {
         try {
             if(dbManager.get_user_id(username) == -1){
                 int user_id = dbManager.add_user(username,password);
-                User user = dbManager.getUserData(user_id);
-                req.getSession().setAttribute("user",user);
-                req.getRequestDispatcher("/UserPage.jsp").forward(req,resp);
+                if(user_id != -1) req.getRequestDispatcher("/signin.jsp").forward(req,resp);
+                else{
+                    req.getRequestDispatcher("/signuperror.jsp").forward(req,resp);
+                }
             }else{
                 req.getRequestDispatcher("/signuperror.jsp").forward(req,resp);
             }

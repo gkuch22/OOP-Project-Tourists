@@ -25,19 +25,9 @@
 
 <div class="right_container">
     <div class = "head">
-        <p>Quizerinio</p>
+        <img class="homePagePicture" src="logo1.png">
     </div>
-
-    <div class = "form">
-        <div class = "fillers">
-            <input type="text" placeholder="USERNAME" class = "username" name = "username"/>
-            <input type="password" placeholder="PASSWORD" class="password" name = "password"/>
-        </div>
-        <div class = "buttonDiv">
-            <button class="sign"> sign in </button>
-            <button class="register"> register </button>
-        </div>
-    </div>
+    <h1>Guest Mode</h1>
 </div>
 
 

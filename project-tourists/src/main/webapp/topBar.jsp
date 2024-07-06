@@ -1,6 +1,7 @@
 <%@ page import="javaFiles.User" %>
 <%@ page import="javaFiles.UserImpl" %>
-<%@ page import="javaFiles.DBManager" %><%--
+<%@ page import="javaFiles.DBManager" %>
+<%@ page import="java.sql.SQLException" %><%--
   Created by IntelliJ IDEA.
   User: surma
   Date: 7/5/2024
@@ -15,9 +16,14 @@
 </head>
 <body>
 <% DBManager dbManager = (DBManager) application.getAttribute("db-manager");
-    int userId = 1;
+    int userId = 10;
 //    userId = (int)request.getSession().getAttribute("userId");
-    User user = dbManager.getUserData(userId);
+    User user = null;
+    try {
+        user = dbManager.getUserData(userId);
+    } catch (SQLException e) {
+        throw new RuntimeException(e);
+    }
     String pictureURL = user.getProfilePhoto();
 %>
 
