@@ -5,6 +5,7 @@
 
 <%
     Integer user_id = (Integer) request.getAttribute("current_id");
+    System.out.println("userid in another - " + user_id);
 %>
 <html>
 <head>
@@ -101,6 +102,7 @@
         <button type="submit" class="promote-button">Promote</button>
     </form>
     <% } %>
+    <% System.out.println("bottom of another - " + user.getUser_id());%>
     <%  if(isCurrentUserAdmin){ %>
     <form action="DeleteUserServlet" method="post">
         <input type="hidden" name="userId" value="<%=user.getUser_id()%>">

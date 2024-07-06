@@ -16,6 +16,7 @@
 <body>
 <jsp:include page="topBar.jsp" />
 <% int userID = (Integer) request.getSession().getAttribute("ban_user_id");
+    System.out.println("userid in  banUser - " + userID);
     DBManager dbManager = (DBManager) application.getAttribute("db-manager");
     User user = null;
     try {

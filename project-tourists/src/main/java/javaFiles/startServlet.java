@@ -35,13 +35,16 @@ public class startServlet extends HttpServlet {
 
 
 
+
          int quizId = Integer.parseInt(quizIdStr);
+        System.out.println("quiz id in startServlet" + quizId);
         //int quizId = (int) session.getAttribute("quizId");
-        System.out.println(quizId + " alaaaa");
+//        System.out.println(quizId + " alaaaa");
         session.setAttribute("currentQuestionIndex", 0);
         DBManager dbManager;
         try {
             dbManager = new DBManager();
+//             dbManager = (DBManager) getServletContext().getAttribute("db-manager");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

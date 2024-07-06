@@ -20,7 +20,7 @@ public class friendRequestServlet extends HttpServlet {
 
 //        int toId = 1; //TODO userid get parameter
         DBManager dbManager = (DBManager) getServletContext().getAttribute("db-manager");
-        int toId = (int) request.getSession().getAttribute("user_id");
+        int toId = (Integer) request.getSession().getAttribute("user_id");
 
 
         try {

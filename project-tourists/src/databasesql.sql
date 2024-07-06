@@ -33,7 +33,7 @@ CREATE TABLE ban_table (
        ban_id INT AUTO_INCREMENT PRIMARY KEY,
        user_id INT,
        expire_date DATE,
-       FOREIGN KEY (user_id) REFERENCES user_table(user_id) ON DELETE CASCADE
+       FOREIGN KEY (user_id) REFERENCES user_table(user_id) ON DELETE CASCADE,
        reason TEXT not null,
        FOREIGN KEY (user_id) REFERENCES user_table(user_id)
 );
@@ -320,47 +320,47 @@ CREATE TABLE question_table (
 -- select * from user_table;
 -- select * from login_table;
 
-INSERT INTO login_table (user_id, username, password) VALUES (30, 'saxeli', 'paroli');
-INSERT INTO user_table(user_id, username) VALUES (30, 'saxeli');
-
-
-INSERT INTO login_table (user_id, username, password) VALUES (31, 'jemali', 'parolii');
-INSERT INTO user_table(user_id, username) VALUES (31, 'jemali');
-INSERT INTO friend_table(friend_id, user_id_1, user_id_2) VALUES (30, 30, 31);
-
-
-
-INSERT INTO quiz_table(quiz_id,quiz_name,quiz_description,quiz_tag,difficulty,creator_id, multiple_pages, practice_mode, timed, duration_time) VALUES (14,'hard','math','hard', 'desc',30,false,false,true, 1);
-
-INSERT INTO question_table(question, possible_answers, answer, quiz_id, question_type, imageURL) VALUES ('question10', '','fuck', 14, 3, 'https://miro.medium.com/v2/resize:fit:720/format:webp/1*Qr2z3ZS7--o8xO6jJi77Ig.jpeg');
-INSERT INTO question_table(question, possible_answers, answer, quiz_id, question_type, imageURL) VALUES ('question11', '','fuck', 14, 4, '');
-
-
-
-INSERT INTO quiz_table(quiz_id,quiz_name,quiz_description,quiz_tag,difficulty,creator_id, multiple_pages, practice_mode, timed, duration_time) VALUES (15,'hard','math','hard', 'desc',30,true,false,true, 1);
-
-INSERT INTO question_table(question, possible_answers, answer, quiz_id, question_type, imageURL) VALUES ('question10', '','fuck', 15, 3, 'https://miro.medium.com/v2/resize:fit:720/format:webp/1*Qr2z3ZS7--o8xO6jJi77Ig.jpeg');
-INSERT INTO question_table(question, possible_answers, answer, quiz_id, question_type, imageURL) VALUES ('question11', '','fuck', 15, 4, '');
-
-
-
-INSERT INTO quiz_table(quiz_id,quiz_name,quiz_description,quiz_tag,difficulty,creator_id, multiple_pages, practice_mode, immediate_correction,timed, duration_time) VALUES (16,'hard','math','hard', 'desc',30,true,true,true,true, 1);
-
-INSERT INTO question_table(question, possible_answers, answer, quiz_id, question_type, imageURL) VALUES ('question10', '','fuck', 16, 3, 'https://miro.medium.com/v2/resize:fit:720/format:webp/1*Qr2z3ZS7--o8xO6jJi77Ig.jpeg');
-INSERT INTO question_table(question, possible_answers, answer, quiz_id, question_type, imageURL) VALUES ('question11', '','fuck', 16, 4, '');
-
-SELECT * FROM review_table;
-
-
-INSERT INTO quiz_table(quiz_id,quiz_name,quiz_description,quiz_tag,difficulty,creator_id, multiple_pages, practice_mode, timed, duration_time) VALUES (17,'hard','math','hard', 'desc',30,false,true,true, 1);
-
-INSERT INTO question_table(question, possible_answers, answer, quiz_id, question_type, imageURL) VALUES ('question10', '','fuck', 17, 3, 'https://miro.medium.com/v2/resize:fit:720/format:webp/1*Qr2z3ZS7--o8xO6jJi77Ig.jpeg');
-INSERT INTO question_table(question, possible_answers, answer, quiz_id, question_type, imageURL) VALUES ('question11', '','fuck', 17, 4, '');
-INSERT INTO question_table(question, possible_answers, answer, quiz_id, question_type, imageURL) VALUES ('question11', 'a;b;c;d','b', 17, 2, '');
-
-
-INSERT INTO quiz_table(quiz_id,quiz_name,quiz_description,quiz_tag,difficulty,creator_id, multiple_pages, practice_mode, timed, duration_time) VALUES (18,'hard','math','hard', 'desc',30,false,true,false, 1);
-
-INSERT INTO question_table(question, possible_answers, answer, quiz_id, question_type, imageURL) VALUES ('question10', '','fuck', 18, 3, 'https://miro.medium.com/v2/resize:fit:720/format:webp/1*Qr2z3ZS7--o8xO6jJi77Ig.jpeg');
-INSERT INTO question_table(question, possible_answers, answer, quiz_id, question_type, imageURL) VALUES ('question11', '','fuck', 18, 4, '');
-INSERT INTO question_table(question, possible_answers, answer, quiz_id, question_type, imageURL) VALUES ('question11', 'a;b;c;d','b', 18, 2, '');
+# INSERT INTO login_table (user_id, username, password) VALUES (30, 'saxeli', 'paroli');
+# INSERT INTO user_table(user_id, username) VALUES (30, 'saxeli');
+#
+#
+# INSERT INTO login_table (user_id, username, password) VALUES (31, 'jemali', 'parolii');
+# INSERT INTO user_table(user_id, username) VALUES (31, 'jemali');
+# INSERT INTO friend_table(friend_id, user_id_1, user_id_2) VALUES (30, 30, 31);
+#
+#
+#
+# INSERT INTO quiz_table(quiz_id,quiz_name,quiz_description,quiz_tag,difficulty,creator_id, multiple_pages, practice_mode, timed, duration_time) VALUES (14,'hard','math','hard', 'desc',30,false,false,true, 1);
+#
+# INSERT INTO question_table(question, possible_answers, answer, quiz_id, question_type, imageURL) VALUES ('question10', '','fuck', 14, 3, 'https://miro.medium.com/v2/resize:fit:720/format:webp/1*Qr2z3ZS7--o8xO6jJi77Ig.jpeg');
+# INSERT INTO question_table(question, possible_answers, answer, quiz_id, question_type, imageURL) VALUES ('question11', '','fuck', 14, 4, '');
+#
+#
+#
+# INSERT INTO quiz_table(quiz_id,quiz_name,quiz_description,quiz_tag,difficulty,creator_id, multiple_pages, practice_mode, timed, duration_time) VALUES (15,'hard','math','hard', 'desc',30,true,false,true, 1);
+#
+# INSERT INTO question_table(question, possible_answers, answer, quiz_id, question_type, imageURL) VALUES ('question10', '','fuck', 15, 3, 'https://miro.medium.com/v2/resize:fit:720/format:webp/1*Qr2z3ZS7--o8xO6jJi77Ig.jpeg');
+# INSERT INTO question_table(question, possible_answers, answer, quiz_id, question_type, imageURL) VALUES ('question11', '','fuck', 15, 4, '');
+#
+#
+#
+# INSERT INTO quiz_table(quiz_id,quiz_name,quiz_description,quiz_tag,difficulty,creator_id, multiple_pages, practice_mode, immediate_correction,timed, duration_time) VALUES (16,'hard','math','hard', 'desc',30,true,true,true,true, 1);
+#
+# INSERT INTO question_table(question, possible_answers, answer, quiz_id, question_type, imageURL) VALUES ('question10', '','fuck', 16, 3, 'https://miro.medium.com/v2/resize:fit:720/format:webp/1*Qr2z3ZS7--o8xO6jJi77Ig.jpeg');
+# INSERT INTO question_table(question, possible_answers, answer, quiz_id, question_type, imageURL) VALUES ('question11', '','fuck', 16, 4, '');
+#
+# SELECT * FROM review_table;
+#
+#
+# INSERT INTO quiz_table(quiz_id,quiz_name,quiz_description,quiz_tag,difficulty,creator_id, multiple_pages, practice_mode, timed, duration_time) VALUES (17,'hard','math','hard', 'desc',30,false,true,true, 1);
+#
+# INSERT INTO question_table(question, possible_answers, answer, quiz_id, question_type, imageURL) VALUES ('question10', '','fuck', 17, 3, 'https://miro.medium.com/v2/resize:fit:720/format:webp/1*Qr2z3ZS7--o8xO6jJi77Ig.jpeg');
+# INSERT INTO question_table(question, possible_answers, answer, quiz_id, question_type, imageURL) VALUES ('question11', '','fuck', 17, 4, '');
+# INSERT INTO question_table(question, possible_answers, answer, quiz_id, question_type, imageURL) VALUES ('question11', 'a;b;c;d','b', 17, 2, '');
+#
+#
+# INSERT INTO quiz_table(quiz_id,quiz_name,quiz_description,quiz_tag,difficulty,creator_id, multiple_pages, practice_mode, timed, duration_time) VALUES (18,'hard','math','hard', 'desc',30,false,true,false, 1);
+#
+# INSERT INTO question_table(question, possible_answers, answer, quiz_id, question_type, imageURL) VALUES ('question10', '','fuck', 18, 3, 'https://miro.medium.com/v2/resize:fit:720/format:webp/1*Qr2z3ZS7--o8xO6jJi77Ig.jpeg');
+# INSERT INTO question_table(question, possible_answers, answer, quiz_id, question_type, imageURL) VALUES ('question11', '','fuck', 18, 4, '');
+# INSERT INTO question_table(question, possible_answers, answer, quiz_id, question_type, imageURL) VALUES ('question11', 'a;b;c;d','b', 18, 2, '');

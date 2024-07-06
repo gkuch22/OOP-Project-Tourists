@@ -125,8 +125,10 @@
     Integer tmp = (Integer) session.getAttribute("quizId");
     int quizId = tmp.intValue();
     DBManager dbManager = new DBManager();
+//    DBManager dbManager = (DBManager) request.getSession().getAttribute("db-manager");
     List<Question> questions = dbManager.getQuestions(quizId);
     Quiz quiz = (Quiz) session.getAttribute("quizz");
+    System.out.println("quizid in imidMulti - " + quiz.getQuiz_id());
     if (quiz.isRandom()) {
         Collections.shuffle(questions);
     }

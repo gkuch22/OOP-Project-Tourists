@@ -28,24 +28,22 @@
             <a class="left_href creatQuiz" href = "createQuizes.jsp"> Create Quiz </a>
         </div>
         <%
-            try{
-                User user;
+                User user = null;
                 try {
-                    user = manager.getUserData(10);
-                    user.setAdminStatus(true);
+                    user = manager.getUserData((Integer)request.getSession().getAttribute("user_id"));
+
+//                    user.setAdminStatus(true);
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
+                System.out.println("isAdmin - " + user.isAdmin());
                 if(user.isAdmin()){
         %>
         <div class="left_div announce">
-            <a class="left_href creatQuiz" href = ""> Announce </a>
+            <a class="left_href creatQuiz" href = "writeannouncement.jsp"> Announce </a>
         </div>
         <%
                 }
-            }catch (RuntimeException e){
-                throw new RuntimeException(e);
-            }
         %>
     </nav>
 </div>
