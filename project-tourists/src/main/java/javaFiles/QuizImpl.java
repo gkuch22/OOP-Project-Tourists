@@ -161,14 +161,4 @@ public class QuizImpl implements Quiz{
     public ArrayList<Question> getQuestions(){
         return questions;
     }
-
-    @Override
-    public boolean isRandom(){
-        return isRandom;
-    }
-
-    @Override
-    public boolean isImmediatelyCorrected(){
-        return immediatelyCorrected;
-    }
 }

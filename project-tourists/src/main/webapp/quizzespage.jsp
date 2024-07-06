@@ -20,7 +20,7 @@
 </head>
 
 <body>
-
+<jsp:include page="topBar.jsp" />
 <%
     DBManager dbManager = (DBManager) application.getAttribute("db-manager");
     List<Quiz> quizzes = null;
@@ -39,9 +39,9 @@
     }
 %>
 
-<div class="header">
-    <h1><a href="index.jsp">Quizzerinho</a></h1>
-</div>
+<%--<div class="header">--%>
+<%--    <h1><a href="index.jsp">Quizzerinho</a></h1>--%>
+<%--</div>--%>
 
 <div class="container">
 
