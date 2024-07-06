@@ -42,7 +42,23 @@ public class DBManager {
     }
 
     public int user_password_is_correct(String name, String password) throws SQLException {
-        return -1;
+        Connection connection = dataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement("select user_id from login_table where (username = ?) AND (password = ?)");
+        statement.setString(1,name);
+        statement.setString(2,password);
+        ResultSet res = statement.executeQuery();
+        ArrayList<Integer> list = new ArrayList<Integer>();
+
+        while(res.next()){
+            int num = res.getInt("user_id");
+            list.add(num);
+        }
+
+        res.close();
+        statement.close();
+        connection.close();
+        if(list.size() != 1) return -1;
+        return list.get(0);
     }
 
     public int add_user(String name, String password) throws SQLException {
@@ -63,6 +79,16 @@ public class DBManager {
         }
         connection.close();
         return user_id;
+    }
+
+    public List<Announcement> get_Announcement_List(){
+        List<Announcement> list = new ArrayList<Announcement>();
+
+        for(int i=0;i<10;i++) {
+            Announcement announcement = new AnnouncementImpl(i, "welcome people, it is our new site, nice to meet you, have fun. " + Integer.toString(i), 10, new Date());
+            list.add(announcement);
+        }
+        return list;
     }
 
     public List<Quiz> getQuizzes() throws SQLException {

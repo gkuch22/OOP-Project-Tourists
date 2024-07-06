@@ -44,6 +44,13 @@ body{
     align-items: center;
 }
 
+.homePagePicture{
+    width: 200px;
+    height: 50px;
+    border-radius: 25px;
+    border: 3px solid #f5f6f7;
+}
+
 .left_div{
     display: grid;
     width: min(10rem,20vw);
@@ -93,8 +100,6 @@ body{
 
 .right_container{
     background: var(--background-color);
-
-    height: 100rem;
 
     position: relative;
     display: grid;
@@ -190,4 +195,49 @@ input::placeholder{
     text-align: center;
     font-size: large;
     font-family: Arial, sans-serif;
+}
+
+.announcements{
+    display: grid;
+    align-items: center;
+    justify-items: center;
+    background: var(--header-color);
+    width: 90%;
+    border-radius: 1rem;
+}
+
+.line{
+    /*border-bottom: 2px solid white;*/
+}
+
+.messagebox{
+    /*padding: 1rem;*/
+    display: grid;
+    align-items: start;
+    justify-content: start;
+    width: 100%;
+    height: 25rem;
+    background: var(--navbar-color);
+    overflow-y: scroll;
+}
+
+ul{
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    align-items: start;
+    justify-items: start;
+}
+
+li{
+    /*border: 2px solid white;*/
+    border-left: 2px solid white;
+    margin: 5px;
+    padding-left: 10px;
+}
+
+.text-div{
+    width: 50vw;
+    /*width: 100px;*/
+/*    height: 1rem;*/
 }

@@ -1,16 +1,85 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: surma
-  Date: 7/5/2024
-  Time: 9:39 PM
-  To change this template use File | Settings | File Templates.
---%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="javaFiles.DBManager" %>
+<%@ page import="javaFiles.Announcement" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="java.util.List" %>
+<%@ page import="java.sql.SQLException" %>
+<%@ page import="javaFiles.User" %>
 <html>
 <head>
-    <title>Title</title>
+    <title>WELCOME</title>
+    <link rel="stylesheet" href="mystyle1.css">
 </head>
+
 <body>
-<h1>You are on Homepage!</h1>
+<jsp:include page="topBar.jsp" />
+<%
+    DBManager manager = (DBManager) application.getAttribute("db-manager");
+    List<Announcement> list = new ArrayList<Announcement>();
+
+    list = manager.get_Announcement_List();
+%>
+
+<div class="left_container">
+    <nav class="left_nav">
+        <div class="left_div takeQuiz">
+            <a class="left_href takeQuiz" href = "quizzespage.jsp"> Take Quiz </a>
+        </div>
+        <div class="left_div createQuiz">
+            <a class="left_href creatQuiz" href = "createQuizes.jsp"> Create Quiz </a>
+        </div>
+        <%
+            try{
+                User user;
+                try {
+                    user = manager.getUserData(10);
+                    user.setAdminStatus(true);
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+                if(user.isAdmin()){
+        %>
+        <div class="left_div announce">
+            <a class="left_href creatQuiz" href = ""> Announce </a>
+        </div>
+        <%
+                }
+            }catch (RuntimeException e){
+                throw new RuntimeException(e);
+            }
+        %>
+    </nav>
+</div>
+
+<div class="right_container">
+
+    <div class = "announcements">
+        <div class="line">
+            <p>Announcements</p>
+        </div>
+        <ul class="messagebox">
+            <%
+                try {
+                    for (Announcement s : list) {
+            %>
+            <li class="item">
+                <div class="text-div announcement_name">
+                    <h2><%= "announcement name" %></h2>
+                </div>
+                <div class="text-div announcement_text">
+                    <p><%= s.get_post_text() %></p>
+                </div>
+            </li>
+            <%
+                    }
+                } catch (RuntimeException e) {
+                    throw new RuntimeException(e);
+                }
+            %>
+        </ul>
+    </div>
+</div>
+
+
 </body>
+
 </html>
