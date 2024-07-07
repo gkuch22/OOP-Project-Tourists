@@ -56,7 +56,7 @@ public class HistoryImpl implements History{
         this.type = type;
     }
 
-    public class comparator implements Comparator<History>{
+    public class Historycomparator implements Comparator<History>{
         @Override
         public int compare(History o1, History o2) {
             return o1.get_history_date().compareTo(o2.get_history_date());

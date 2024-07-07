@@ -1,5 +1,6 @@
 package javaFiles;
 
+import java.util.Comparator;
 import java.util.Date;
 
 public class AnnouncementImpl implements Announcement{
@@ -65,5 +66,12 @@ public class AnnouncementImpl implements Announcement{
     @Override
     public void set_date(Date date) {
         this.date = date;
+    }
+
+    public class AnnouncementComparator implements Comparator<Announcement> {
+        @Override
+        public int compare(Announcement o1, Announcement o2) {
+            return o1.get_date().compareTo(o2.get_date());
+        }
     }
 }
