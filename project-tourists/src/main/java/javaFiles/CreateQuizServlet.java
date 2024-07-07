@@ -21,6 +21,9 @@ public class CreateQuizServlet extends HttpServlet {
         String tags = (String)request.getParameter("tags");
         String difficulty = (String)request.getParameter("difficulty");
         String[] boxes = (String[])request.getParameterValues("checkbox");
+        int hours = Integer.parseInt(request.getParameter("hours"));
+        int minutes = Integer.parseInt(request.getParameter("minutes"));
+        int seconds = Integer.parseInt(request.getParameter("seconds"));
 //        System.out.println("name - " + name);
 //        System.out.println("description - " + description);
 //        System.out.println("tags - " + tags);
@@ -51,7 +54,7 @@ public class CreateQuizServlet extends HttpServlet {
             practiceMode = Arrays.asList(boxes).contains("practiceMode");
         }
 
-        int durationTime = -1;
+        int durationTime = seconds + minutes*60 + hours*3600;
         //should add this input in createQuizzes;
         boolean gradable = false;
 
