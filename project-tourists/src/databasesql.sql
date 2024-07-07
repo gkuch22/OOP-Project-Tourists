@@ -32,7 +32,8 @@ CREATE TABLE user_table (
 CREATE TABLE ban_table (
        ban_id INT AUTO_INCREMENT PRIMARY KEY,
        user_id INT,
-       expire_date DATE,
+       ban_create_date DATE not null,
+       expire_date DATE not null,
        FOREIGN KEY (user_id) REFERENCES user_table(user_id) ON DELETE CASCADE,
        reason TEXT not null,
        FOREIGN KEY (user_id) REFERENCES user_table(user_id)
@@ -41,10 +42,12 @@ CREATE TABLE ban_table (
 CREATE TABLE achievement_table (
        achievement_id INT AUTO_INCREMENT PRIMARY KEY,
        achievement VARCHAR(255),
-       num_created INT DEFAULT 0,
-       num_taken INT DEFAULT 0,
+       num_created INT DEFAULT 1000,
+       num_taken INT DEFAULT 1000,
        had_highest_score boolean DEFAULT false,
-       practiced boolean DEFAULT false
+       practiced boolean DEFAULT false,
+       imageURL VARCHAR(500) DEFAULT 'https://i.pinimg.com/736x/64/5f/d9/645fd98adba55582c6851985779fcb0e.jpg',
+       description TEXT
 );
 
 CREATE TABLE friend_table (
@@ -133,6 +136,17 @@ CREATE TABLE question_table (
 
 
 
+Insert into achievement_table(achievement_id,achievement,num_created,imageURL,description) Values (1,'Amateur Author',1,'https://t3.ftcdn.net/jpg/02/03/51/94/360_F_203519429_UbqivNUdFdD2ZiUH4MmGkw5cMRIw7WqS.jpg','The user created a quiz');
+Insert into achievement_table(achievement_id,achievement,num_created,imageURL,description) Values (2,'Prolific Author',5,'https://cdn.shopify.com/s/files/1/0101/2750/7515/files/DSP-040-1592x1000.jpg?v=1659951356','The user created five quizzes');
+Insert into achievement_table(achievement_id,achievement,num_created,imageURL,description) Values (3,'Prodigious Author',10,'https://img.freepik.com/premium-vector/gold-medal-with-red-ribbon-laurel-wreath-award-victory-winner_144920-356.jpg','The user created ten quizzes');
+
+Insert into achievement_table(achievement_id,achievement,num_taken,imageURL,description) Values (5,'Amature Quizzer',1,'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRngSJ7qeiW3NKqi9B29yTE6GmCBUuaZGWbeg&s','The user took one quizz');
+Insert into achievement_table(achievement_id,achievement,num_taken,imageURL,description) Values (6,'Advanced Quizzer',5,'https://i.pngimg.me/thumb/f/720/dd22fa78215d4efdba06.jpg','The user took five quizzes');
+Insert into achievement_table(achievement_id,achievement,num_taken,imageURL,description) Values (4,'Quiz Machine',10,'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRaIc0whboacFLZHH92MFiBrwC9OT88MnqXTA&s','The user took ten quizzes');
+
+Insert into achievement_table(achievement_id,achievement,had_highest_score,imageURL,description) Values (7,'I am the Greatest',true,'https://www.shutterstock.com/image-vector/emoticon-emoji-strong-muscle-bodybuilder-260nw-1615658167.jpg','The user had the highest score on a quiz');
+Insert into achievement_table(achievement_id,achievement,practiced,imageURL,description) Values (8,'Practice Makes Perfect',true,'https://s3.amazonaws.com/pix.iemoji.com/images/emoji/apple/ios-12/256/man-lifting-weights.png','The user took a quiz in practice mode');
+
 
 
 -- INSERTS --------------------------------------------------------------
@@ -178,18 +192,20 @@ CREATE TABLE question_table (
 # INSERT INTO login_table VALUES (1,'bendo','1234');
 # INSERT INTO login_table VALUES (2,'Quaggy','1234');
 # INSERT INTO login_table VALUES (3,'Joe','1234');
-# INSERT INTO achievement_table(achievement_id, achievement, num_created) VALUES (1,'supreme',10);
-# INSERT INTO user_table VALUES (1,'bendo',false,false,30,true,'https://i.pinimg.com/736x/64/5f/d9/645fd98adba55582c6851985779fcb0e.jpg');
-# INSERT INTO user_table VALUES (2,'Quaggy',false,false,20,true,'https://www.watchmojo.com/uploads/thumbs720/Fi-T-Top10-Family-Guy-Characters_I2B8Z1-720p30-1.jpg');
-# INSERT INTO user_table VALUES (3,'Joe',false,false,14,true,'https://media.entertainmentearth.com/assets/images/fe9f5fc5d21e4c338652f08b5f86b0caxl.jpg');
-# Insert into achievement_table(achievement_id,achievement,num_created) Values (2,'wowzers',20);
+# INSERT INTO user_table VALUES (1,'bendo',false,false,3,false,'https://i.pinimg.com/736x/64/5f/d9/645fd98adba55582c6851985779fcb0e.jpg');
+# INSERT INTO user_table VALUES (2,'Quaggy',false,false,0,false,'https://www.watchmojo.com/uploads/thumbs720/Fi-T-Top10-Family-Guy-Characters_I2B8Z1-720p30-1.jpg');
+# INSERT INTO user_table VALUES (3,'Joe',false,false,0,false,'https://media.entertainmentearth.com/assets/images/fe9f5fc5d21e4c338652f08b5f86b0caxl.jpg');
 # INSERT INTO quiz_table(quiz_id,quiz_name,quiz_tag,difficulty,creator_id) VALUES (1,'ez','history','easy',1);
 # INSERT INTO quiz_table(quiz_id,quiz_name,quiz_tag,difficulty,creator_id) VALUES (2,'mid','english;history','medium',1);
 # INSERT INTO quiz_table(quiz_id,quiz_name,quiz_tag,difficulty,creator_id) VALUES (3,'hard','math','hard',1);
+# INSERT INTO quiz_table(quiz_id,quiz_name,quiz_tag,difficulty,creator_id) VALUES (4,'hard','math','hard',1);
+# INSERT INTO quiz_table(quiz_id,quiz_name,quiz_tag,difficulty,creator_id) VALUES (5,'hard','math','hard',1);
 #
 # INSERT INTO review_table(user_id, quiz_id, quiz_name,score, date, review_text) VALUES (1,1,'ez',10,NOW(),'');
 # INSERT INTO review_table(user_id, quiz_id, quiz_name,score, date, review_text) VALUES (1,2,'mid',8,NOW(),'');
 # INSERT INTO review_table(user_id, quiz_id, quiz_name,score, date, review_text) VALUES (1,3,'hard',5,NOW(),'');
+# INSERT INTO review_table(user_id, quiz_id, quiz_name,score, date, review_text) VALUES (1,4,'ez',10,NOW(),'');
+# INSERT INTO review_table(user_id, quiz_id, quiz_name,score, date, review_text) VALUES (1,5,'ez',10,NOW(),'');
 #
 # INSERT INTO review_table(user_id, quiz_id, quiz_name,score, date, review_text) VALUES (2,1,'ez',9,NOW(),'');
 # INSERT INTO review_table(user_id, quiz_id, quiz_name,score, date, review_text) VALUES (2,2,'mid',7,NOW(),'');

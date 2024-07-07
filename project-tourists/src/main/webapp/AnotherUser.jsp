@@ -2,6 +2,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="javaFiles.*" %>
 <%@ page import="java.util.Map" %>
+<%@ page import="javafx.util.Pair" %>
 
 <%
     Integer user_id = (Integer) request.getAttribute("current_id");
@@ -122,10 +123,14 @@
                 <ul class="achievements-list">
                     <%
                         try {
-                            for (String s : manager.getAchievements(user)) {
+                            for (Pair<String,String> s : manager.getAchievements(user)) {
                     %>
                     <li>
-                        <a><%= s %></a>
+                        <a>
+                            <img src="<%= s.getValue() %>" alt="<%= s.getKey() %>">
+                            <span class="achievement-tooltip"><%= manager.getAchievementDescription(s.getKey()) %></span>
+                        </a>
+                        <span class="FriendUserName"><%= s.getKey() %></span>
                     </li>
                     <%
                             }
@@ -203,12 +208,19 @@
         const quizzesTaken = JSON.parse('<%= quizzesTakenJson.toString() %>');
         const quizzesCreated = JSON.parse('<%= quizzesCreatedJson.toString() %>');
 
+        // Set the default active button and table content
+        quizzesTakenBtn.classList.add('active');
+        populateTable(quizzesTaken, 'taken');
 
         quizzesTakenBtn.addEventListener('click', () => {
+            quizzesTakenBtn.classList.add('active');
+            quizzesCreatedBtn.classList.remove('active');
             populateTable(quizzesTaken, 'taken');
         });
 
         quizzesCreatedBtn.addEventListener('click', () => {
+            quizzesCreatedBtn.classList.add('active');
+            quizzesTakenBtn.classList.remove('active');
             populateTable(quizzesCreated, 'created');
         });
 
@@ -218,20 +230,20 @@
             let headers = '';
             if (type === 'taken') {
                 headers = `
-                    <tr>
-                        <th>Quiz Name</th>
-                        <th>Score</th>
-                        <th>Date</th>
-                    </tr>
-                `;
+                <tr>
+                    <th>Quiz Name</th>
+                    <th>Score</th>
+                    <th>Date</th>
+                </tr>
+            `;
             } else if (type === 'created') {
                 headers = `
-                    <tr>
-                        <th>Quiz Name</th>
-                        <th>Date Created</th>
-                        <th>Link to Quiz</th>
-                    </tr>
-                `;
+                <tr>
+                    <th>Quiz Name</th>
+                    <th>Date Created</th>
+                    <th>Link to Quiz</th>
+                </tr>
+            `;
             }
             quizTable.innerHTML = headers;
 
@@ -239,26 +251,24 @@
                 let row = '';
                 if (type === 'taken') {
                     row = `
-                        <tr>
-                            <td>${quiz.quizName}</td>
-                            <td>${quiz.score}</td>
-                            <td>${quiz.date}</td>
-                        </tr>
-                    `;
+                    <tr>
+                        <td>${quiz.quizName}</td>
+                        <td>${quiz.score}</td>
+                        <td>${quiz.date}</td>
+                    </tr>
+                `;
                 } else if (type === 'created') {
                     row = `
-                        <tr>
-                            <td>${quiz.quizName}</td>
-                            <td>${quiz.dateCreated}</td>
-                            <td><a href="quizStart.jsp?quiz_id=${quiz.quizId}">Link</a></td>
-                        </tr>
-                    `;
+                    <tr>
+                        <td>${quiz.quizName}</td>
+                        <td>${quiz.dateCreated}</td>
+                        <td><a href="quizStart.jsp?quiz_id=${quiz.quizId}">Link</a></td>
+                    </tr>
+                `;
                 }
                 quizTable.innerHTML += row;
             });
         }
-
-        populateTable(quizzesTaken, 'taken');
     });
 </script>
 <script>
@@ -267,6 +277,10 @@
         xhr.open('POST', 'SendFriendRequestServlet', true);
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         xhr.send('userId=<%= user.getUser_id() %>');
+        document.getElementById('sendRequestBtn').classList.add('clicked');
+        setTimeout(function() {
+            document.getElementById('sendRequestBtn').classList.remove('clicked');
+        }, 300);
     });
 </script>
 </body>

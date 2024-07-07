@@ -35,12 +35,12 @@
         <fieldset class="buttons">
             <legend>Choose question type to add question to quiz</legend>
             <div class="firstLine">
-            <input type="submit" name="action" value="Question-Response">
-            <input type="submit" name="action" value="Fill In The Blank">
+            <input class="questionButton" type="submit" name="action" value="Question-Response">
+            <input class="questionButton" type="submit" name="action" value="Fill In The Blank">
             </div>
             <div class="secondLine">
-            <input type="submit" name="action" value="Multiple Choice">
-            <input type="submit" name="action" value="Picture Response">
+            <input class="questionButton" type="submit" name="action" value="Multiple Choice">
+            <input class="questionButton" type="submit" name="action" value="Picture Response">
             </div>
         </fieldset>
     </form>
