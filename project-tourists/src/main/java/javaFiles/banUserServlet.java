@@ -22,6 +22,13 @@ public class banUserServlet extends HttpServlet {
         int userId = (int) request.getSession().getAttribute("ban_user_id");
         String reason = request.getParameter("reason");
         String dateInString = (String)request.getParameter("banDate");
+        if(request.getSession().getAttribute("from_reports") != null) {
+            try {
+                dbManager.removeReports(1, userId, "");
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
         System.out.println("user_id - " + userId);
         System.out.println("reason - " + reason);
         System.out.println("date - " + dateInString);
@@ -32,7 +39,8 @@ public class banUserServlet extends HttpServlet {
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
-
+        request.getSession().removeAttribute("ban_user_id");
+        request.getSession().removeAttribute("from_reports");
         request.getRequestDispatcher("/homePage.jsp").forward(request, response);
     }
 
@@ -40,6 +48,9 @@ public class banUserServlet extends HttpServlet {
         String idInStr = request.getParameter("ban_user_id");
         System.out.println("id in banUser - " + idInStr);
         int id = Integer.parseInt(request.getParameter("ban_user_id"));
+        if(request.getParameter("from_reports") != null) {
+            request.getSession().setAttribute("from_reports", true);
+        }
         request.getSession().setAttribute("ban_user_id", id);
         request.getRequestDispatcher("/banUser.jsp").forward(request,response);
     }

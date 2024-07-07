@@ -790,7 +790,7 @@ public class DBManagerTESTER extends TestCase {
         rs.close();
         stmt.close();
         connection.close();
-
+    }
     public void testGetSiteTagData() throws SQLException {
         addTestUserData();
 

@@ -93,7 +93,12 @@
             box-sizing: border-box;
         }
         .image-container {
-            margin-bottom: 20px; /* Increase margin below image */
+            margin-bottom: 20px;
+        }
+
+        .imageBox{
+            width: 30vw;
+            height: 40vh;
         }
     </style>
     <script>
@@ -183,7 +188,7 @@
                     PictureResponse prQuestion = (PictureResponse) question;%>
                 <li>
                     <div class="image-container">
-                        <img src="<%= prQuestion.getImageURL() %>" alt="Question Image">
+                        <img class="imageBox" src="<%= prQuestion.getImageURL() %>" alt="Question Image">
                     </div>
                     <textarea name="question_<%= i %>" class="text-area"></textarea>
                 </li>
