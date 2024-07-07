@@ -97,12 +97,12 @@
     Quiz quiz = (Quiz) session.getAttribute("quizz");
     boolean isTimed = quiz.isTimed();
     int duration = quiz.getDurationTime();
-
+    long startTime = System.currentTimeMillis();
     if (quiz.isRandom()) {
         Collections.shuffle(questions);
     }
     if (questions != null) {
-        long startTime = System.currentTimeMillis();
+
 %>
 <div class="quiz-container">
     <% if (isTimed) { %>
@@ -125,7 +125,7 @@
                     for (String answer : answers) { %>
                 <li>
                     <input type="radio" name="question_<%= question.getQuestionText() %>" value="<%= answer %>">
-                    <%= answer %>
+                    <label for="question_<%= question.getQuestionText() %>_<%= answer %>"><%= answer %></label>
                 </li>
                 <% }
                 }
@@ -167,7 +167,7 @@
 %>
 <script>
     <% if (isTimed) { %>
-    const duration = <%= duration %> * 60; // duration in seconds
+    const duration = <%= duration %> * 60;
     let timeLeft = duration;
 
     const timerElement = document.getElementById('timeLeft');

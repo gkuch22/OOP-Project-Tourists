@@ -179,7 +179,7 @@
 %>
 <script>
     <% if (isTimed) { %>
-    const duration = <%= duration %> * 60; // duration in seconds
+    const duration = <%= duration %> * 60;
     let timeLeft = duration;
 
     const timerElement = document.getElementById('timeLeft');
