@@ -20,7 +20,7 @@ public class signInServlet extends HttpServlet {
         DBManager dbManager = (DBManager) getServletContext().getAttribute("db-manager");
         try {
             int user_id = dbManager.user_password_is_correct(username,password);
-            System.out.println("sign in id - " + user_id);
+//            System.out.println("sign in id - " + user_id);
             if(user_id == -1){
                 req.getRequestDispatcher("/signinerror.jsp").forward(req,resp);
             }else{

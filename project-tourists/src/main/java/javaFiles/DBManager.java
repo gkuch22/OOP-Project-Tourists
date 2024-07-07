@@ -25,7 +25,7 @@ public class DBManager {
         dataSource = new BasicDataSource();
         dataSource.setUrl("jdbc:mysql://localhost:3306/tourists");
         dataSource.setUsername("root");
-        dataSource.setPassword("rootroot");
+        dataSource.setPassword("+qwerty+");
     }
 
     public int get_user_id(String name) throws SQLException {
@@ -88,14 +88,82 @@ public class DBManager {
         return user_id;
     }
 
-    public List<Announcement> get_Announcement_List(){
+    public List<Announcement> get_Announcement_List() throws SQLException {
+        Connection connection = dataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement("select * from post_table");
+        ResultSet res = statement.executeQuery();
         List<Announcement> list = new ArrayList<Announcement>();
-        System.out.println("here");
-        for(int i=0;i<10;i++) {
-            Announcement announcement = new AnnouncementImpl(i, "welcome people, it is our new site, nice to meet you, have fun. " + Integer.toString(i), 10, new Date());
+
+        while(res.next()){
+            Announcement announcement = new AnnouncementImpl(res.getInt("post_id"),
+                    res.getString("post_title"),res.getString("post_text"),
+                    res.getInt("user_id"),res.getDate("date"));
             list.add(announcement);
         }
-//        System.out.println("here");
+
+        statement.close();
+        connection.close();
+        return list;
+    }
+
+    public List<History> get_Ban_History() throws SQLException {
+        List<History> list = new ArrayList<History>();
+
+        Connection connection = dataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement("select * from ban_table");
+        ResultSet res = statement.executeQuery();
+
+        while(res.next()){
+            String name = "User " + getUserData(res.getInt("user_id")).getUsername() + " got banned";
+            String description = res.getString("reason");
+            /*
+                this has to be changed
+            */
+            Date date = (res.getDate("expire_date"));
+            String type = "banned";
+            History history = new HistoryImpl(name,description,type,date);
+            list.add(history);
+        }
+
+        statement.close();
+        connection.close();
+
+        return list;
+    }
+
+    public List<History> get_Created_Quiz_History() throws SQLException {
+        List<History> list = new ArrayList<History>();
+
+        Connection connection = dataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement("select * from quiz_table");
+        ResultSet res = statement.executeQuery();
+
+        while(res.next()){
+            String name = "User " + getUserData(res.getInt("creator_id")).getUsername() + " created new quiz named " + res.getString("quiz_name");
+            String description = res.getString("quiz_description");
+            /*
+                this has to be changed
+            */
+            Date date = (res.getDate("date_created"));
+            String type = "created quiz";
+            History history = new HistoryImpl(name,description,type,date);
+            list.add(history);
+        }
+
+        statement.close();
+        connection.close();
+
+        return list;
+    }
+
+    public List<History> get_History_List() throws SQLException {
+        List<History> list = new ArrayList<History>();
+
+        list.addAll(get_Ban_History());
+        list.addAll(get_Created_Quiz_History());
+
+        Arrays.sort(new List[]{list});
+
         return list;
     }
 
