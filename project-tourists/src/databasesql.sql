@@ -116,10 +116,26 @@ CREATE TABLE question_table (
         imageURL TEXT not null,
         FOREIGN KEY (quiz_id) REFERENCES quiz_table(quiz_id) ON DELETE CASCADE
 );
-
-
 -- show tables;
 
+-- INSERT INTO login_table (username, password) VALUES ("admin", "admin");
+-- INSERT INTO user_table (user_id, username, is_admin) VALUES (1, "admin", TRUE);
+
+# select * from login_table;
+# select * from user_table;
+# select * from friend_table;
+# select * from mail_table;
+# select * from quiz_table;
+# select * from question_table;
+# select * from review_table;
+# select * from ban_table;
+# select * from achievement_table;
+
+
+
+
+
+-- INSERTS --------------------------------------------------------------
 
 -- # INSERT INTO login_table (username, password) VALUES ("nick", "rume123");
 -- # INSERT INTO login_table (username, password) VALUES ("john", "rume123");
