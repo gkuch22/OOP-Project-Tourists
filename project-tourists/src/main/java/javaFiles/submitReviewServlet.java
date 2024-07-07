@@ -69,9 +69,11 @@ public class submitReviewServlet extends HttpServlet {
         }
 
 
-        dbManager.saveReview(userId, quizId, score, date, rating, review, (String) session.getAttribute("quizName"));
-
-
+        try {
+            dbManager.saveReview(userId, quizId, score, time, date, rating, review, (String) session.getAttribute("quizName"));
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
 
         response.sendRedirect("homePage.jsp");

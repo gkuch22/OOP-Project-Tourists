@@ -1,16 +1,10 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: User
-  Date: 28.06.2024
-  Time: 00:09
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page import="java.util.*" %>
 <%@ page import="javaFiles.DBManager" %>
 <%@ page import="javaFiles.Quiz" %>
+<%@ page import="javaFiles.User" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
-//    session.setAttribute("quizId", 1);
+    //    session.setAttribute("quizId", 1);
 //    session.setAttribute("user_id", 30);
 %>
 <html lang="en">
@@ -30,7 +24,7 @@
             height: 100vh;
             color: #ffffff;
         }
-        .header, .tags {
+        .header, .tags, .top-scores {
             background-color: #3A3A5F;
             color: #ffffff;
             padding: 20px;
@@ -40,10 +34,24 @@
             max-width: 800px;
             margin-bottom: 20px;
         }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 60px;
+        }
         .header div {
             font-weight: bold;
             font-size: 1.2em;
             margin-bottom: 10px;
+        }
+        .creator {
+            align-self: flex-start;
+            margin-left: 20px;
+        }
+        .creator a {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 0.9em;
         }
         .tags {
             text-align: center;
@@ -99,13 +107,50 @@
         .button.start-practice:hover {
             background-color: #07071a;
         }
+        .top-scores {
+            max-width: 800px;
+            margin-top: 20px;
+            text-align: center;
+        }
+        .top-scores h2 {
+            margin: 0 0 20px;
+        }
+        .top-scores ul {
+            list-style: none;
+            padding: 0;
+        }
+        .top-scores li {
+            background-color: #2D2D4B;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 4px;
+        }
+        .top-scores ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .top-scores li {
+            background-color: #2D2D4B;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .top-scores li span {
+            flex: 1;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
 <jsp:include page="topBar.jsp" />
 <%
-//    int quizId = 18;
-//    session.setAttribute("quizId", 18);
+//    int quizId = 19;
+//    session.setAttribute("quizId", 19);
     int quizId = Integer.parseInt(request.getParameter("quiz_id"));
     System.out.println("quiz id - " + quizId);
     session.setAttribute("quizId", quizId);
@@ -116,13 +161,22 @@
     session.setAttribute("quizz", quiz);
     session.setAttribute("quizName", quiz.getQuiz_name());
     session.setAttribute("practiceMode", quiz.isPractice_mode());
+    String username = dbManager.getUsernameById(quiz.getCreator_id());
+    System.out.println(username + " username");
     if (quiz != null) {
 %>
 
 <div class="header">
-    <div id="name"><%= quiz.getQuiz_name() %></div>
-    <div id="difficulty"><%= quiz.getDifficulty() %></div>
-    <div class="description">Description: <%= quiz.getDescription() %></div>
+    <div>
+        <div id="name"><%= quiz.getQuiz_name() %></div>
+        <div id="difficulty"><%= quiz.getDifficulty() %></div>
+        <div class="description">Description: <%= quiz.getDescription() %></div>
+    </div>
+    <div class="creator">
+        Creator: <%=username%>
+        <br>
+        <a href="AnotherUser?name=<%=username%>">View Profile</a>
+    </div>
 </div>
 <div class="tags">
     <p>Tags:</p>
@@ -151,8 +205,29 @@
     </form>
     <%}%>
 </div>
+
+<div class="top-scores">
+    <h2>Top Scores</h2>
+    <ul>
+        <li>
+            <span>Name</span>
+            <span>Score</span>
+            <span>Time Taken</span>
+            <span>Date</span>
+        </li>
+        <%
+            List<String> topScorers = dbManager.getTopScorers(quizId, 10);
+            for (String user : topScorers) {
+                String[] output = user.split(";");
+        %>
+        <li>
+            <span><%= output[0] %></span>
+            <span><%= output[1] %></span>
+            <span><%= output[2] %></span>
+            <span><%= output[3] %></span>
+        </li>
+        <% } %>
+    </ul>
+</div>
 </body>
 </html>
-
-
-

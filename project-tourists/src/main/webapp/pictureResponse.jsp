@@ -15,7 +15,7 @@
 <!-- Include the top bar -->
 <jsp:include page="topBar.jsp" />
 <h1>Picture-Response</h1>
-<form method="post" action="/pictureResponse">
+<form class="multipleForm" method="post" action="/pictureResponse">
     <div class="question">
         <label for="question">Type question</label>
         <textarea required placeholder="ex: What kind of bird do you see in the picture?" name="question" id="question" rows="5" cols="40"></textarea>

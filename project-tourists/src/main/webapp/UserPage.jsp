@@ -4,6 +4,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="javaFiles.*" %>
 <%@ page import="java.util.Map" %>
+<%@ page import="javafx.util.Pair" %>
 <html>
 <head>
     <meta charset="UTF-8">
@@ -57,6 +58,18 @@
     quizzesCreatedJson.append("]");
 %>
 
+
+<%
+    if(user.isAdmin()){
+%>
+    <div class="reportbox">
+        <button class="reports-button" onclick="window.location.href='reportpage.jsp'">Reported Quizzes</button>
+    </div>
+<%
+    }
+%>
+
+
 <div class="UserName">
     <a><%=user.getUsername()%></a>
 </div>
@@ -90,10 +103,14 @@
                 <ul class="achievements-list">
                     <%
                         try {
-                            for (String s : manager.getAchievements(user)) {
+                            for (Pair<String,String> s : manager.getAchievements(user)) {
                     %>
                     <li>
-                        <a><%= s %></a>
+                        <a>
+                            <img src="<%= s.getValue() %>" alt="<%= s.getKey() %>">
+                            <span class="achievement-tooltip"><%= manager.getAchievementDescription(s.getKey()) %></span>
+                        </a>
+                        <span class="FriendUserName"><%= s.getKey() %></span>
                     </li>
                     <%
                             }
@@ -106,7 +123,7 @@
         </fieldset>
 
         <fieldset>
-            <legend>Tags:</legend>
+            <legend>Tags</legend>
             <div class="tags">
                 <ul class="tags-list">
                     <%
