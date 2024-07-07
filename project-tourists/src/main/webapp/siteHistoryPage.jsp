@@ -4,6 +4,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="java.sql.SQLException" %>
 <%@ page import="javaFiles.User" %>
+<%@ page import="javaFiles.History" %>
 <html>
 <head>
     <title>WELCOME</title>
@@ -14,10 +15,10 @@
 <jsp:include page="topBar.jsp" />
 <%
     DBManager manager = (DBManager) application.getAttribute("db-manager");
-    List<Announcement> list = new ArrayList<Announcement>();
+    List<History> list = new ArrayList<History>();
 
     try {
-        list = manager.get_Announcement_List();
+        list = manager.get_History_List();
     } catch (SQLException e) {
         throw new RuntimeException(e);
     }
@@ -31,29 +32,29 @@
         <div class="left_div createQuiz">
             <a class="left_href creatQuiz" href = "createQuizes.jsp"> Create Quiz </a>
         </div>
-        <div class="left_div history">
+        <div class="left_div history active">
             <a class="left_href history" href = "siteHistoryPage.jsp"> History </a>
         </div>
-        <div class="left_div announcement active">
+        <div class="left_div announcement">
             <a class="left_href announcement" href = "homePage.jsp"> Announcements </a>
         </div>
         <%
-                User user = null;
-                try {
-                    user = manager.getUserData((Integer)request.getSession().getAttribute("user_id"));
+            User user = null;
+            try {
+                user = manager.getUserData((Integer)request.getSession().getAttribute("user_id"));
 
 //                    user.setAdminStatus(true);
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
 //                System.out.println("isAdmin - " + user.isAdmin());
-                if(user.isAdmin()){
+            if(user.isAdmin()){
         %>
         <div class="left_div announce">
             <a class="left_href creatQuiz" href = "writeannouncement.jsp"> Announce </a>
         </div>
         <%
-                }
+            }
         %>
     </nav>
 </div>
@@ -62,20 +63,19 @@
 
     <div class = "announcements">
         <div class="line">
-            <h1>Announcements</h1>
+            <h1>History</h1>
         </div>
         <ul class="messagebox">
             <%
                 try {
-                    for (Announcement s : list) {
-//                        System.out.println(s.get_post_id() + " " + s.get_post_name() + " " + s.get_post_text() + " " + s.get_user_id() + " " + s.get_date());
+                    for (History s : list) {
             %>
             <li class="item">
                 <div class="text-div announcement_name">
-                    <h2><%= s.get_post_name() %></h2>
+                    <h2><%= s.get_history_name() %></h2>
                 </div>
                 <div class="text-div announcement_text">
-                    <p><%= s.get_post_text() %></p>
+                    <p><%="description: " + s.get_history_description() %></p>
                 </div>
             </li>
             <%

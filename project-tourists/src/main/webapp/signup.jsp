@@ -31,11 +31,11 @@
     <form method="post" action="signup">
         <div class = "form">
             <div class = "fillers">
-                <input type="text" placeholder="USERNAME" class = "username" name = "username"/>
-                <input type="password" placeholder="ENTER PASSWORD" class="password" name = "password"/>
+                <input type="text" placeholder="USERNAME" class = "input username" name = "username"/>
+                <input type="password" placeholder="ENTER PASSWORD" class="input password" name = "password"/>
             </div>
             <div class = "buttonDiv">
-                <input type="submit" class="sign" value="signup">
+                <button class="sign"> SIGN UP </button>
             </div>
         </div>
     </form>
