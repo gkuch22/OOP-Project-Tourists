@@ -1,17 +1,11 @@
 <%@ page import="javaFiles.User" %>
 <%@ page import="javaFiles.UserImpl" %>
 <%@ page import="javaFiles.DBManager" %>
-<%@ page import="java.sql.SQLException" %><%--
-  Created by IntelliJ IDEA.
-  User: surma
-  Date: 7/5/2024
-  Time: 9:44 PM
-  To change this template use File | Settings | File Templates.
---%>
+<%@ page import="java.sql.SQLException" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Title</title>
+    <title>top bar</title>
     <link rel="stylesheet" href="topBarStyle.css">
 </head>
 <body>
@@ -33,7 +27,7 @@
     <a href="inboxmailpage.jsp"><img class="inboxPicture" src="mail.png"></a>
 </div>
 <div class="search-container">
-    <input type="text" id="search-bar" placeholder="Search for users...">
+    <input type="text" id="search-bar" placeholder="Search for users..." class="searchBarText">
     <div id="search-results"></div>
 </div>
 <script>
