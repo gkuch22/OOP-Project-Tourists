@@ -5,7 +5,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
     //    session.setAttribute("quizId", 1);
-    session.setAttribute("user_id", 30);
+//    session.setAttribute("user_id", 30);
 %>
 <html lang="en">
 <head>
@@ -175,7 +175,7 @@
     <div class="creator">
         Creator: <%=username%>
         <br>
-        <a href="AnotherUser.jsp">View Profile</a>
+        <a href="AnotherUser?name=<%=username%>">View Profile</a>
     </div>
 </div>
 <div class="tags">

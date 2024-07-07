@@ -59,7 +59,7 @@
                     <p>Quiz Creator: <%= creatorUsername %></p>
                     <p>Reported by: <%= reporterUsername %></p>
                     <a href="quizStart.jsp?quiz_id=<%= quizId %>">Take Quiz</a>
-                    <form action="banUser" method="post">
+                    <form action="banUser" method="get">
                         <input type="hidden" name="ban_user_id" value="<%= quizcreator %>">
                         <input type="hidden" name="from_reports" value="<%=fromReports%>">
                         <button class="ban-button" type="submit">Ban User</button>

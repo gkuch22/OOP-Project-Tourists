@@ -21,9 +21,19 @@ public class CreateQuizServlet extends HttpServlet {
         String tags = (String)request.getParameter("tags");
         String difficulty = (String)request.getParameter("difficulty");
         String[] boxes = (String[])request.getParameterValues("checkbox");
-        int hours = Integer.parseInt(request.getParameter("hours"));
-        int minutes = Integer.parseInt(request.getParameter("minutes"));
-        int seconds = Integer.parseInt(request.getParameter("seconds"));
+        int hours = 0;
+        if(!request.getParameter("hours").equals("")){
+            hours = Integer.parseInt(request.getParameter("hours"));
+        }
+        int minutes = 0;
+        if(!request.getParameter("minutes").equals("")){
+            minutes = Integer.parseInt(request.getParameter("minutes"));
+        }
+        int seconds = 0;
+        if(!request.getParameter("seconds").equals("")){
+            seconds = Integer.parseInt(request.getParameter("seconds"));
+        }
+
 //        System.out.println("name - " + name);
 //        System.out.println("description - " + description);
 //        System.out.println("tags - " + tags);
@@ -39,8 +49,7 @@ public class CreateQuizServlet extends HttpServlet {
         }
 
         //we should get from user attribute
-        User user = (UserImpl) getServletContext().getAttribute("user");
-        int creatorId = 1;
+        int creatorId = (Integer)request.getSession().getAttribute("user_id");;
         boolean isRandom = false;
         boolean isTimed = false;
         boolean multiplePages = false;

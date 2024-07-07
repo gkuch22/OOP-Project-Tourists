@@ -25,7 +25,7 @@ public class DBManager {
         dataSource = new BasicDataSource();
         dataSource.setUrl("jdbc:mysql://localhost:3306/tourists");
         dataSource.setUsername("root");
-        dataSource.setPassword("+qwerty+");
+        dataSource.setPassword("rootroot");
     }
 
     public int get_user_id(String name) throws SQLException {
@@ -100,7 +100,8 @@ public class DBManager {
                     res.getInt("user_id"),res.getDate("date"));
             list.add(announcement);
         }
-
+        Arrays.sort(new List[]{list});
+        Collections.reverse(list);
         statement.close();
         connection.close();
         return list;
@@ -119,7 +120,7 @@ public class DBManager {
             /*
                 this has to be changed
             */
-            Date date = (res.getDate("expire_date"));
+            Date date = (res.getDate("ban_create_date"));
             String type = "banned";
             History history = new HistoryImpl(name,description,type,date);
             list.add(history);
@@ -163,7 +164,10 @@ public class DBManager {
         list.addAll(get_Created_Quiz_History());
 
         Arrays.sort(new List[]{list});
-
+        Collections.reverse(list);
+        for(int i = 0; i < list.size(); i++){
+            System.out.println(list.get(i).get_history_name() + " - " + list.get(i).get_history_date());
+        }
         return list;
     }
 
