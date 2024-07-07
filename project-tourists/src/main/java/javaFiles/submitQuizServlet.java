@@ -58,24 +58,23 @@ public class submitQuizServlet extends HttpServlet {
 
 
             if (question instanceof MultipleChoice) {
-                if (Objects.equals(userAnswer, question.getAnswer())) {
+                if (Objects.equals(userAnswer.toLowerCase(), question.getAnswer().toLowerCase())) {
                     correctAnswers++;
                 }
             }
             if (question instanceof QuestionResponse) {
-                if (Objects.equals(userAnswer, question.getAnswer())) {
+                if (Objects.equals(userAnswer.toLowerCase(), question.getAnswer().toLowerCase())) {
                     correctAnswers++;
                 }
             }
             if (question instanceof FillInTheBlank) {
-
-                if (Objects.equals(userAnswer, question.getAnswer())) {
+                if (Objects.equals(userAnswer.toLowerCase(), question.getAnswer().toLowerCase())) {
                     correctAnswers++;
                 }
             }
             if (question instanceof PictureResponse) {
 
-                if (Objects.equals(userAnswer, question.getAnswer())) {
+                if (Objects.equals(userAnswer.toLowerCase(), question.getAnswer().toLowerCase())) {
                     correctAnswers++;
                 }
             }
@@ -85,7 +84,7 @@ public class submitQuizServlet extends HttpServlet {
         System.out.println(startTime + " startTime");
         System.out.println(endTime + " endTime");
         session.setAttribute("score", correctAnswers);
-        session.setAttribute("timeTaken", endTime - startTime);
+        session.setAttribute("timeTaken", (long)endTime - startTime);
         session.setAttribute("totalQuestions", questions.size());
         request.setAttribute("correctAnswers", correctAnswers);
         request.setAttribute("totalQuestions", questions.size());

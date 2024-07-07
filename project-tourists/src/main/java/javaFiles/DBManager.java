@@ -1115,7 +1115,7 @@ public class DBManager {
                     rs.getString("quiz_description"), rs.getInt("duration_time"));
 
         }
-
+        connection.close();
         //System.out.println(quiz.getName());
         return quiz;
     }
@@ -1137,7 +1137,7 @@ public class DBManager {
             multiplePages = rs.getBoolean("multiple_pages");
         }
 
-
+        connection.close();
         return multiplePages;
     }
     public List<Question> getQuestions(int quizId) throws SQLException {
@@ -1180,31 +1180,33 @@ public class DBManager {
 
 
         }
-
+        connection.close();
 
         return questions;
     }
-    public void saveReview(int user_id, int quiz_id, int score, Date date, int rating, String review, String quizName) {
+    public void saveReview(int user_id, int quiz_id, int score, long timeTaken, Date date, int rating, String review, String quizName) throws SQLException {
         Connection connection = null;
         PreparedStatement stmt = null;
         try {
             connection = dataSource.getConnection();
 
-            String sql = "INSERT INTO review_table (user_id, quiz_id, quiz_name, score, date, rating, review_text) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO review_table (user_id, quiz_id, quiz_name, score, timeTaken, date, rating, review_text) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             stmt = connection.prepareStatement(sql);
             stmt.setInt(1, user_id);
             stmt.setInt(2, quiz_id);
             stmt.setString(3, quizName);
             stmt.setInt(4, score);
+            stmt.setLong(5, timeTaken);
             java.sql.Date sqlDate = new java.sql.Date(date.getTime());
-            stmt.setDate(5, sqlDate);
-            stmt.setInt(6, rating);
-            stmt.setString(7, review);
+            stmt.setDate(6, sqlDate);
+            stmt.setInt(7, rating);
+            stmt.setString(8, review);
 
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        connection.close();
     }
 
     public void updatePracticedField(int userId) throws SQLException {
@@ -1214,6 +1216,7 @@ public class DBManager {
             preparedStatement.setInt(1, userId);
             preparedStatement.executeUpdate();
         }
+        connection.close();
     }
 
     public int getUserIdByName(String friendName) throws SQLException {
@@ -1232,6 +1235,7 @@ public class DBManager {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        connection.close();
 
         return userId;
     }
@@ -1247,6 +1251,7 @@ public class DBManager {
             preparedStatement.setString(4, message);
             preparedStatement.executeUpdate();
         }
+        connection.close();
     }
 
     public boolean areFriends(int userId1, int userId2) throws SQLException {
@@ -1264,11 +1269,13 @@ public class DBManager {
                 if (resultSet.next() && resultSet.getInt(1) > 0) {
                     areFriends = true;
                 }
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
+        connection.close();
         return areFriends;
     }
 
@@ -1278,12 +1285,19 @@ public class DBManager {
 
         PreparedStatement stmt = connection.prepareStatement(query);
         stmt.setInt(1, quizId);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getInt("highest_score");
-                }
-            }
+        ResultSet rs = stmt.executeQuery();
+        if (rs.next()) {
+            int ret = rs.getInt("highest_score");
+            connection.close();
+            stmt.close();
+            rs.close();
+            return ret;
+        }
 
+
+        connection.close();
+        stmt.close();
+        rs.close();
         return -10000;
     }
 
@@ -1295,6 +1309,8 @@ public class DBManager {
         stmt.setInt(1, userId);
         stmt.executeUpdate();
 
+        connection.close();
+        stmt.close();
     }
 
 
@@ -1339,6 +1355,36 @@ public class DBManager {
     }
 
 
+    public List<String> getTopScorers(int quizId, int limit) throws SQLException {
+        List<String> topScorers = new ArrayList<>();
+
+        String query = "SELECT u.username, MAX(r.score) as max_score, MIN(r.timeTaken) as min_timeTaken, MAX(r.date) as max_date " +
+                "FROM user_table u " +
+                "JOIN review_table r ON u.user_id = r.user_id " +
+                "WHERE r.quiz_id = ? " +
+                "GROUP BY u.username " +
+                "ORDER BY max_score DESC, min_timeTaken ASC " +
+                "LIMIT ?";
+
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(query)) {
+
+            stmt.setInt(1, quizId);
+            stmt.setInt(2, limit);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    String username = rs.getString("username");
+                    int score = rs.getInt("max_score");
+                    long timeTakenMillis = rs.getLong("min_timeTaken");
+                    long timeTakenSeconds = timeTakenMillis / 1000;
+                    String date = rs.getString("max_date");
+                    topScorers.add(username + ";" + score + ";" + timeTakenSeconds + ";" + date);
+                }
+            }
+        }
+        return topScorers;
+    }
 
 
 }

@@ -38,6 +38,7 @@ public class pracImidSubmitQuizServlet extends HttpServlet {
         //session.setAttribute("quizId", quizId);
         request.setAttribute("timeTaken", duration);
 
+
         // Redirect to the review page
         request.getRequestDispatcher("quizResult.jsp").forward(request, response);
     }
