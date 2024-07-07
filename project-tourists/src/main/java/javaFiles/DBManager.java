@@ -1111,8 +1111,8 @@ public class DBManager {
         Connection connection = dataSource.getConnection();
 
         PreparedStatement statement = connection.prepareStatement("INSERT INTO ban_table " +
-                "(user_id, expire_date, reason) " +
-                "VALUES (?, ?, ?)");
+                "(user_id, ban_create_date, expire_date, reason) " +
+                "VALUES (?, sysdate(), ?, ?)");
 
 //        SqlDate sqlDate = new SqlDate(utilDate.getTime());
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");

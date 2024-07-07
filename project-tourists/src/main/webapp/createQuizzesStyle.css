@@ -12,6 +12,7 @@ body{
     text-align: center;
     padding-top: 30px;
     padding-bottom: -20px;
+    font-size: 22px;
 }
 
 .time-input {
@@ -20,7 +21,7 @@ body{
     margin-right: 10px;
 }
 
-.createQuizForm{
+.createQuizForm, .banUserForm{
     width: 60vw;
     max-width: 500px;
     min-width: 300px;
@@ -36,10 +37,24 @@ body{
 }
 
 input[name="checkbox"],input[name="quizname"],
-input[name="tags"], input[class ="createQuizSubmit"], textarea {
+input[name="tags"], input[class ="createQuizSubmit"],
+input[name ="submitBan"], textarea {
+
     background-color: #3a3a5f;
     border: 1px solid #3a3a5f;
     color: #ffffff;
+}
+
+input[name="submitBan"], input[class="createQuizSubmit"]{
+    display: block;
+    height: 10%;
+    width: 30%;
+    border-radius: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: #1B1B32;
+    border: 1px solid #1B1B32;
+    font-size: 20px;
 }
 
 
@@ -60,4 +75,16 @@ label{
     margin: 0 0.5em 0 0;
     vertical-align: middle;
     display: inline;
+}
+
+
+
+label,
+.createQuizForm,
+.banUserForm {
+    font-size: 20px;
+}
+
+.banUserH1{
+    font-size: 30px;
 }

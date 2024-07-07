@@ -28,13 +28,13 @@
     String userName = user.getUsername();
 %>
 <h1 class="banUserH1">Banning user - <%=userName%></h1>
-<form method="post" action="/banUser">
+<form class="banUserForm" method="post" action="/banUser">
     <label>Enter the reason for the ban</label>
     <textarea name="reason" required rows="5" cols="30" placeholder="You are banned because..."></textarea>
 <%--    date to be added--%>
     <label for="banDate">Select ban date:</label>
     <input type="date" id="banDate" name="banDate" required>
-    <input type="submit" value="submit">
+    <input name="submitBan" type="submit" value="submit">
 </form>
 </body>
 </html>
