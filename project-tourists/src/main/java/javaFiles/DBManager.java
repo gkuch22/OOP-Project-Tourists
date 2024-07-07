@@ -281,7 +281,7 @@ public class DBManager {
         List<Quiz> quizzesTaken = new ArrayList<Quiz>();
         User user = null;
         resultSet.next();
-        System.out.println(user_id);
+        //System.out.println(user_id);
         int User_id = resultSet.getInt("user_id");
         String username = resultSet.getString("username");
         boolean is_admin = resultSet.getBoolean("is_admin");
@@ -355,22 +355,143 @@ public class DBManager {
 
 
 
-    public List<String> getAchievements(User user) throws SQLException {
+    public List<Pair<String,String>> getAchievements(User user) throws SQLException {
         Connection connection = dataSource.getConnection();
-        PreparedStatement statement = connection.prepareStatement("Select * from achievement_table where num_created < ? OR num_taken < ? OR (had_highest_score = true AND ? = true) OR (practiced = true AND ? = true);");
-        statement.setInt(1,user.getNumberOfCreatedQuizzes());
+        PreparedStatement statement = connection.prepareStatement("Select * from achievement_table where num_created <= ? OR num_taken <= ? OR (had_highest_score = true AND ? = true) OR (practiced = true AND ? = true);");
+        statement.setInt(1,this.getUserCreatedQuizzes(user).size());
         statement.setInt(2,this.getUniqueUserQuizzes(user.getUser_id()).size());
         statement.setBoolean(3,user.scoredHighest());
         statement.setBoolean(4,user.hasPracticed());
         ResultSet resultSet = statement.executeQuery();
-        List<String> result = new ArrayList<String>();
+        List<Pair<String,String>> result = new ArrayList<Pair<String,String>>();
         while(resultSet.next()){
-            result.add(resultSet.getString("achievement"));
+            result.add(new Pair<String, String>(resultSet.getString("achievement"),resultSet.getString("imageURL")));
         }
         resultSet.close();
         statement.close();
         connection.close();
         return result;
+    }
+
+    public String getAchievementDescription(String name) throws SQLException {
+        Connection connection = dataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement("Select * from achievement_table where achievement = ?;");
+        statement.setString(1,name);
+        ResultSet resultSet = statement.executeQuery();
+        String result = "Achievment not found";
+        while(resultSet.next()){
+            result=resultSet.getString("description");
+        }
+        resultSet.close();
+        statement.close();
+        connection.close();
+        return result;
+    }
+
+    public int getUserCount() throws SQLException {
+        Connection connection = dataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement("Select user_id from user_table");
+        ResultSet resultSet = statement.executeQuery();
+        int res = 0;
+        while(resultSet.next()){
+            res++;
+        }
+        resultSet.close();
+        statement.close();
+        connection.close();
+        return res;
+    }
+
+    public Map<String,Integer> getSiteActivity() throws SQLException {
+        Connection connection = dataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement("SELECT u.username as user, COUNT(r.review_id) AS activity_count FROM user_table u LEFT JOIN review_table r ON u.user_id = r.user_id GROUP BY u.username ORDER BY activity_count DESC LIMIT 5");
+        ResultSet resultSet = statement.executeQuery();
+        Map<String,Integer> res = new HashMap<>();
+        while(resultSet.next()){
+            res.put(resultSet.getString("user"),resultSet.getInt("activity_count"));
+        }
+        resultSet.close();
+        statement.close();
+        connection.close();
+        return res;
+    }
+
+    public double getAverageRating()  throws SQLException {
+        Connection connection = dataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement("SELECT AVG(rating) AS average_rating, COUNT(*) AS total_reviews FROM review_table where NOT(rating IS NULL) AND NOT(rating = 0)");
+        ResultSet resultSet = statement.executeQuery();
+        double res = 0;
+        while(resultSet.next()){
+            res = resultSet.getInt("average_rating");
+        }
+        resultSet.close();
+        statement.close();
+        connection.close();
+        return res;
+    }
+
+    public Map<String,Integer> getSiteTagData() throws SQLException {
+        Connection connection = dataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement("Select user_id from user_table");
+        ResultSet resultSet = statement.executeQuery();
+        Map<String,Integer> res = new HashMap<>();
+        while(resultSet.next()){
+            int id = resultSet.getInt("user_id");
+            User user = getUserData(id);
+            for (Map.Entry<String, Integer> entry : user.getTagCount().entrySet()) {
+                if(res.containsKey(entry.getKey())){
+                    res.put(entry.getKey(),res.get(entry.getKey())+entry.getValue());
+                }else {
+                    res.put(entry.getKey(), entry.getValue());
+                }
+            }
+        }
+        resultSet.close();
+        statement.close();
+        connection.close();
+        return res;
+    }
+
+    public List<Pair<String, Double>> getHighPerformanceQuizzes() throws SQLException {
+        Connection connection = dataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement("SELECT qt.quiz_name AS name, AVG(rt.score) AS average_score FROM quiz_table qt INNER JOIN review_table rt ON qt.quiz_id = rt.quiz_id GROUP BY qt.quiz_id ORDER BY average_score DESC LIMIT 5");
+        ResultSet resultSet = statement.executeQuery();
+        List<Pair<String, Double>> res = new ArrayList<>();
+        while(resultSet.next()){
+            res.add(new Pair<String, Double>(resultSet.getString("name"), resultSet.getDouble("average_score")));
+        }
+        resultSet.close();
+        statement.close();
+        connection.close();
+        return res;
+    }
+
+    public int getAdminQuizzesCount() throws SQLException {
+        Connection connection = dataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement("SELECT quiz_id FROM quiz_table WHERE creator_id IN (SELECT user_id FROM user_table WHERE is_admin = TRUE)");
+        ResultSet resultSet = statement.executeQuery();
+        int res = 0;
+        while(resultSet.next()){
+            res++;
+        }
+        resultSet.close();
+        statement.close();
+        connection.close();
+        return res;
+    }
+
+    public int getBanCount() throws SQLException {
+        Connection connection = dataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement("SELECT ban_id AS total_bans FROM ban_table");
+        ResultSet resultSet = statement.executeQuery();
+        int res = 0;
+        while(resultSet.next()){
+            res++;
+        }
+        resultSet.close();
+        statement.close();
+        connection.close();
+        return res;
     }
 
     public void deleteUser(int user_id) throws SQLException {
@@ -386,12 +507,15 @@ public class DBManager {
 
     public int getReviewCount() throws SQLException {
         Connection connection = dataSource.getConnection();
-        PreparedStatement statement = connection.prepareStatement("Select * from review_table");
+        PreparedStatement statement = connection.prepareStatement("Select * from review_table where rating IS NOT NULL AND NOT(rating = 0)");
         ResultSet resultSet = statement.executeQuery();
         int cnt=0;
         while(resultSet.next()){
             cnt++;
         }
+        resultSet.close();
+        statement.close();
+        connection.close();
         return cnt;
     }
 
@@ -475,6 +599,8 @@ public class DBManager {
         connection.close();
         return quizzes;
     }
+
+
 
     public boolean userExists(String name) throws SQLException {
         Connection connection = dataSource.getConnection();
@@ -770,6 +896,84 @@ public class DBManager {
         connection.close();
     }
 
+    public void saveReportToDataBase(int quizId, int fromId) throws SQLException{
+        Quiz quiz = getQuiz(quizId);
+        int creatorId = quiz.getCreator_id();
+
+        Connection connection = dataSource.getConnection();
+        PreparedStatement statement = null;
+        String query = "INSERT INTO mail_table (from_id, to_id, type, message, date) VALUES (?, ?, ?, ?, NOW())";
+        statement = connection.prepareStatement(query);
+
+        String quizIdString = "" + quizId;
+        statement.setInt(1, fromId);
+        statement.setInt(2, creatorId);
+        statement.setString(3, "report");
+        statement.setString(4, quizIdString);
+
+        statement.executeUpdate();
+
+        statement.close();
+        connection.close();
+    }
+
+    public List<Message> getReports() throws SQLException{
+        List<Message> reports = new ArrayList<Message>();
+
+        Connection connection = dataSource.getConnection();
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+
+        String query = "SELECT * FROM mail_table WHERE type = 'report'";
+
+        statement = connection.prepareStatement(query);
+        resultSet = statement.executeQuery();
+
+        while (resultSet.next()) {
+            int fromId = resultSet.getInt("from_id");
+            int toId = resultSet.getInt("to_id");
+            String messageType = resultSet.getString("type");
+            String messageText = resultSet.getString("message");
+            Date date = resultSet.getTimestamp("date");
+
+            Message message = new MessageImpl(messageType, fromId, toId, messageText, date);
+            reports.add(message);
+        }
+        resultSet.close();
+        statement.close();
+        connection.close();
+
+        return reports;
+    }
+
+    public void removeReport(int reporter, int creator, String quizidString) throws SQLException{
+        String query = "DELETE FROM mail_table WHERE type = 'report' AND from_id = ? AND to_id = ? AND message = ?";
+
+        Connection connection = dataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement(query);
+        statement.setInt(1, reporter);
+        statement.setInt(2, creator);
+        statement.setString(3, quizidString);
+        statement.executeUpdate();
+
+        statement.close();
+        connection.close();
+    }
+
+    public void removeReports(int reporter, int creator, String quizidString) throws SQLException{
+        String query = "DELETE FROM mail_table WHERE type = 'report' AND to_id = ?";
+
+        Connection connection = dataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement(query);
+        statement.setInt(1, reporter);
+        statement.executeUpdate();
+
+        statement.close();
+        connection.close();
+    }
+
+
+
 
     public void sendFriendRequest(int user1Id,int user2Id) throws SQLException {
         Connection connection = dataSource.getConnection();
@@ -778,6 +982,9 @@ public class DBManager {
         checker.setInt(2,user2Id);
         ResultSet res = checker.executeQuery();
         if(res.next()){
+            res.close();
+            checker.close();
+            connection.close();
             return;
         }
         res.close();
@@ -1127,8 +1334,8 @@ public class DBManager {
         Connection connection = dataSource.getConnection();
 
         PreparedStatement statement = connection.prepareStatement("INSERT INTO ban_table " +
-                "(user_id, expire_date, reason) " +
-                "VALUES (?, ?, ?)");
+                "(user_id, ban_create_date, expire_date, reason) " +
+                "VALUES (?, sysdate(), ?, ?)");
 
 //        SqlDate sqlDate = new SqlDate(utilDate.getTime());
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");

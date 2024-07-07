@@ -15,7 +15,7 @@
 <!-- Include the top bar -->
 <jsp:include page="topBar.jsp" />
 <h1>Multiple Choice</h1>
-    <form method="post" action="/multipleChoice">
+    <form class="multipleForm" method="post" action="/multipleChoice">
         <div class="question">
             <label for="question">Type question</label>
             <textarea required placeholder="ex: How many goals did Mikautadze score?" name="question" id="question" rows="5" cols="40"></textarea>

@@ -15,7 +15,7 @@
 <!-- Include the top bar -->
 <jsp:include page="topBar.jsp" />
     <h1>Fill in the blank</h1>
-    <form method="post" action="fillInTheBlank">
+    <form class="multipleForm" method="post" action="fillInTheBlank">
         <div class="question">
         <label for="question">Enter question, instead of the word that you want to be
         blank, type asterisk(*).</label>

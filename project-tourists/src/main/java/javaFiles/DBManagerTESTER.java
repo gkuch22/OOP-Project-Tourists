@@ -406,7 +406,7 @@ public class DBManagerTESTER extends TestCase {
         statement.executeUpdate("INSERT INTO quiz_table(quiz_id,quiz_name,quiz_tag,difficulty,creator_id) VALUES (2,'mid','english;history','medium',1);");
         statement.executeUpdate("INSERT INTO quiz_table(quiz_id,quiz_name,quiz_tag,difficulty,creator_id) VALUES (3,'hard','math','hard',1);");
 
-        statement.executeUpdate("INSERT INTO review_table(user_id, quiz_id, quiz_name,score, date, review_text) VALUES (1,1,'ez',10,NOW(),'');");
+        statement.executeUpdate("INSERT INTO review_table(user_id, quiz_id, quiz_name,score, date, review_text, rating) VALUES (1,1,'ez',10,NOW(),'',10);");
         statement.executeUpdate("INSERT INTO review_table(user_id, quiz_id, quiz_name,score, date, review_text) VALUES (1,2,'mid',8,NOW(),'');");
         statement.executeUpdate("INSERT INTO review_table(user_id, quiz_id, quiz_name,score, date, review_text) VALUES (1,3,'hard',5,NOW(),'');");
 
@@ -444,9 +444,9 @@ public class DBManagerTESTER extends TestCase {
         addTestUserData();
 
         User temp = dbManager.getUserData(1);
-        List<String> achievements = dbManager.getAchievements(temp);
-        assertEquals("supreme",achievements.get(0));
-        assertEquals("wowzers",achievements.get(1));
+        List<Pair<String,String>> achievements = dbManager.getAchievements(temp);
+        assertEquals("supreme",achievements.get(0).getKey());
+        assertEquals("wowzers",achievements.get(1).getKey());
 
         removeTestUserData();
     }
@@ -549,6 +549,7 @@ public class DBManagerTESTER extends TestCase {
 
         removeTestUserData();
     }
+
 
     public void testGetQuiz() throws SQLException {
         addQuizzes();
@@ -789,6 +790,79 @@ public class DBManagerTESTER extends TestCase {
         rs.close();
         stmt.close();
         connection.close();
+
+    public void testGetSiteTagData() throws SQLException {
+        addTestUserData();
+
+        Map<String,Integer> tagData = dbManager.getSiteTagData();
+        assertEquals((Integer) 2,tagData.get("history"));
+        assertEquals((Integer) 1,tagData.get("math"));
+        assertEquals((Integer) 1,tagData.get("english"));
+
+        removeTestUserData();
+    }
+
+    public void testGetUserCount() throws SQLException {
+        addTestUserData();
+
+        int cnt = dbManager.getUserCount();
+        assertEquals(4,cnt);
+
+        removeTestUserData();
+    }
+
+    public void testgetSiteActivity() throws SQLException {
+        addTestUserData();
+
+        Map<String,Integer> activityData = dbManager.getSiteActivity();
+        assertEquals((Integer) 3,activityData.get("bendo"));
+
+        removeTestUserData();
+    }
+
+    public void testgetAverageRating() throws SQLException {
+        addTestUserData();
+
+        double avg = dbManager.getAverageRating();
+        assertEquals(10.0,avg);
+
+        removeTestUserData();
+    }
+    public void testgetHighPerformanceQuizzes() throws SQLException {
+        addTestUserData();
+
+        List<Pair<String,Double>> avg = dbManager.getHighPerformanceQuizzes();
+        assertEquals(3,avg.size());
+
+        removeTestUserData();
+    }
+
+    public void testgetAdminQuizzesCount() throws SQLException {
+        addTestUserData();
+
+        int activityData = dbManager.getAdminQuizzesCount();
+        assertEquals(0,activityData);
+
+        removeTestUserData();
+    }
+
+    public void testgetBanCount() throws SQLException {
+        addTestUserData();
+
+        int banCount = dbManager.getBanCount();
+        assertEquals(0,banCount);
+
+        removeTestUserData();
+    }
+
+    public void testgetAchievementDescription() throws SQLException {
+        addTestUserData();
+
+        String banCount = dbManager.getAchievementDescription("supreme");
+        assertEquals(null,banCount);
+
+        removeTestUserData();
+
     }
 
 }
