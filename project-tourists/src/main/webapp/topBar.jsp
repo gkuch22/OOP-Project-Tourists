@@ -28,7 +28,16 @@
 %>
 
 <div class="topbar">
+<%--    <style>--%>
+<%--        form{--%>
+<%--            display: inline-block;--%>
+<%--            float:right;--%>
+<%--        }--%>
+<%--    </style>--%>
     <a href="/homePage.jsp"><img class="homePagePicture" src="logo1.png"></a>
+    <form   class="topBarSubmitForm" method="get" action="LogoutServlet">
+        <input class="topBarSubmitButton" type="submit" value="Logout">
+    </form>
     <a href="/UserPage.jsp"><img class="profilePicture" src="<%=pictureURL%>"></a>
     <a href="inboxmailpage.jsp"><img class="inboxPicture" src="mail.png"></a>
 </div>

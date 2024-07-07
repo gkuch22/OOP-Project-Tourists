@@ -14,23 +14,33 @@ body{
     padding-bottom: -20px;
 }
 
-form {
+.time-input {
+    width: 70px;
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.createQuizForm{
     width: 60vw;
     max-width: 500px;
     min-width: 300px;
     margin: 0 auto;
-    padding-bottom: 0px;
-    padding-top: 50px;
-    height: 50vw;
+    padding-bottom: 20px;
+    margin-top:20px;
+    padding-top: 20px;
+    /*height: 40vw;*/
+    padding-left: 40px;
+    padding-right: 40px;
+    border-radius: 20px;
+    background-color: #2a2a4f;
 }
 
-input, textarea {
-    background-color: #0a0a23;
-    border: 1px solid #0a0a23;
+input[name="checkbox"],input[name="quizname"],
+input[name="tags"], input[class ="createQuizSubmit"], textarea {
+    background-color: #3a3a5f;
+    border: 1px solid #3a3a5f;
     color: #ffffff;
 }
-
-
 
 
 input,
