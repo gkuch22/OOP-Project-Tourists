@@ -32,7 +32,8 @@ CREATE TABLE user_table (
 CREATE TABLE ban_table (
        ban_id INT AUTO_INCREMENT PRIMARY KEY,
        user_id INT,
-       expire_date DATE,
+       ban_create_date DATE not null,
+       expire_date DATE not null,
        FOREIGN KEY (user_id) REFERENCES user_table(user_id) ON DELETE CASCADE,
        reason TEXT not null,
        FOREIGN KEY (user_id) REFERENCES user_table(user_id)

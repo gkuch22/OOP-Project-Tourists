@@ -32,7 +32,8 @@ fieldset{
 
 
 
-input[type="submit"] {
+input[class = "questionButton"],
+input[class = "finishButton"]{
     flex: 1;
     margin: 5px;
     padding: 20px;

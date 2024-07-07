@@ -15,7 +15,7 @@
 <!-- Include the top bar -->
 <jsp:include page="topBar.jsp" />
     <h1>Question-Response</h1>
-    <form method="post" action="/questionResponse">
+    <form class="multipleForm" method="post" action="/questionResponse">
         <div class="questionText">
           <label for="question">Type question </label>
             <textarea required name="question" id="question" rows="5" cols="40" placeholder="ex:What year did Stalin..."></textarea>
