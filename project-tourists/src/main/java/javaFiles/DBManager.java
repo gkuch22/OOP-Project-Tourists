@@ -25,7 +25,7 @@ public class DBManager {
         dataSource = new BasicDataSource();
         dataSource.setUrl("jdbc:mysql://localhost:3306/tourists");
         dataSource.setUsername("root");
-        dataSource.setPassword("rootroot");
+        dataSource.setPassword("+qwerty+");
     }
 
     public int get_user_id(String name) throws SQLException {
