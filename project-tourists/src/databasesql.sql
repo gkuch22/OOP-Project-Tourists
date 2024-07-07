@@ -119,6 +119,22 @@ CREATE TABLE question_table (
         imageURL TEXT not null,
         FOREIGN KEY (quiz_id) REFERENCES quiz_table(quiz_id) ON DELETE CASCADE
 );
+-- show tables;
+
+-- INSERT INTO login_table (username, password) VALUES ("admin", "admin");
+-- INSERT INTO user_table (user_id, username, is_admin) VALUES (1, "admin", TRUE);
+
+# select * from login_table;
+# select * from user_table;
+# select * from friend_table;
+# select * from mail_table;
+# select * from quiz_table;
+# select * from question_table;
+# select * from review_table;
+# select * from ban_table;
+# select * from achievement_table;
+
+
 
 Insert into achievement_table(achievement_id,achievement,num_created,imageURL,description) Values (1,'Amateur Author',1,'https://t3.ftcdn.net/jpg/02/03/51/94/360_F_203519429_UbqivNUdFdD2ZiUH4MmGkw5cMRIw7WqS.jpg','The user created a quiz');
 Insert into achievement_table(achievement_id,achievement,num_created,imageURL,description) Values (2,'Prolific Author',5,'https://cdn.shopify.com/s/files/1/0101/2750/7515/files/DSP-040-1592x1000.jpg?v=1659951356','The user created five quizzes');
@@ -132,8 +148,8 @@ Insert into achievement_table(achievement_id,achievement,had_highest_score,image
 Insert into achievement_table(achievement_id,achievement,practiced,imageURL,description) Values (8,'Practice Makes Perfect',true,'https://s3.amazonaws.com/pix.iemoji.com/images/emoji/apple/ios-12/256/man-lifting-weights.png','The user took a quiz in practice mode');
 
 
--- show tables;
 
+-- INSERTS --------------------------------------------------------------
 
 -- # INSERT INTO login_table (username, password) VALUES ("nick", "rume123");
 -- # INSERT INTO login_table (username, password) VALUES ("john", "rume123");

@@ -896,6 +896,84 @@ public class DBManager {
         connection.close();
     }
 
+    public void saveReportToDataBase(int quizId, int fromId) throws SQLException{
+        Quiz quiz = getQuiz(quizId);
+        int creatorId = quiz.getCreator_id();
+
+        Connection connection = dataSource.getConnection();
+        PreparedStatement statement = null;
+        String query = "INSERT INTO mail_table (from_id, to_id, type, message, date) VALUES (?, ?, ?, ?, NOW())";
+        statement = connection.prepareStatement(query);
+
+        String quizIdString = "" + quizId;
+        statement.setInt(1, fromId);
+        statement.setInt(2, creatorId);
+        statement.setString(3, "report");
+        statement.setString(4, quizIdString);
+
+        statement.executeUpdate();
+
+        statement.close();
+        connection.close();
+    }
+
+    public List<Message> getReports() throws SQLException{
+        List<Message> reports = new ArrayList<Message>();
+
+        Connection connection = dataSource.getConnection();
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+
+        String query = "SELECT * FROM mail_table WHERE type = 'report'";
+
+        statement = connection.prepareStatement(query);
+        resultSet = statement.executeQuery();
+
+        while (resultSet.next()) {
+            int fromId = resultSet.getInt("from_id");
+            int toId = resultSet.getInt("to_id");
+            String messageType = resultSet.getString("type");
+            String messageText = resultSet.getString("message");
+            Date date = resultSet.getTimestamp("date");
+
+            Message message = new MessageImpl(messageType, fromId, toId, messageText, date);
+            reports.add(message);
+        }
+        resultSet.close();
+        statement.close();
+        connection.close();
+
+        return reports;
+    }
+
+    public void removeReport(int reporter, int creator, String quizidString) throws SQLException{
+        String query = "DELETE FROM mail_table WHERE type = 'report' AND from_id = ? AND to_id = ? AND message = ?";
+
+        Connection connection = dataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement(query);
+        statement.setInt(1, reporter);
+        statement.setInt(2, creator);
+        statement.setString(3, quizidString);
+        statement.executeUpdate();
+
+        statement.close();
+        connection.close();
+    }
+
+    public void removeReports(int reporter, int creator, String quizidString) throws SQLException{
+        String query = "DELETE FROM mail_table WHERE type = 'report' AND to_id = ?";
+
+        Connection connection = dataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement(query);
+        statement.setInt(1, reporter);
+        statement.executeUpdate();
+
+        statement.close();
+        connection.close();
+    }
+
+
+
 
     public void sendFriendRequest(int user1Id,int user2Id) throws SQLException {
         Connection connection = dataSource.getConnection();
