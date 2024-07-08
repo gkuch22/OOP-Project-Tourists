@@ -15,11 +15,12 @@
 
 <head>
     <title>Quizzerinho</title>
+    <link rel="stylesheet" href="reportpageStyle.css">
 </head>
 
 
 <body>
-
+<jsp:include page="topBar.jsp" />
 <%
     DBManager dbManager = (DBManager) application.getAttribute("db-manager");
     List<Message> reports = null;
@@ -55,20 +56,31 @@
                 boolean fromReports = true;
         %>
                 <div class="report-box">
-                    <p>Quiz Name: <%= quizName %></p>
-                    <p>Quiz Creator: <%= creatorUsername %></p>
-                    <p>Reported by: <%= reporterUsername %></p>
-                    <a href="quizStart.jsp?quiz_id=<%= quizId %>">Take Quiz</a>
-                    <form action="banUser" method="get">
-                        <input type="hidden" name="ban_user_id" value="<%= quizcreator %>">
-                        <input type="hidden" name="from_reports" value="<%=fromReports%>">
-                        <button class="ban-button" type="submit">Ban User</button>
-                    </form>
+                    <div class="quizname-box">
+                        <p>Quiz Name: <%= quizName %></p>
+                    </div>
+                    <div class="quizcreator-box">
+                        <p>Quiz Creator: <%= creatorUsername %></p>
+                    </div>
+                    <div class="quizreporter-box">
+                        <p>Reported by: <%= reporterUsername %></p>
+                    </div>
+                    <div class="link-box">
+                        <a href="quizStart.jsp?quiz_id=<%= quizId %>">Check Quiz</a>
+                    </div>
                     <form action="dismissServlet" method="post">
                         <input type="hidden" name="reporter" value="<%=reporter%>">
                         <input type="hidden" name="creator" value="<%=quizcreator%>">
                         <input type="hidden" name="quizid" value="<%=quizId%>">
                         <button class="dismiss-button" type="submit">Dismiss</button>
+                    </form>
+                    <form action="banUser" method="get">
+                        <input type="hidden" name="ban_user_id" value="<%= quizcreator %>">
+                        <input type="hidden" name="from_reports" value="<%=fromReports%>">
+                        <input type="hidden" name="reporter" value="<%=reporter%>">
+                        <input type="hidden" name="creator" value="<%=quizcreator%>">
+                        <input type="hidden" name="quizid" value="<%=quizId%>">
+                        <button class="ban-button" type="submit">Ban User</button>
                     </form>
                 </div>
         <%

@@ -1055,17 +1055,19 @@ public class DBManager {
         connection.close();
     }
 
-    public void removeReports(int reporter, int creator, String quizidString) throws SQLException{
-        String query = "DELETE FROM mail_table WHERE type = 'report' AND to_id = ?";
-
-        Connection connection = dataSource.getConnection();
-        PreparedStatement statement = connection.prepareStatement(query);
-        statement.setInt(1, reporter);
-        statement.executeUpdate();
-
-        statement.close();
-        connection.close();
-    }
+//    public void removeReports(int reporter, int creator, String quizidString) throws SQLException{
+//        String query = "DELETE FROM mail_table WHERE type = 'report' AND to_id = ?";
+//
+//        System.out.println("remove reports" + reporter + " - " + creator + " - " + quizidString);
+//
+//        Connection connection = dataSource.getConnection();
+//        PreparedStatement statement = connection.prepareStatement(query);
+//        statement.setInt(1, creator);
+//        statement.executeUpdate();
+//
+//        statement.close();
+//        connection.close();
+//    }
 
 
 

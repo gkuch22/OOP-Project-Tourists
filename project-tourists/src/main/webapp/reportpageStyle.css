@@ -1,0 +1,98 @@
+body {
+    background-color: #1B1B32;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    color: white;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 20px;
+}
+
+.reportlist-box {
+    background-color: #3A3A5F;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    /*margin-top: -50px;*/
+}
+
+.title-box {
+    text-align: center;
+    background-color: #5454ea;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+}
+
+.report-box {
+    background-color: #2A2A4F;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.report-box > div, .report-box > form, .report-box > a {
+    margin: 5px;
+}
+
+.report-box p {
+    margin: 0;
+}
+
+.report-box .link-box a{
+    padding: 10px 20px;
+    background-color: #0A0A23;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+    border: none;
+    cursor: pointer;
+}
+
+.ban-button{
+    padding: 10px 20px;
+    background-color: #ff4c4c;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+    border: none;
+    cursor: pointer;
+}
+
+.dismiss-button{
+    padding: 10px 20px;
+    background-color: #b7ff4c;
+    color: black;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+    border: none;
+    cursor: pointer;
+}
+
+.report-box .link-box a:hover{
+    background-color: #333;
+}
+
+.ban-button:hover{
+    background-color: #cc0000;
+}
+
+.dismiss-button:hover{
+    background-color: #81cc00;
+}

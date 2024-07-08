@@ -22,9 +22,13 @@ public class banUserServlet extends HttpServlet {
         int userId = (int) request.getSession().getAttribute("ban_user_id");
         String reason = request.getParameter("reason");
         String dateInString = (String)request.getParameter("banDate");
+
         if(request.getSession().getAttribute("from_reports") != null) {
+            int reporter = (Integer) request.getSession().getAttribute("reporterrr");
+            int creator = (Integer) request.getSession().getAttribute("creatorrr");
+            String quizidString = (String) request.getSession().getAttribute("quiziddd");
             try {
-                dbManager.removeReports(1, userId, "");
+                dbManager.removeReport(reporter, creator, quizidString);
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -49,7 +53,14 @@ public class banUserServlet extends HttpServlet {
         System.out.println("id in banUser - " + idInStr);
         int id = Integer.parseInt(request.getParameter("ban_user_id"));
         if(request.getParameter("from_reports") != null) {
+            int reporter = Integer.parseInt(request.getParameter("reporter"));
+            int creator = Integer.parseInt(request.getParameter("creator"));
+            int quizId = Integer.parseInt(request.getParameter("quizid"));
+            String quizidString = "" + quizId;
             request.getSession().setAttribute("from_reports", true);
+            request.getSession().setAttribute("reporterrr", reporter);
+            request.getSession().setAttribute("creatorrr", creator);
+            request.getSession().setAttribute("quiziddd", quizidString);
         }
         request.getSession().setAttribute("ban_user_id", id);
         request.getRequestDispatcher("/banUser.jsp").forward(request,response);
