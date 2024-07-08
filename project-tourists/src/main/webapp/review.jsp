@@ -88,6 +88,8 @@
             background-color: #3A3A5F;
             color: white;
         }
+
+
         .submit-button {
             padding: 10px 20px;
             background-color: #0A0A23;
@@ -101,9 +103,34 @@
             border-radius: 4px;
             transition: background-color 0.3s;
         }
+
+
         .submit-button:hover {
             background-color: #333;
         }
+
+        .report-button{
+            padding: 10px 20px;
+            background-color: #ff4c4c;
+            color: white;
+            border: none;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        .report-button:hover {
+            background-color: #cc0000;
+        }
+
+        .report-button {
+            margin-top: 20px;
+        }
+
     </style>
 </head>
 <body>
@@ -149,6 +176,12 @@
         </div>
         <button type="submit" class="submit-button">Send to Friend</button>
     </form>
+
+    <form action="reportServlet" method="post">
+        <button class="report-button" type="submit">Report Quiz</button>
+    </form>
+
+
 </div>
 <script>
     document.querySelectorAll('.stars input').forEach(input => {

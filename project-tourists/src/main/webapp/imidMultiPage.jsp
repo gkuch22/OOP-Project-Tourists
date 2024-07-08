@@ -93,7 +93,12 @@
             box-sizing: border-box;
         }
         .image-container {
-            margin-bottom: 20px; /* Increase margin below image */
+            margin-bottom: 20px;
+        }
+
+        .imageBox{
+            width: 30vw;
+            height: 40vh;
         }
     </style>
     <script>
@@ -183,7 +188,7 @@
                     PictureResponse prQuestion = (PictureResponse) question;%>
                 <li>
                     <div class="image-container">
-                        <img src="<%= prQuestion.getImageURL() %>" alt="Question Image">
+                        <img class="imageBox" src="<%= prQuestion.getImageURL() %>" alt="Question Image">
                     </div>
                     <textarea name="question_<%= i %>" class="text-area"></textarea>
                 </li>
@@ -231,7 +236,7 @@
             return;
         }
 
-        // Update hidden input with user answer
+
         const userAnswerInput = document.createElement('input');
         userAnswerInput.type = 'hidden';
         userAnswerInput.name = `user_answer_${currentQuestionIndex}`;
@@ -240,7 +245,9 @@
 
         if (!isFeedbackShown) {
             const correctAnswer = document.querySelector(`input[name="correct_answer_${currentQuestionIndex}"]`).value;
-            if (userAnswer === correctAnswer) {
+            // alert(userAnswer);
+            // alert(correctAnswer);
+            if (userAnswer.toLowerCase() === correctAnswer.toLowerCase()) {
                 feedbackElem.textContent = "Correct!";
                 feedbackElem.classList.add("correct");
                 correctCount++;
@@ -253,19 +260,19 @@
             isFeedbackShown = true;
             document.getElementById('nextButton').textContent = "Next Question";
         } else {
-            // Hide current question and feedback
+
             questionElem.style.display = 'none';
             feedbackElem.style.display = 'none';
             feedbackElem.classList.remove("correct", "incorrect");
             feedbackElem.textContent = "";
 
             if (currentQuestionIndex < totalQuestions - 1) {
-                // Show next question
+
                 currentQuestionIndex++;
                 document.getElementById(`question_${currentQuestionIndex}`).style.display = 'block';
                 document.getElementById('nextButton').textContent = "Submit Answer";
             } else {
-                // All questions answered, update hidden fields and submit the form
+
                 document.getElementById('correctCount').value = correctCount;
                 document.getElementById('incorrectCount').value = incorrectCount;
                 document.getElementById('quizForm').submit();

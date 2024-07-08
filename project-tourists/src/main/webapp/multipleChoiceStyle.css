@@ -33,7 +33,8 @@ label:first-of-type{
     padding-top: 10px;
 }
 
-textarea,input{
+textarea,input[name = "answer"],
+input[value="Add Question"]{
     width: 100%;
     box-sizing: border-box;
     background-color: #3a3a5f;
@@ -43,11 +44,12 @@ textarea,input{
 
 }
 
-input{
+input[name = "answer"],
+input[value="Add Question"]{
     width: 40%;
 }
 
-input[type="submit"] {
+input[value="Add Question"] {
     display: block;
     margin: 1em auto;
     padding: 20px;
@@ -60,7 +62,7 @@ input[type="submit"] {
     transition: background-color 0.3s ease;
 }
 
-form{
+.multipleForm{
     width: 50%;
     margin-left: auto;
     margin-right: auto;

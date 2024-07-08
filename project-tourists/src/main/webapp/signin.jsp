@@ -31,8 +31,8 @@
     <form method="post" action="signin">
         <div class = "form">
             <div class = "fillers">
-                <input type="text" placeholder="USERNAME" class = "username" name = "username"/>
-                <input type="password" placeholder="PASSWORD" class="password" name = "password"/>
+                <input type="text" placeholder="USERNAME" class = "input username" name = "username"/>
+                <input type="password" placeholder="PASSWORD" class="input password" name = "password"/>
             </div>
             <div class = "buttonDiv">
                 <button class="sign"> SIGN IN </button>

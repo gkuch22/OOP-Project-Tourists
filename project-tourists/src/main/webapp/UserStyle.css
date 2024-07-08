@@ -62,8 +62,8 @@ legend {
     text-align: center;
     text-decoration: none;
     transition: background-color 0.3s;
-    top: 180px;
-    left: 145px;
+    top: 25%;
+    left: 10%;
     position: absolute;
 }
 
@@ -155,7 +155,7 @@ legend {
 .PictureUpload {
     position: absolute;
     color: white;
-    top: 25%;
+    top: 30%;
     left: 12%;
     font-size: 1.2vw;
 }

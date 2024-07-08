@@ -58,6 +58,18 @@
     quizzesCreatedJson.append("]");
 %>
 
+
+<%
+    if(user.isAdmin()){
+%>
+    <div class="reportbox">
+        <button class="reports-button" onclick="window.location.href='reportpage.jsp'">Reported Quizzes</button>
+    </div>
+<%
+    }
+%>
+
+
 <div class="UserName">
     <a><%=user.getUsername()%></a>
 </div>

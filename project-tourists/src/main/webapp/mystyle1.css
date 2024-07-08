@@ -12,10 +12,10 @@
 
     --black-color: rgb(0,0,0);
     --background-color: #1B1B32;
-    --div-color: var(--linear-gradient2);
+    --div-color: var(--color1);
     --text-field-color: #3A3A5F;
-    --navbar-color: var(--linear-gradient1);
-    --div-before-color: var(--linear-gradient2);
+    --navbar-color: var(--color3);
+    --div-before-color: var(--color2);
     --button-color: var(--color1);
     --header-color: var(--color3);
     --text-color: white;
@@ -44,11 +44,13 @@ body{
     align-items: center;
 }
 
-.homePagePicture{
+.head .homePagePicture{
     width: 200px;
     height: 50px;
     border-radius: 25px;
     border: 3px solid #f5f6f7;
+    /*margin-bottom: 15px;*/
+    /*margin-left: 10px;*/
 }
 
 .left_div{
@@ -176,7 +178,7 @@ button{
     color: white;
 }
 
-input{
+.input{
     background: var(--text-field-color);
     width: 12rem;
     height: 3rem;
@@ -190,7 +192,7 @@ input{
     opacity: 0.6;
 }
 
-input::placeholder{
+.input::placeholder{
     color: white;
     text-align: center;
     font-size: large;
@@ -204,10 +206,6 @@ input::placeholder{
     background: var(--header-color);
     width: 90%;
     border-radius: 1rem;
-}
-
-.line{
-    /*border-bottom: 2px solid white;*/
 }
 
 .messagebox{
@@ -230,14 +228,14 @@ ul{
 }
 
 li{
-    /*border: 2px solid white;*/
+    border-radius: 10px;
     border-left: 2px solid white;
-    margin: 5px;
-    padding-left: 10px;
+    margin: 20px;
+    padding-left: 20px;
 }
-
 .text-div{
-    width: 50vw;
+    display: flex;
+    /*background: red;*/
+    /*width: 50vw;*/
     /*width: 100px;*/
-/*    height: 1rem;*/
 }

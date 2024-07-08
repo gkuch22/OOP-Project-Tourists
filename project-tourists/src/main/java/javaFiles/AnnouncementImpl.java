@@ -1,16 +1,19 @@
 package javaFiles;
 
+import java.util.Comparator;
 import java.util.Date;
 
 public class AnnouncementImpl implements Announcement{
 
     int post_id;
+    String post_name;
     String post_text;
     int user_id;
     Date date;
 
-    public AnnouncementImpl(int post_id,String post_text, int user_id, Date date){
+    public AnnouncementImpl(int post_id,String post_name,String post_text, int user_id, Date date){
         this.post_id = post_id;
+        this.post_name = post_name;
         this.post_text = post_text;
         this.user_id = user_id;
         this.date = date;
@@ -24,6 +27,15 @@ public class AnnouncementImpl implements Announcement{
     @Override
     public void set_post_id(int id) {
         this.post_id = id;
+    }
+
+    public String get_post_name() {
+        return this.post_name;
+    }
+
+    @Override
+    public void set_post_name(String name) {
+        this.post_name = name;
     }
 
     @Override
@@ -54,5 +66,12 @@ public class AnnouncementImpl implements Announcement{
     @Override
     public void set_date(Date date) {
         this.date = date;
+    }
+
+    public class AnnouncementComparator implements Comparator<Announcement> {
+        @Override
+        public int compare(Announcement o1, Announcement o2) {
+            return o1.get_date().compareTo(o2.get_date());
+        }
     }
 }
