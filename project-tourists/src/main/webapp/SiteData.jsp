@@ -70,6 +70,7 @@
         <%Map<String,Integer> tagData = manager.getSiteTagData();%>
         <div class="tag-container">
             <%for(Map.Entry<String, Integer> entry : tagData.entrySet()){%>
+            <%System.out.println(entry.getKey());%>
             <div class="tag"><%=entry.getKey()%></div>
             <%}%>
         </div>
