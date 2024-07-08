@@ -54,6 +54,11 @@ tr:nth-child(odd) {
     background-color: #2A2A4F;
 }
 
+a{
+    color: white;
+    text-decoration: none;
+}
+
 .container {
     max-width: 1200px;
     margin: auto;

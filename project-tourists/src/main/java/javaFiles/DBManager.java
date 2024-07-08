@@ -482,7 +482,7 @@ public class DBManager {
 
     public int getBanCount() throws SQLException {
         Connection connection = dataSource.getConnection();
-        PreparedStatement statement = connection.prepareStatement("SELECT ban_id AS total_bans FROM ban_table");
+        PreparedStatement statement = connection.prepareStatement("SELECT ban_id AS total_bans FROM ban_table where expire_date > now()");
         ResultSet resultSet = statement.executeQuery();
         int res = 0;
         while(resultSet.next()){
