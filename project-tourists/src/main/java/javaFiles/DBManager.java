@@ -341,8 +341,14 @@ public class DBManager {
         return quizzes;
     }
 
-
-
+    void clearQuizHistory(int quizId) throws SQLException {
+        Connection connection = dataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement("" +
+                "DELETE FROM review_table where quiz_id = ?");
+        statement.setInt(1,quizId);
+        statement.close();
+        connection.close();
+    }
 
 
 
@@ -1443,6 +1449,36 @@ public class DBManager {
         connection.close();
     }
 
+    public List<String>getTodaysTopScorers(int quizId, int limit)throws SQLException{
+        List<String> topScorers = new ArrayList<>();
+
+        String query = "SELECT u.username, MAX(r.score) as max_score, MIN(r.timeTaken) as min_timeTaken, MAX(r.date) as max_date " +
+                "FROM user_table u " +
+                "JOIN review_table r ON u.user_id = r.user_id " +
+                "WHERE r.quiz_id = ? AND r.date = current_date()" +
+                "GROUP BY u.username " +
+                "ORDER BY max_score DESC, min_timeTaken ASC " +
+                "LIMIT ?";
+
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(query)) {
+
+            stmt.setInt(1, quizId);
+            stmt.setInt(2, limit);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    String username = rs.getString("username");
+                    int score = rs.getInt("max_score");
+                    long timeTakenMillis = rs.getLong("min_timeTaken");
+                    long timeTakenSeconds = timeTakenMillis / 1000;
+                    String date = rs.getString("max_date");
+                    topScorers.add(username + ";" + score + ";" + timeTakenSeconds + ";" + date);
+                }
+            }
+        }
+        return topScorers;
+    }
 
     public List<String> getTopScorers(int quizId, int limit) throws SQLException {
         List<String> topScorers = new ArrayList<>();

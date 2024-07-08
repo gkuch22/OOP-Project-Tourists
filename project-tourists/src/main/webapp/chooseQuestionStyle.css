@@ -15,7 +15,6 @@ h1{
 
 fieldset{
     width: 600px;
-    height: 300px;
     margin-right: auto;
     margin-left: auto;
     padding: 20px;
@@ -24,16 +23,26 @@ fieldset{
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
+.editQuizFieldSet{
+    max-height: 200px;
+    padding-bottom: 35px;
+    padding-right: 8px;
+}
+
 .firstLine, .secondLine {
     display: flex;
     width: 100%;
     height: 50%;
 }
 
+.editQuizFirstLine{
+    height: 100%;
+}
+
 
 
 input[class = "questionButton"],
-input[class = "finishButton"]{
+input[class = "finishButton"],input[class= "editButton"]{
     flex: 1;
     margin: 5px;
     padding: 20px;
@@ -44,6 +53,12 @@ input[class = "finishButton"]{
     font-size: 18px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+}
+
+input[class = "editButton"]{
+    height: 100%;
+    width: 47%;
+    font-size: 22px;
 }
 
 input[class="finishButton"]{
