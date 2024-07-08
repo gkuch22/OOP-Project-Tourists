@@ -11,14 +11,19 @@
 <body>
 <% DBManager dbManager = (DBManager) application.getAttribute("db-manager");
     int userId = (Integer)request.getSession().getAttribute("user_id");
+     //userId = 0;
 //    userId = (int)request.getSession().getAttribute("userId");
     User user = null;
+    String pictureURL = null;
     try {
-        user = dbManager.getUserData(userId);
+        if(userId >= 1){
+            user = dbManager.getUserData(userId);
+            pictureURL = user.getProfilePhoto();
+        }
     } catch (SQLException e) {
         throw new RuntimeException(e);
     }
-    String pictureURL = user.getProfilePhoto();
+
 %>
 
 <div class="topbar">
@@ -32,8 +37,10 @@
     <form   class="topBarSubmitForm" method="get" action="LogoutServlet">
         <input class="topBarSubmitButton" type="submit" value="Logout">
     </form>
+    <% if (userId >= 1) { %>
     <a href="/UserPage.jsp"><img class="profilePicture" src="<%=pictureURL%>"></a>
     <a href="inboxmailpage.jsp"><img class="inboxPicture" src="mail.png"></a>
+    <% } %>
 </div>
 <div class="search-container">
     <input type="text" id="search-bar" placeholder="Search for users..." class="searchBarText">
