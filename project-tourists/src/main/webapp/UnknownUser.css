@@ -9,7 +9,10 @@ body {
     margin: 0;
     background-color: #1B1B32;
 }
-
+a{
+    color: white;
+    text-decoration: none;
+}
 .message{
     text-align: center;
     align-items: center;

@@ -20,6 +20,10 @@ public class AnotherUserServlet extends HttpServlet {
                 dispatcher.forward(request,response);
                 return;
             }
+            if((int) request.getSession().getAttribute("user_id") < 0){
+                request.getRequestDispatcher("GuestUserPage.jsp").forward(request,response);
+                return;
+            }
 
             int visitingId = manager.getIdByUsername(visitingName);
 
@@ -27,7 +31,8 @@ public class AnotherUserServlet extends HttpServlet {
             RequestDispatcher dispatcher=null;
             if(visitingId==(Integer)request.getSession().getAttribute("user_id")){
                 dispatcher = request.getRequestDispatcher("UserPage.jsp");
-            }else{
+            }
+            else{
                 System.out.println(visitingId);
                 dispatcher = request.getRequestDispatcher("AnotherUser.jsp");
             }
