@@ -28,6 +28,25 @@ public class DBManagerTESTER extends TestCase {
         dataSource.setPassword("rootroot");
     }
 
+    private void clearTables() throws SQLException {
+        Connection connection = dataSource.getConnection();
+        Statement statement = connection.createStatement();
+
+        statement.executeUpdate("DELETE FROM question_table WHERE 1=1");
+        statement.executeUpdate("DELETE FROM review_table WHERE 1=1");
+        statement.executeUpdate("DELETE FROM friend_table WHERE 1=1");
+        statement.executeUpdate("DELETE FROM ban_table WHERE 1=1");
+        statement.executeUpdate("DELETE FROM achievement_table WHERE 1=1");
+        statement.executeUpdate("DELETE FROM mail_table WHERE 1=1");
+        statement.executeUpdate("DELETE FROM post_table WHERE 1=1");
+        statement.executeUpdate("DELETE FROM quiz_table WHERE 1=1");
+        statement.executeUpdate("DELETE FROM user_table WHERE 1=1");
+        statement.executeUpdate("DELETE FROM login_table WHERE 1=1");
+
+        statement.close();
+        connection.close();
+    }
+
     private void addQuizzes() throws SQLException {
         init();
         Connection connection = dataSource.getConnection();
@@ -76,7 +95,7 @@ public class DBManagerTESTER extends TestCase {
         connection.close();
     }
 
-    public void testGetQuizes() throws SQLException {
+    public void testGetQuizzes() throws SQLException {
         addQuizzes();
         List<Quiz> quizzes = dbManager.getQuizzes();
         Quiz quiz = quizzes.get(0);
@@ -91,7 +110,8 @@ public class DBManagerTESTER extends TestCase {
         assertEquals("Medium", quiz.getDifficulty());
         assertEquals(1, quiz.getCreator_id());
 
-        removeQuizzes();
+//        removeQuizzes();
+        clearTables();
     }
 
     private void addReviews() throws SQLException{
@@ -126,8 +146,9 @@ public class DBManagerTESTER extends TestCase {
         assertEquals(1, count);
         assertEquals(80, score);
 
-        removeReviews();
-        removeQuizzes();
+//        removeReviews();
+//        removeQuizzes();
+        clearTables();
     }
 
     public void testGetFilteredQuizzes() throws SQLException {
@@ -139,7 +160,8 @@ public class DBManagerTESTER extends TestCase {
         assertEquals("math", quiz.getQuiz_tag().get(0));
         assertEquals("Easy", quiz.getDifficulty());
         assertEquals(1, quiz.getCreator_id());
-        removeQuizzes();
+//        removeQuizzes();
+        clearTables();
     }
 
     private void addPeople() throws SQLException {
@@ -864,5 +886,99 @@ public class DBManagerTESTER extends TestCase {
         removeTestUserData();
 
     }
+
+    public void testRemoveQuiz() throws SQLException{
+        init();
+        addQuizzes();
+        dbManager.removeQuiz(1);
+        List<Quiz> quizzes = dbManager.getQuizzes();
+        assertEquals(1, quizzes.size());
+        assertEquals(2, quizzes.get(0).getQuiz_id());
+
+        clearTables();
+    }
+
+    public void testAddAnnouncement() throws SQLException{
+        init();
+        addPeople();
+        dbManager.addAnnouncement("satauri1", "shida1", 1);
+        dbManager.addAnnouncement("satauri2", "shida2", 1);
+        dbManager.addAnnouncement("satauri3", "shida3", 2);
+
+        List<Announcement> lst = dbManager.get_Announcement_List();
+        assertEquals(3,lst.size());
+        assertEquals(1, lst.get(2).get_user_id());
+        assertEquals(2, lst.get(0).get_user_id());
+
+        clearTables();
+    }
+
+    private void addLotQuizzes() throws SQLException{
+        Connection connection = dataSource.getConnection();
+        Statement statement = connection.createStatement();
+        statement.executeUpdate("INSERT INTO quiz_table (quiz_id, quiz_name, quiz_tag, difficulty, creator_id, date_created, multiple_pages, practice_mode, gradable) VALUES (1, 'Basic Math Quiz', 'math;3grade', 'Easy', 1, NOW(), FALSE, TRUE, TRUE)");
+        statement.executeUpdate("INSERT INTO quiz_table (quiz_id, quiz_name, quiz_tag, difficulty, creator_id, date_created, multiple_pages, practice_mode, gradable) VALUES (2, 'english Quiz', 'english;3grade', 'Medium', 2, NOW(), FALSE, TRUE, TRUE)");
+        statement.executeUpdate("INSERT INTO quiz_table (quiz_id, quiz_name, quiz_tag, difficulty, creator_id, date_created, multiple_pages, practice_mode, gradable) VALUES (3, 'abc', 'english;3grade', 'Medium', 3, NOW(), FALSE, TRUE, TRUE)");
+        statement.executeUpdate("INSERT INTO quiz_table (quiz_id, quiz_name, quiz_tag, difficulty, creator_id, date_created, multiple_pages, practice_mode, gradable) VALUES (4, 'zxc', 'english;3grade', 'Medium', 3, NOW(), FALSE, TRUE, TRUE)");
+        statement.close();
+        connection.close();
+    }
+
+    public void testSaveReportToDatabase() throws SQLException{
+        init();
+        addPeople();
+        addLotQuizzes();
+        dbManager.saveReportToDataBase(2, 3);
+        dbManager.saveReportToDataBase(4, 2);
+        List<Message> reports = dbManager.getReports();
+
+        assertEquals(2, reports.size());
+        assertEquals(3, reports.get(0).getFromId());
+        assertEquals(2, reports.get(0).getToId());
+        assertEquals("2", reports.get(0).getContext());
+
+        clearTables();
+    }
+
+    public void testGetReports() throws SQLException{
+        init();
+        addPeople();
+        addLotQuizzes();
+        dbManager.saveReportToDataBase(2, 3);
+        dbManager.saveReportToDataBase(4, 2);
+        List<Message> reports = dbManager.getReports();
+
+        assertEquals(2, reports.size());
+        assertEquals(2, reports.get(1).getFromId());
+        assertEquals(3, reports.get(1).getToId());
+        assertEquals("4", reports.get(1).getContext());
+
+        clearTables();
+    }
+
+    public void testRemoveReport() throws SQLException{
+        init();
+        addPeople();
+        addLotQuizzes();
+        dbManager.saveReportToDataBase(2, 3);
+        dbManager.saveReportToDataBase(4, 2);
+        dbManager.removeReport(3,2,"2");
+
+        List<Message> reports = dbManager.getReports();
+
+        assertEquals(1, reports.size());
+        assertEquals(2, reports.get(0).getFromId());
+        assertEquals(3, reports.get(0).getToId());
+        assertEquals("4", reports.get(0).getContext());
+
+        clearTables();
+    }
+
+
+
+
+
+
+
 
 }
