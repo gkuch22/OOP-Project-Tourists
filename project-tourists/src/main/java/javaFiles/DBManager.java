@@ -15,6 +15,7 @@ import java.util.*;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class DBManager {
@@ -25,7 +26,7 @@ public class DBManager {
         dataSource = new BasicDataSource();
         dataSource.setUrl("jdbc:mysql://localhost:3306/tourists");
         dataSource.setUsername("root");
-        dataSource.setPassword("+qwerty+");
+        dataSource.setPassword("rootroot");
     }
 
     public int get_user_id(String name) throws SQLException {
@@ -485,7 +486,15 @@ public class DBManager {
         resultSet.close();
         statement.close();
         connection.close();
-        return res;
+        return res.entrySet()
+                .stream()
+                .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        Map.Entry::getValue,
+                        (e1, e2) -> e1,
+                        LinkedHashMap::new
+                ));
     }
 
     public double getAverageRating()  throws SQLException {
@@ -521,7 +530,15 @@ public class DBManager {
         resultSet.close();
         statement.close();
         connection.close();
-        return res;
+        return res.entrySet()
+                .stream()
+                .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        Map.Entry::getValue,
+                        (e1, e2) -> e1,
+                        LinkedHashMap::new
+                ));
     }
 
     public List<Pair<String, Double>> getHighPerformanceQuizzes() throws SQLException {
@@ -554,7 +571,7 @@ public class DBManager {
 
     public int getBanCount() throws SQLException {
         Connection connection = dataSource.getConnection();
-        PreparedStatement statement = connection.prepareStatement("SELECT ban_id AS total_bans FROM ban_table");
+        PreparedStatement statement = connection.prepareStatement("SELECT ban_id AS total_bans FROM ban_table where expire_date > now()");
         ResultSet resultSet = statement.executeQuery();
         int res = 0;
         while(resultSet.next()){

@@ -33,7 +33,7 @@
             <%
                 for(Map.Entry<String, Integer> entry : userActivity.entrySet()){%>
                     <tr>
-                        <td><%=entry.getKey()%></td>
+                        <td><a href="AnotherUser?name=<%= entry.getKey()%>"><%=entry.getKey()%></a></td>
                         <td><%=entry.getValue()%></td>
                     </tr>
 
@@ -58,7 +58,7 @@
             </tr>
             <%for(Pair<String,Double> cur : getHighPerformanceQuizzes){%>
             <tr>
-                <td><%=cur.getKey()%></td>
+                <td><a href="quizStart.jsp?quiz_id=<%=cur.getKey()%>"><%=cur.getKey()%></a></td>
                 <td><%=cur.getValue()%></td>
             </tr>
             <%}%>
@@ -70,6 +70,7 @@
         <%Map<String,Integer> tagData = manager.getSiteTagData();%>
         <div class="tag-container">
             <%for(Map.Entry<String, Integer> entry : tagData.entrySet()){%>
+            <%System.out.println(entry.getKey());%>
             <div class="tag"><%=entry.getKey()%></div>
             <%}%>
         </div>

@@ -59,17 +59,6 @@
 %>
 
 
-<%
-    if(user.isAdmin()){
-%>
-    <div class="reportbox">
-        <button class="reports-button" onclick="window.location.href='reportpage.jsp'">Reported Quizzes</button>
-    </div>
-<%
-    }
-%>
-
-
 <div class="UserName">
     <a><%=user.getUsername()%></a>
 </div>
@@ -92,7 +81,8 @@
 </div>
 <div class="admin-buttons">
     <%  if(user.isAdmin()){ %>
-    <a href="SiteData.jsp" class = "ban-button">See Site Data</a>
+    <button onclick="window.location.href='SiteData.jsp'" class = "ban-button">See Site Data</button>
+    <button class="delete-button" onclick="window.location.href='reportpage.jsp'">Reported Quizzes</button>
     <%}%>
 </div>
 <div class="container">
@@ -234,7 +224,7 @@
                         <tr>
                             <td>${quiz.quizName}</td>
                             <td>${quiz.dateCreated}</td>
-                            <td><a href="quizStart.jsp?quiz_id=${quiz.quizId}">Link</a></td>
+                            <td><a href="quizStart.jsp?quiz_id=${quiz.quizId}">Go to quiz</a></td>
                         </tr>
                     `;
                 }
