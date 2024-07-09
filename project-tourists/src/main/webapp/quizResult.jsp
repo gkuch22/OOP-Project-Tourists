@@ -86,7 +86,7 @@
         %>
     </div>
     <div>
-        <a href="homePage.jsp" class="button">Return to Home</a>
+        <a href="practiceStartServlet" class="button">Return to Quiz</a>
     </div>
 
 </div>

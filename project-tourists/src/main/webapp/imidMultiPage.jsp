@@ -103,16 +103,18 @@
     </style>
     <script>
         function startTimer(duration) {
-            let timer = duration, minutes, seconds;
+            let timer = duration, hours, minutes, seconds;
             const timerDisplay = document.getElementById('timer');
             const interval = setInterval(() => {
-                minutes = parseInt(timer / 60, 10);
+                hours = parseInt(timer / 3600, 10);
+                minutes = parseInt((timer % 3600) / 60, 10);
                 seconds = parseInt(timer % 60, 10);
 
+                hours = hours < 10 ? "0" + hours : hours;
                 minutes = minutes < 10 ? "0" + minutes : minutes;
                 seconds = seconds < 10 ? "0" + seconds : seconds;
 
-                timerDisplay.textContent = minutes + ":" + seconds;
+                timerDisplay.textContent = hours + ":" + minutes + ":" + seconds;
 
                 if (--timer < 0) {
                     clearInterval(interval);
@@ -122,6 +124,7 @@
             }, 1000);
         }
     </script>
+
 </head>
 <body>
 <jsp:include page="topBar.jsp" />
@@ -145,7 +148,7 @@
 %>
 <div class="quiz-container">
     <% if (isTimed) { %>
-    <div id="timer">Time left: <span id="timeLeft"><%= durationTime %></span> minutes</div>
+    <div id="timer">Time left: <span id="timeLeft"><%= durationTime %></span></div>
     <% } %>
     <form id="quizForm" action="imidSubmitQuizServlet" method="post">
         <input type="hidden" name="quiz_id" value="<%= quizId %>">
@@ -217,6 +220,16 @@
     let incorrectCount = 0;
     let isFeedbackShown = false;
 
+    function getUserAnswer(ans) {
+        let answers = ans;
+        answers = answers.replace(/\s*,\s*/g, ",");
+        answers = answers.replace(/,/g, ';');
+        console.log(answers);
+        return answers;
+    }
+
+
+
     function validateAndMove() {
         const questionElem = document.getElementById(`question_${currentQuestionIndex}`);
         const feedbackElem = document.getElementById(`feedback_${currentQuestionIndex}`);
@@ -242,6 +255,7 @@
         userAnswerInput.name = `user_answer_${currentQuestionIndex}`;
         userAnswerInput.value = userAnswer;
         questionElem.appendChild(userAnswerInput);
+        userAnswer = getUserAnswer(userAnswer);
 
         if (!isFeedbackShown) {
             const correctAnswer = document.querySelector(`input[name="correct_answer_${currentQuestionIndex}"]`).value;
@@ -252,7 +266,7 @@
                 feedbackElem.classList.add("correct");
                 correctCount++;
             } else {
-                feedbackElem.textContent = "Incorrect!";
+                feedbackElem.textContent = "Incorrect!  " + correctAnswer;
                 feedbackElem.classList.add("incorrect");
                 incorrectCount++;
             }
@@ -283,7 +297,7 @@
 
     <% if (quiz.isTimed()) { %>
     window.onload = function() {
-        startTimer(<%= durationTime * 60 %>);
+        startTimer(<%= durationTime %>);
     };
     <% } %>
 </script>

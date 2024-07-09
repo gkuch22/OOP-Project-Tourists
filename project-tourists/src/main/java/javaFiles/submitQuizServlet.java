@@ -68,7 +68,8 @@ public class submitQuizServlet extends HttpServlet {
                 }
             }
             if (question instanceof FillInTheBlank) {
-                if (Objects.equals(userAnswer.toLowerCase(), question.getAnswer().toLowerCase())) {
+                String tmp1 = getUserAnswer(userAnswer.toLowerCase());
+                if (Objects.equals(tmp1, question.getAnswer().toLowerCase())) {
                     correctAnswers++;
                 }
             }
@@ -92,5 +93,15 @@ public class submitQuizServlet extends HttpServlet {
         //response.sendRedirect("singlePage.jsp?quiz_id=" + 2);
         request.getRequestDispatcher("review.jsp").forward(request, response);
     }
+
+    public String getUserAnswer(String ans){
+        String answers = ans;
+        answers  = answers.replaceAll("\\s*,\\s*", ",");
+        answers = answers.replace(',',';');
+        System.out.println(answers);
+        return answers;
+    }
+
+
 }
 

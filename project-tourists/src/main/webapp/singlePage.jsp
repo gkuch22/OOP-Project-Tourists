@@ -84,6 +84,10 @@
         .image-container {
             margin-bottom: 10px;
         }
+        .imageBox{
+            width: 30vw;
+            height: 40vh;
+        }
     </style>
 </head>
 <body>
@@ -106,7 +110,7 @@
 %>
 <div class="quiz-container">
     <% if (isTimed) { %>
-    <div id="timer">Time left: <span id="timeLeft"><%= duration %></span> minutes</div>
+    <div id="timer">Time left: <span id="timeLeft"><%= duration %></span></div>
     <% } %>
     <form id="quizForm" action="submitQuizServlet" method="post">
         <input type="hidden" name="quiz_id" value="<%= quizId %>">
@@ -147,7 +151,7 @@
                     PictureResponse prQuestion = (PictureResponse) question;%>
                 <li>
                     <div class="image-container">
-                        <img src="<%= prQuestion.getImageURL() %>" alt="Question Image">
+                        <img class="imageBox" src="<%= prQuestion.getImageURL() %>" alt="Question Image">
                     </div>
                     <textarea name="question_<%= question.getQuestionText() %>" class="text-area"></textarea>
                 </li>
@@ -167,7 +171,7 @@
 %>
 <script>
     <% if (isTimed) { %>
-    const duration = <%= duration %> * 60;
+    const duration = <%= duration %>;
     let timeLeft = duration;
 
     const timerElement = document.getElementById('timeLeft');
@@ -175,10 +179,11 @@
     const interval = setInterval(() => {
         timeLeft--;
 
-        const minutes = Math.floor(timeLeft / 60);
+        const hours = Math.floor(timeLeft / 3600);
+        const minutes = Math.floor((timeLeft % 3600) / 60);
         const seconds = timeLeft % 60;
 
-        timerElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+        timerElement.textContent = `${hours}:${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 
         if (timeLeft <= 0) {
             clearInterval(interval);

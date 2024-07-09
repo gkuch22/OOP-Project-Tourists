@@ -93,21 +93,23 @@
             box-sizing: border-box;
         }
         .image-container {
-            margin-bottom: 20px; /* Increase margin below image */
+            margin-bottom: 20px;
         }
     </style>
     <script>
         function startTimer(duration) {
-            let timer = duration, minutes, seconds;
+            let timer = duration, hours, minutes, seconds;
             const timerDisplay = document.getElementById('timer');
             const interval = setInterval(() => {
-                minutes = parseInt(timer / 60, 10);
+                hours = parseInt(timer / 3600, 10);
+                minutes = parseInt((timer % 3600) / 60, 10);
                 seconds = parseInt(timer % 60, 10);
 
+                hours = hours < 10 ? "0" + hours : hours;
                 minutes = minutes < 10 ? "0" + minutes : minutes;
                 seconds = seconds < 10 ? "0" + seconds : seconds;
 
-                timerDisplay.textContent = minutes + ":" + seconds;
+                timerDisplay.textContent = hours + ":" + minutes + ":" + seconds;
 
                 if (--timer < 0) {
                     clearInterval(interval);
@@ -137,7 +139,7 @@
 %>
 <div class="quiz-container">
     <% if (isTimed) { %>
-    <div id="timer">Time left: <span id="timeLeft"><%= durationTime %></span> minutes</div>
+    <div id="timer">Time left: <span id="timeLeft"><%= durationTime %></span></div>
     <% } %>
     <form id="quizForm" action="submitQuizServlet" method="post">
         <input type="hidden" name="quiz_id" value="<%= quizId %>">
@@ -178,7 +180,7 @@
                     PictureResponse prQuestion = (PictureResponse) question;%>
                 <li>
                     <div class="image-container">
-                        <img src="<%= prQuestion.getImageURL() %>" alt="Question Image">
+                        <img class="imageBox" src="<%= prQuestion.getImageURL() %>" alt="Question Image">
                     </div>
                     <textarea name="question_<%= question.getQuestionText() %>" class="text-area"></textarea>
                 </li>
@@ -188,8 +190,10 @@
         <% } %>
         <div class="navigation-buttons">
             <button type="button" class="nav-button" id="prevButton" onclick="showPrevQuestion()" style="display: none;">Previous</button>
+            <% if (questions.size() > 1) { %>
             <button type="button" class="nav-button" id="nextButton" onclick="showNextQuestion()">Next</button>
-            <button type="submit" class="nav-button" id="submitButton" style="display: none;">Submit Quiz</button>
+            <% } %>
+            <button type="submit" class="nav-button" id="submitButton" style="<%= questions.size() == 1 ? "display: inline-block;" : "display: none;" %>">Submit Quiz</button>
         </div>
     </form>
 </div>
@@ -204,7 +208,7 @@
 
     <% if (quiz.isTimed()) { %>
     window.onload = function() {
-        startTimer(<%= durationTime * 60 %>);
+        startTimer(<%= durationTime %>);
     };
     <% } %>
 

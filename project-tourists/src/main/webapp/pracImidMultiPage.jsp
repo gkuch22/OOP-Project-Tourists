@@ -93,21 +93,27 @@
             box-sizing: border-box;
         }
         .image-container {
-            margin-bottom: 20px; /* Increase margin below image */
+            margin-bottom: 20px;
+        }
+        .imageBox{
+            width: 30vw;
+            height: 40vh;
         }
     </style>
     <script>
         function startTimer(duration) {
-            let timer = duration, minutes, seconds;
+            let timer = duration, hours, minutes, seconds;
             const timerDisplay = document.getElementById('timer');
             const interval = setInterval(() => {
-                minutes = parseInt(timer / 60, 10);
+                hours = parseInt(timer / 3600, 10);
+                minutes = parseInt((timer % 3600) / 60, 10);
                 seconds = parseInt(timer % 60, 10);
 
+                hours = hours < 10 ? "0" + hours : hours;
                 minutes = minutes < 10 ? "0" + minutes : minutes;
                 seconds = seconds < 10 ? "0" + seconds : seconds;
 
-                timerDisplay.textContent = minutes + ":" + seconds;
+                timerDisplay.textContent = hours + ":" + minutes + ":" + seconds;
 
                 if (--timer < 0) {
                     clearInterval(interval);
@@ -128,6 +134,12 @@
     List<Question> questions = dbManager.getQuestions(quizId);
     Quiz quiz = (Quiz) session.getAttribute("quizz");
     boolean isTimed = quiz.isTimed();
+    Map<String, Integer> practiceCounts = (Map<String, Integer>) session.getAttribute("practice");
+    int ramdeniWavida = 0;
+    for (String key : practiceCounts.keySet()){
+        int tmp5 = practiceCounts.get(key);
+        if (tmp5 >= 3) ramdeniWavida++;
+    }
 
     int durationTime = quiz.isTimed() ? quiz.getDurationTime() : -1;
     if (quiz.isRandom()) {
@@ -138,7 +150,7 @@
 %>
 <div class="quiz-container">
     <% if (isTimed) { %>
-    <div id="timer">Time left: <span id="timeLeft"><%= durationTime %></span> minutes</div>
+    <div id="timer">Time left: <span id="timeLeft"><%= durationTime %></span> </div>
     <% } %>
     <form id="quizForm" action="pracImidSubmitQuizServlet" method="post">
         <input type="hidden" name="quiz_id" value="<%= quizId %>">
@@ -147,6 +159,9 @@
         <input type="hidden" name="incorrectCount" id="incorrectCount" value="0">
         <% for (int i = 0; i < questions.size(); i++) {
             Question question = questions.get(i);
+<%--            String questionText = question.getQuestionText();--%>
+<%--            Integer practiceCount = practiceCounts.getOrDefault(questionText, 0);--%>
+<%--            if (practiceCount < 3) { %>--%>
         %>
         <div class="question" id="question_<%= i %>" style="display: <%= i == 0 ? "block" : "none" %>;">
             <div class="question-text">
@@ -181,7 +196,7 @@
                     PictureResponse prQuestion = (PictureResponse) question;%>
                 <li>
                     <div class="image-container">
-                        <img src="<%= prQuestion.getImageURL() %>" alt="Question Image">
+                        <img class="imageBox" src="<%= prQuestion.getImageURL() %>" alt="Question Image">
                     </div>
                     <textarea name="question_<%= i %>" class="text-area"></textarea>
                 </li>
@@ -190,6 +205,7 @@
             <input type="hidden" name="correct_answer_<%= i %>" value="<%= question.getAnswer() %>">
             <div class="feedback" id="feedback_<%= i %>" style="display: none;"></div>
         </div>
+<%--        <% } %>--%>
         <% } %>
         <div class="navigation-buttons">
             <button type="button" class="nav-button" id="nextButton" onclick="validateAndMove()">Next</button>
@@ -209,6 +225,20 @@
     let correctCount = 0;
     let incorrectCount = 0;
     let isFeedbackShown = false;
+
+    const questionTexts = [
+        <% for (int i = 0; i < questions.size(); i++) { %>
+        "<%= questions.get(i).getQuestionText().replace("\"", "\\\"") %>"<%= (i < questions.size() - 1) ? "," : "" %>
+        <% } %>
+    ];
+
+    function getUserAnswer(ans) {
+        let answers = ans;
+        answers = answers.replace(/\s*,\s*/g, ",");
+        answers = answers.replace(/,/g, ';');
+        console.log(answers);
+        return answers;
+    }
 
     function validateAndMove() {
         const questionElem = document.getElementById(`question_${currentQuestionIndex}`);
@@ -234,6 +264,7 @@
         userAnswerInput.name = `user_answer_${currentQuestionIndex}`;
         userAnswerInput.value = userAnswer;
         questionElem.appendChild(userAnswerInput);
+        userAnswer = getUserAnswer(userAnswer);
 
         if (!isFeedbackShown) {
             const correctAnswer = document.querySelector(`input[name="correct_answer_${currentQuestionIndex}"]`).value;
@@ -241,6 +272,8 @@
                 feedbackElem.textContent = "Correct!";
                 feedbackElem.classList.add("correct");
                 correctCount++;
+                <%--let practiceCount = parseInt(<%= practiceCounts.getOrDefault(questionTexts[currentQuestionIndex], 0) %>);--%>
+
             } else {
                 feedbackElem.textContent = "Incorrect!";
                 feedbackElem.classList.add("incorrect");
@@ -272,7 +305,7 @@
     }
     <% if (quiz.isTimed()) { %>
     window.onload = function() {
-        startTimer(<%= durationTime * 60 %>);
+        startTimer(<%= durationTime %>);
     };
     <% } %>
 </script>

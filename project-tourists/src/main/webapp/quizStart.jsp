@@ -2,10 +2,12 @@
 <%@ page import="javaFiles.DBManager" %>
 <%@ page import="javaFiles.Quiz" %>
 <%@ page import="javaFiles.User" %>
+<%@ page import="javaFiles.Question" %>
+<%@ page import="java.sql.SQLException" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
     //    session.setAttribute("quizId", 1);
-//    session.setAttribute("user_id", 30);
+    session.setAttribute("user_id", 30);
 %>
 <html lang="en">
 <head>
@@ -16,13 +18,13 @@
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #1B1B32;
-            margin: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             height: 100vh;
             color: #ffffff;
+            margin: 50px 0 0;
         }
         .header, .tags, .top-scores {
             background-color: #3A3A5F;
@@ -48,7 +50,7 @@
             align-self: flex-start;
             margin-left: 20px;
         }
-        .creator a {
+        a {
             color: #ffffff;
             text-decoration: none;
             font-size: 0.9em;
@@ -81,7 +83,7 @@
             display: flex;
             justify-content: space-around;
             width: 100%;
-            max-width: 400px;
+            max-width: 700px;
         }
         .button {
             padding: 10px 20px;
@@ -105,6 +107,18 @@
             background-color: #0A0A23;
         }
         .button.start-practice:hover {
+            background-color: #07071a;
+        }
+        .button.edit-quiz {
+            background-color: #0A0A23;
+        }
+        .button.edit-quiz:hover {
+            background-color: #07071a;
+        }
+        .button.delete-history {
+            background-color: #0A0A23;
+        }
+        .button.delete-history:hover {
             background-color: #07071a;
         }
         .top-scores {
@@ -149,8 +163,8 @@
 <body>
 <jsp:include page="topBar.jsp" />
 <%
-//    int quizId = 19;
-//    session.setAttribute("quizId", 19);
+//    int quizId = 38;
+//    session.setAttribute("quizId", 38);
     int quizId = Integer.parseInt(request.getParameter("quiz_id"));
     System.out.println("quiz id - " + quizId);
     session.setAttribute("quizId", quizId);
@@ -159,6 +173,7 @@
     Quiz quiz = dbManager.getQuiz(quizId);
     System.out.println("same quiz id - " + quiz.getQuiz_id());
     session.setAttribute("quizz", quiz);
+    User userr = dbManager.getUserData((Integer) session.getAttribute("user_id"));
     session.setAttribute("quizName", quiz.getQuiz_name());
     session.setAttribute("practiceMode", quiz.isPractice_mode());
     String username = dbManager.getUsernameById(quiz.getCreator_id());
@@ -193,19 +208,48 @@
 <%
     }
 %>
+<%if ((Integer)session.getAttribute("user_id") >= 0) {%>
 <div class="buttons">
     <form action="startServlet" method="post">
         <input type="hidden" name="quiz_id" value="<%= quizId %>">
         <button class="button start-quiz">Start Quiz</button>
     </form>
     <%if (quiz.isPractice_mode()) {%>
+    <%
+        Map<String, Integer> practice = new HashMap<String, Integer>();
+        List<Question> questions = null;
+        try {
+            questions = dbManager.getQuestions(quizId);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        for (Question question : questions) {
+
+            practice.put(question.getQuestionText(), 0);
+        }
+        System.out.println(practice.get(0) + " practice");
+        session.setAttribute("practice", practice);
+    %>
     <form action="practiceStartServlet" method="post">
         <input type="hidden" name="quiz_id" value="<%= quizId %>">
         <button class="button start-practice">Start Practice</button>
     </form>
     <%}%>
+        <%if (quiz.getCreator_id() == (Integer)session.getAttribute("user_id")) {%>
+        <form action="clearHistoryServlet" method="post">
+            <input type="hidden" name="quiz_id" value="<%= quizId %>">
+            <button class="button edit-quiz">Edit Quiz</button>
+        </form>
+        <%}%>
+        <%if (userr.isAdmin()) {%>
+        <form action="clearHistoryServlet" method="post">
+            <input type="hidden" name="quiz_id" value="<%= quizId %>">
+            <button class="button delete-history">Delete History</button>
+        </form>
+        <%}%>
 </div>
-
+<%}%>
 <div class="top-scores">
     <h2>Top Scores</h2>
     <ul>
@@ -221,7 +265,32 @@
                 String[] output = user.split(";");
         %>
         <li>
-            <span><%= output[0] %></span>
+            <span><a href="AnotherUser?name=<%=output[0]%>"><%=output[0]%></a></span>
+<%--            <span><%= output[0] %></span>--%>
+            <span><%= output[1] %></span>
+            <span><%= output[2] %></span>
+            <span><%= output[3] %></span>
+        </li>
+        <% } %>
+    </ul>
+</div>
+<div class="top-scores">
+    <h2>Top Scores For Today</h2>
+    <ul>
+        <li>
+            <span>Name</span>
+            <span>Score</span>
+            <span>Time Taken</span>
+            <span>Date</span>
+        </li>
+        <%
+            List<String> topScorersToday = dbManager.getTopScorers(quizId, 10);
+            for (String user : topScorersToday) {
+                String[] output = user.split(";");
+        %>
+        <li>
+            <span><a href="AnotherUser?name=<%=output[0]%>"><%=output[0]%></a></span>
+<%--            <span><%= output[0] %></span>--%>
             <span><%= output[1] %></span>
             <span><%= output[2] %></span>
             <span><%= output[3] %></span>
