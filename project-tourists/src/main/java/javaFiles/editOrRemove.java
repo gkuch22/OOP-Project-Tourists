@@ -25,11 +25,11 @@ public class editOrRemove extends HttpServlet {
                 request.getRequestDispatcher("/edit").forward(request,response);
             }
         }else{
-            try {
-                dbManager.removeQuestion((String)request.getSession().getAttribute("question_text"));
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
+//            try {
+////                dbManager.removeQuestion((String)request.getSession().getAttribute("question_text"));
+//            } catch (SQLException e) {
+//                throw new RuntimeException(e);
+//            }
             request.getRequestDispatcher("/editQuizQuestion.jsp").forward(request,response);
         }
     }
