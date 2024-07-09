@@ -49,31 +49,77 @@ public class practiceSubmitQuizServlet extends HttpServlet {
         int correctAnswers = 0, totalQuestions = 0;
         Map<String, String> userAnswers = new HashMap<String, String>();
 
+        Map<String, Integer> practice = (Map<String, Integer>) session.getAttribute("practice");
+
         for (Question question : questions) {
             String userAnswer = request.getParameter("question_" + question.getQuestionText());
             userAnswers.put(question.getQuestionText(), userAnswer);
 
 
             if (question instanceof MultipleChoice) {
-                if (Objects.equals(userAnswer, question.getAnswer())) {
-                    correctAnswers++;
+                int tmp4 = practice.get(question.getQuestionText());
+                if (!(tmp4 >= 3)) {
+
+                    if (Objects.equals(userAnswer, question.getAnswer())) {
+                        correctAnswers++;
+                        String tmp3 = question.getQuestionText();
+                        int a = practice.get(tmp3);
+                        a++;
+                        practice.put(tmp3, a);
+                    } else {
+                        String tmp3 = question.getQuestionText();
+                        practice.put(tmp3, 0);
+                    }
                 }
+
             }
             if (question instanceof QuestionResponse) {
-                if (Objects.equals(userAnswer, question.getAnswer())) {
-                    correctAnswers++;
+                int tmp4 = practice.get(question.getQuestionText());
+                if (!(tmp4 >= 3)) {
+
+                    if (Objects.equals(userAnswer, question.getAnswer())) {
+                        correctAnswers++;
+                        String tmp3 = question.getQuestionText();
+                        int a = practice.get(tmp3);
+                        a++;
+                        practice.put(tmp3, a);
+                    } else {
+                        String tmp3 = question.getQuestionText();
+                        practice.put(tmp3, 0);
+                    }
                 }
+
             }
             if (question instanceof FillInTheBlank) {
-
-                if (Objects.equals(userAnswer, question.getAnswer())) {
-                    correctAnswers++;
+                int tmp4 = practice.get(question.getQuestionText());
+                if (!(tmp4 >= 3)) {
+                    String tmp1 = getUserAnswer(userAnswer.toLowerCase());
+                    if (Objects.equals(tmp1, question.getAnswer().toLowerCase())) {
+                        correctAnswers++;
+                        String tmp3 = question.getQuestionText();
+                        int a = practice.get(tmp3);
+                        a++;
+                        practice.put(tmp3, a);
+                    } else {
+                        String tmp3 = question.getQuestionText();
+                        practice.put(tmp3, 0);
+                    }
                 }
             }
             if (question instanceof PictureResponse) {
+                int tmp4 = practice.get(question.getQuestionText());
+                if (!(tmp4 >= 3)) {
 
-                if (Objects.equals(userAnswer, question.getAnswer())) {
-                    correctAnswers++;
+                    if (Objects.equals(userAnswer, question.getAnswer())) {
+                        correctAnswers++;
+                        String tmp3 = question.getQuestionText();
+                        int a = practice.get(tmp3);
+                        a++;
+                        practice.put(tmp3, a);
+                    } else {
+                        String tmp3 = question.getQuestionText();
+                        practice.put(tmp3, 0);
+                    }
                 }
             }
         }
@@ -90,6 +136,14 @@ public class practiceSubmitQuizServlet extends HttpServlet {
         request.setAttribute("timeTaken", endTime - startTime);
         //response.sendRedirect("singlePage.jsp?quiz_id=" + 2);
         request.getRequestDispatcher("quizResult.jsp").forward(request, response);
+    }
+
+    public String getUserAnswer(String ans){
+        String answers = ans;
+        answers  = answers.replaceAll("\\s*,\\s*", ",");
+        answers = answers.replace(',',';');
+        System.out.println(answers);
+        return answers;
     }
 }
 

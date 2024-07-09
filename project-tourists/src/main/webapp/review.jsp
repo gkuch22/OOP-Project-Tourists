@@ -156,8 +156,8 @@
     </div>
     <form action="submitReviewServlet" method="post">
         <input type="hidden" name="rating" id="rating" value="0">
-        <input type="hidden" name="score" value="<%= request.getAttribute("correctAnswers") %>">
-        <input type="hidden" name="timeTaken" value="<%= request.getAttribute("timeTaken") %>">
+        <input type="hidden" name="score" value="<%= (Integer)session.getAttribute("score") * 100 / (Integer)session.getAttribute("totalQuestions")%>">
+        <input type="hidden" name="timeTaken" value="<%= session.getAttribute("timeTaken") %>">
         <div class="stars">
             <input type="radio" name="star" id="star1" value="5"><label for="star1">&#9733;</label>
             <input type="radio" name="star" id="star2" value="4"><label for="star2">&#9733;</label>

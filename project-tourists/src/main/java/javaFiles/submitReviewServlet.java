@@ -35,6 +35,7 @@ public class submitReviewServlet extends HttpServlet {
         System.out.println(date + " date");
 
         int score = (Integer) session.getAttribute("score");
+        int totalQuestions = (Integer) session.getAttribute("totalQuestions");
         //int score = Integer.parseInt(request.getParameter("score"));
         long time = (Long) session.getAttribute("timeTaken");
         //long time = Long.parseLong(request.getParameter("timeTaken"));
@@ -70,7 +71,7 @@ public class submitReviewServlet extends HttpServlet {
 
 
         try {
-            dbManager.saveReview(userId, quizId, score, time, date, rating, review, (String) session.getAttribute("quizName"));
+            dbManager.saveReview(userId, quizId, score * 100 / totalQuestions, time, date, rating, review, (String) session.getAttribute("quizName"));
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

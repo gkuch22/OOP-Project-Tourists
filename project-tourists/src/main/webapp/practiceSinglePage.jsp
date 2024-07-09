@@ -1,14 +1,4 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: User
-  Date: 30.06.2024
-  Time: 14:58
-  To change this template use File | Settings | File Templates.
---%>
-
 <%@ page import="java.sql.*, java.util.*" %>
-<%--<%@ page import="javaFiles.Question" %>--%>
-<%@ page import="java.util.Date" %>
 <%@ page import="javaFiles.*" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html lang="en">
@@ -93,18 +83,18 @@
         .image-container {
             margin-bottom: 10px;
         }
+        .imageBox{
+            width: 30vw;
+            height: 40vh;
+        }
     </style>
 </head>
 <body>
 <jsp:include page="topBar.jsp" />
 <%
-    //    session = request.getSession();
-//    Integer tmp = (Integer) session.getAttribute("quizId");
-//    int quizId = tmp.intValue();
-
-    String quizIdStr = request.getParameter("quiz_id");
-    int quizId = Integer.parseInt(quizIdStr);
-    // System.out.println("fuuuuuuuuck");
+//    String quizIdStr = request.getParameter("quiz_id");
+//    int quizId = Integer.parseInt(quizIdStr);
+    int quizId = (Integer)session.getAttribute("quizId");
     DBManager dbManager = new DBManager();
     List<Question> questions = dbManager.getQuestions(quizId);
     Quiz quiz = (Quiz) session.getAttribute("quizz");
@@ -113,60 +103,60 @@
     if (quiz.isRandom()) {
         Collections.shuffle(questions);
     }
+
+    Map<String, Integer> practiceCounts = (Map<String, Integer>) session.getAttribute("practice");
+
+
     if (questions != null) {
         long startTime = System.currentTimeMillis();
 %>
 <div class="quiz-container">
     <% if (isTimed) { %>
-    <div id="timer">Time left: <span id="timeLeft"><%= duration %></span> minutes</div>
+    <div id="timer">Time left: <span id="timeLeft"><%= duration %></span></div>
     <% } %>
     <form id="quizForm" action="practiceSubmitQuizServlet" method="post">
-        <%--        <input type="hidden" name="quiz_id" value="<%= quizId %>">--%>
         <input type="hidden" name="startTime" value="<%= startTime %>">
-        <% for (Question question : questions) { %>
-            <div class="question-container">
-
-            <div class="question">
-            <%= question.getQuestionText() %>
+        <% for (Question question : questions) {
+            String questionText = question.getQuestionText();
+            Integer practiceCount = practiceCounts.getOrDefault(questionText, 0);
+            //System.out.println(practiceCount + " practice count");
+            if (practiceCount < 3) { %>
+        <div class="question-container">
+            <div class="question"><%= questionText %></div>
+            <ul class="answers">
+                <% if (question instanceof MultipleChoice) {
+                    MultipleChoice mcQuestion = (MultipleChoice) question;
+                    String[] answers = mcQuestion.getPossibleAnswers();
+                    for (String answer : answers) { %>
+                <li>
+                    <input type="radio" name="question_<%= questionText %>" value="<%= answer %>">
+                    <%= answer %>
+                </li>
+                <% }
+                }
+                    if (question instanceof QuestionResponse) { %>
+                <li>
+                    <textarea name="question_<%= questionText %>" class="text-area"></textarea>
+                </li>
+                <% }
+                    if (question instanceof FillInTheBlank) { %>
+                <li>
+                    <textarea name="question_<%= questionText %>" class="text-area"></textarea>
+                </li>
+                <% }
+                    if (question instanceof PictureResponse) {
+                        PictureResponse prQuestion = (PictureResponse) question; %>
+                <li>
+                    <div class="image-container">
+                        <img class="imageBox" src="<%= prQuestion.getImageURL() %>" alt="Question Image">
+                    </div>
+                    <textarea name="question_<%= questionText %>" class="text-area"></textarea>
+                </li>
+                <% } %>
+            </ul>
         </div>
-        <ul class="answers">
-            <% if (question instanceof MultipleChoice) {
-                MultipleChoice mcQuestion = (MultipleChoice) question;
-                String[] answers = mcQuestion.getPossibleAnswers();
-                for (String answer : answers) { %>
-            <li>
-                <input type="radio" name="question_<%= question.getQuestionText() %>" value="<%= answer %>">
-                <%= answer %>
-            </li>
-            <% }
-            }
-                if (question instanceof QuestionResponse) {
-                    QuestionResponse qrQuestion = (QuestionResponse) question; %>
-            <li>
-                <textarea name="question_<%= question.getQuestionText() %>" class="text-area"></textarea>
-            </li>
-            <%} %>
-
-            <% if (question instanceof FillInTheBlank) {
-                FillInTheBlank qrQuestion = (FillInTheBlank) question; %>
-            <li>
-                <textarea name="question_<%= question.getQuestionText() %>" class="text-area"></textarea>
-            </li>
-            <%}%>
-
-            <% if (question instanceof PictureResponse) {
-                PictureResponse prQuestion = (PictureResponse) question;%>
-            <li>
-                <div class="image-container">
-                    <img src="<%= prQuestion.getImageURL() %>" alt="Question Image">
-                </div>
-                <textarea name="question_<%= question.getQuestionText() %>" class="text-area"></textarea>
-            </li>
-            <%}%>
-        </ul>
-            </div>
-
-            <% } %>
+        <% }
+        } %>
         <button type="submit" class="submit-button">Submit Quiz</button>
     </form>
 </div>
@@ -179,7 +169,7 @@
 %>
 <script>
     <% if (isTimed) { %>
-    const duration = <%= duration %> * 60;
+    const duration = <%= duration %>;
     let timeLeft = duration;
 
     const timerElement = document.getElementById('timeLeft');
@@ -187,10 +177,11 @@
     const interval = setInterval(() => {
         timeLeft--;
 
-        const minutes = Math.floor(timeLeft / 60);
+        const hours = Math.floor(timeLeft / 3600);
+        const minutes = Math.floor((timeLeft % 3600) / 60);
         const seconds = timeLeft % 60;
 
-        timerElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+        timerElement.textContent = `${hours}:${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 
         if (timeLeft <= 0) {
             clearInterval(interval);
@@ -202,4 +193,3 @@
 </script>
 </body>
 </html>
-
