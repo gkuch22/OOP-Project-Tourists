@@ -16,7 +16,7 @@
 <body>
 <jsp:include page="topBar.jsp" />
 <div class="message">
-    <a>You are logged in as a guest, '</a><a href="signin.jsp"> log in </a><a>' or '</a> <a href="signup.jsp">register</a> <a>' to use this feature.</a>
+    <p>You are logged in as a guest</p>
 </div>
 </body>
 </html>

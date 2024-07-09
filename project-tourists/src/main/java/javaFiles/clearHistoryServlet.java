@@ -17,14 +17,15 @@ public class clearHistoryServlet extends HttpServlet {
 
         String quizIdStr = request.getParameter("quiz_id");
         int quizId = Integer.parseInt(quizIdStr);
-
+        System.out.println("in edit - -- " + quizId);
         DBManager dbManager = null;
 
-//        try {
-//            dbManager.updateUserScoredHighest(quizId);
-//        } catch (SQLException e) {
-//            throw new RuntimeException(e);
-//        }
+        try {
+            dbManager = new DBManager();
+            dbManager.clearQuizHistory(quizId);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
         request.getRequestDispatcher("quizStart.jsp").forward(request, response);
 

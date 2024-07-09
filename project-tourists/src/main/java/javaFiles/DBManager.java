@@ -5,6 +5,8 @@ import javafx.util.Pair;
 import org.apache.commons.dbcp2.BasicDataSource;
 
 //import javax.jms.Connection;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -98,6 +100,8 @@ WHERE quiz_id = 1;
     }
 
     public int user_password_is_correct(String name, String password) throws SQLException {
+        password = hash(password);
+        System.out.println("admin  pass - " + password);
         Connection connection = dataSource.getConnection();
         PreparedStatement statement = connection.prepareStatement("select user_id from login_table where (username = ?) AND (password = ?)");
         statement.setString(1,name);
@@ -118,6 +122,9 @@ WHERE quiz_id = 1;
     }
 
     public int add_user(String name, String password) throws SQLException {
+        password = hash(password);
+        System.out.println("admin pass - " + password);
+        assert(password == null);
         Connection connection = dataSource.getConnection();
         PreparedStatement statement = connection.prepareStatement("insert into login_table (username, password) values (?, ?)");
         statement.setString(1,name);
@@ -394,8 +401,30 @@ WHERE quiz_id = 1;
         PreparedStatement statement = connection.prepareStatement("" +
                 "DELETE FROM review_table where quiz_id = ?");
         statement.setInt(1,quizId);
+        statement.executeUpdate();
         statement.close();
         connection.close();
+    }
+
+    public static String hexToString(byte[] bytes) {
+        StringBuffer buff = new StringBuffer();
+        for (int i=0; i<bytes.length; i++) {
+            int val = bytes[i];
+            val = val & 0xff;  // remove higher bits, sign
+            if (val<16) buff.append('0'); // leading 0
+            buff.append(Integer.toString(val, 16));
+        }
+        return buff.toString();
+    }
+
+    public static String hash(String input){
+        MessageDigest digest;
+        try {
+            digest = MessageDigest.getInstance("SHA");
+            digest.update(input.getBytes());
+            return hexToString(digest.digest());
+        } catch (NoSuchAlgorithmException e) {}
+        return null;
     }
 
 

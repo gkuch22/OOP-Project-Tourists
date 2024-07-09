@@ -7,7 +7,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
     //    session.setAttribute("quizId", 1);
-    session.setAttribute("user_id", 30);
+    // session.setAttribute("user_id", 30);
 %>
 <html lang="en">
 <head>
@@ -173,7 +173,12 @@
     Quiz quiz = dbManager.getQuiz(quizId);
     System.out.println("same quiz id - " + quiz.getQuiz_id());
     session.setAttribute("quizz", quiz);
-    User userr = dbManager.getUserData((Integer) session.getAttribute("user_id"));
+    int id = (Integer)session.getAttribute("user_id");
+    User userr = null;
+    if(id != -1){
+        userr = dbManager.getUserData((Integer) session.getAttribute("user_id"));
+    }
+
     session.setAttribute("quizName", quiz.getQuiz_name());
     session.setAttribute("practiceMode", quiz.isPractice_mode());
     String username = dbManager.getUsernameById(quiz.getCreator_id());
@@ -237,7 +242,7 @@
     </form>
     <%}%>
         <%if (quiz.getCreator_id() == (Integer)session.getAttribute("user_id")) {%>
-        <form action="clearHistoryServlet" method="post">
+        <form action="editQuizOptions" method="get">
             <input type="hidden" name="quiz_id" value="<%= quizId %>">
             <button class="button edit-quiz">Edit Quiz</button>
         </form>
@@ -284,7 +289,7 @@
             <span>Date</span>
         </li>
         <%
-            List<String> topScorersToday = dbManager.getTopScorers(quizId, 10);
+            List<String> topScorersToday = dbManager.getTodaysTopScorers(quizId, 10);
             for (String user : topScorersToday) {
                 String[] output = user.split(";");
         %>

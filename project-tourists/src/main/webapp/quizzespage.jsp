@@ -99,8 +99,12 @@
                 <%
                     int id = (Integer) request.getSession().getAttribute("user_id");
 //                    int id = 1;
-                    User user = dbManager.getUserData(id);
-                    if(user.isAdmin()){
+                    User user = null;
+                    if(id != -1){
+                        user = dbManager.getUserData(id);
+                    }
+
+                    if(user != null && user.isAdmin()){
                 %>
                         <th>Remove Quiz</th>
                 <%
@@ -139,7 +143,7 @@
                         <td><%= currDate %></td>
                         <td><a href="quizStart.jsp?quiz_id=<%= quiz.getQuiz_id() %>">Take Quiz</a></td>
                         <%
-                            if(user.isAdmin()){
+                            if(user != null && user.isAdmin()){
                         %>
                             <td>
                                 <form action="removeQuiz" method="post">

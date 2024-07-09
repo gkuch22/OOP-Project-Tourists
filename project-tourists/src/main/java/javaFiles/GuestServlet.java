@@ -11,28 +11,18 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Arrays;
 
-@WebServlet(name = "editQuiz", urlPatterns = {"/editQuiz"})
-public class editQuizServlet extends HttpServlet {
+@WebServlet(name = "guestServlet", urlPatterns = {"/guestServlet"})
+public class GuestServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         System.out.println("shemovida");
         DBManager dbManager = (DBManager) getServletContext().getAttribute("db-manager");
-        String value = (String)request.getParameter("action");
-
-        System.out.println(value);
-
-        if(value.equals("Edit quiz options")){
-            request.getRequestDispatcher("/editQuizOptions.jsp").forward(request, response);
-        }else if(value.equals("Edit quiz questions")){
-            request.getRequestDispatcher("/editQuizQuestions.jsp").forward(request, response);
-        }else if(value.equals("Finish")){
-//
-        }
-        //request.getRequestDispatcher("/chooseQuestionOrSubmit.jsp").forward(request, response);
+        request.getSession().setAttribute("user_id", -1);
+        request.getRequestDispatcher("/homePage.jsp").forward(request, response);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        request.getRequestDispatcher("/editQuiz.jsp").forward(request, response);
+
     }
 }
