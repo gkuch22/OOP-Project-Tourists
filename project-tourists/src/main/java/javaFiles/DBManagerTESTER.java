@@ -29,6 +29,7 @@ public class DBManagerTESTER extends TestCase {
     }
 
     private void clearTables() throws SQLException {
+        init();
         Connection connection = dataSource.getConnection();
         Statement statement = connection.createStatement();
 
@@ -574,6 +575,7 @@ public class DBManagerTESTER extends TestCase {
 
 
     public void testGetQuiz() throws SQLException {
+        clearTables();
         addQuizzes();
 
         Quiz quiz1 = dbManager.getQuiz(1);
@@ -591,9 +593,11 @@ public class DBManagerTESTER extends TestCase {
         assertEquals(Arrays.asList("english", "3grade"), quiz2.getQuiz_tag());
         assertEquals("Medium", quiz2.getDifficulty());
         assertEquals(1, quiz2.getCreator_id());
+        clearTables();
     }
 
     public void testIsMultiplePages() throws SQLException {
+        clearTables();
         addQuizzes();
         addQuizzesMore();
 
@@ -602,9 +606,11 @@ public class DBManagerTESTER extends TestCase {
 
         boolean isMultiplePagesQuiz2 = dbManager.isMultiplePages(3);
         assertTrue(isMultiplePagesQuiz2);
+        clearTables();
     }
 
     public void testGetQuestions() throws SQLException {
+        clearTables();
         addQuizzes();
         addQuestions();
 
@@ -631,13 +637,17 @@ public class DBManagerTESTER extends TestCase {
         assertTrue(questionsQuiz2.get(2) instanceof PictureResponse);
         assertEquals("What is this a picture of?", questionsQuiz2.get(2).getQuestionText());
         assertEquals("legend", questionsQuiz2.get(2).getAnswer());
+
+        clearTables();
     }
 
 
 
 
     public void testSaveReview() throws SQLException {
+        clearTables();
         addQuizzes();
+        addQuizzesMore();
         addReviews();
 
         int userId = 2;
@@ -673,8 +683,10 @@ public class DBManagerTESTER extends TestCase {
         rs.close();
         stmt.close();
         connection.close();
+        clearTables();
     }
     public void testUpdatePracticedField() throws SQLException {
+        clearTables();
         addQuizzes();
 
         int userId = 1;
@@ -698,10 +710,13 @@ public class DBManagerTESTER extends TestCase {
         rs.close();
         stmt.close();
         connection.close();
+        clearTables();
     }
 
     public void testGetUserIdByName() throws SQLException {
+        clearTables();
         addQuizzes();
+        addQuizzesMore();
         String username = "nick";
         int expectedUserId = 1;
 
@@ -719,10 +734,13 @@ public class DBManagerTESTER extends TestCase {
 
         actualUserId = dbManager.getUserIdByName(username);
         assertEquals(expectedUserId, actualUserId);
+        clearTables();
     }
 
     public void testSendMail() throws SQLException {
+        clearTables();
         addQuizzes();
+        addQuizzesMore();
         int fromId = 1;
         int toId = 2;
         String type = "challenge";
@@ -751,10 +769,13 @@ public class DBManagerTESTER extends TestCase {
         rs.close();
         stmt.close();
         connection.close();
+        clearTables();
     }
 
     public void testAreFriends() throws SQLException {
+        clearTables();
         addQuizzes();
+        addQuizzesMore();
         Connection connection = dataSource.getConnection();
         Statement statement = connection.createStatement();
         statement.executeUpdate("INSERT INTO friend_table (user_id_1, user_id_2) VALUES (1, 2)");
@@ -765,13 +786,16 @@ public class DBManagerTESTER extends TestCase {
         assertTrue(dbManager.areFriends(2, 1));
         assertFalse(dbManager.areFriends(1, 3));
         assertFalse(dbManager.areFriends(2, 3));
+        clearTables();
     }
 
     public void testGetHighestScore() throws SQLException {
+        clearTables();
         addQuizzes();
+        addQuizzesMore();
         addReviews();
         int quizId = 1;
-        int expectedHighestScore = 85;
+        int expectedHighestScore = 70;
 
         int actualHighestScore = dbManager.getHighestScore(quizId);
         assertEquals(expectedHighestScore, actualHighestScore);
@@ -787,10 +811,13 @@ public class DBManagerTESTER extends TestCase {
 
         actualHighestScore = dbManager.getHighestScore(quizId);
         assertEquals(expectedHighestScore, actualHighestScore);
+        clearTables();
     }
 
     public void testUpdateUserScoredHighest() throws SQLException {
+        clearTables();
         addQuizzes();
+        addQuizzesMore();
         int userId = 1;
 
 
@@ -812,6 +839,7 @@ public class DBManagerTESTER extends TestCase {
         rs.close();
         stmt.close();
         connection.close();
+        clearTables();
     }
     public void testGetSiteTagData() throws SQLException {
         addTestUserData();
