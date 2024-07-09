@@ -6,7 +6,6 @@
 
 <%
     Integer user_id = (Integer) request.getAttribute("current_id");
-    System.out.println("userid in another - " + user_id);
 %>
 <html>
 <head>
@@ -22,15 +21,18 @@
     List<QuizPerformance> quizzesTaken;
     List<Quiz> quizzesCreated;
     User user;
-    User mainUser;
+    User mainUser=null;
     boolean isCurrentUserAdmin = false;
     boolean isVisitedUserAdmin = false;
     try {
         user = manager.getUserData(user_id);
-        mainUser = manager.getUserData((Integer) request.getSession().getAttribute("user_id"));
+        int mainUserId = (Integer) request.getSession().getAttribute("user_id");
+        if(mainUserId!=-1)  mainUser = manager.getUserData(mainUserId);
         quizzesTaken = manager.getUserQuizzes(user.getUser_id());
         quizzesCreated = manager.getUserCreatedQuizzes(user);
-        isCurrentUserAdmin = mainUser.isAdmin();
+        if(mainUser!=null){
+            isCurrentUserAdmin = mainUser.isAdmin();
+        }
         isVisitedUserAdmin = user.isAdmin();
     } catch (SQLException e) {
         throw new RuntimeException(e);
@@ -42,7 +44,8 @@
         quizzesTakenJson.append("{")
                 .append("\"quizName\":\"").append(quiz.getQuiz_name()).append("\",")
                 .append("\"score\":\"").append(quiz.getScore()).append("\",")
-                .append("\"date\":\"").append(quiz.getDate()).append("\"")
+                .append("\"date\":\"").append(quiz.getDate()).append("\",")
+                .append("\"quizId\":\"").append(quiz.getQuiz_id()).append("\"")
                 .append("}");
         if (i < quizzesTaken.size() - 1) {
             quizzesTakenJson.append(",");
@@ -74,6 +77,7 @@
 <img class="UserProfile" src="<%=user.getProfilePhoto()%>" alt="<%=user.getProfilePhoto()%>">
 
 <%
+    if(mainUser!=null){
     try {
         boolean isFriend = false;
         for(User user1 : manager.getFriends(user.getUser_id())){
@@ -90,6 +94,7 @@
     } catch (SQLException e) {
         throw new RuntimeException(e);
     }
+    }
 %>
 <div class="admin-buttons">
     <% if (isCurrentUserAdmin && isVisitedUserAdmin) { %>
@@ -103,7 +108,6 @@
         <button type="submit" class="promote-button">Promote</button>
     </form>
     <% } %>
-    <% System.out.println("bottom of another - " + user.getUser_id());%>
     <%  if(isCurrentUserAdmin){ %>
     <form action="DeleteUserServlet" method="post">
         <input type="hidden" name="userId" value="<%=user.getUser_id()%>">
@@ -208,7 +212,6 @@
         const quizzesTaken = JSON.parse('<%= quizzesTakenJson.toString() %>');
         const quizzesCreated = JSON.parse('<%= quizzesCreatedJson.toString() %>');
 
-        // Set the default active button and table content
         quizzesTakenBtn.classList.add('active');
         populateTable(quizzesTaken, 'taken');
 
@@ -230,20 +233,20 @@
             let headers = '';
             if (type === 'taken') {
                 headers = `
-                <tr>
-                    <th>Quiz Name</th>
-                    <th>Score</th>
-                    <th>Date</th>
-                </tr>
-            `;
+            <tr>
+                <th>Quiz Name</th>
+                <th>Score</th>
+                <th>Date</th>
+            </tr>
+        `;
             } else if (type === 'created') {
                 headers = `
-                <tr>
-                    <th>Quiz Name</th>
-                    <th>Date Created</th>
-                    <th>Link to Quiz</th>
-                </tr>
-            `;
+            <tr>
+                <th>Quiz Name</th>
+                <th>Date Created</th>
+                <th>Link to Quiz</th>
+            </tr>
+        `;
             }
             quizTable.innerHTML = headers;
 
@@ -251,20 +254,20 @@
                 let row = '';
                 if (type === 'taken') {
                     row = `
-                    <tr>
-                        <td>${quiz.quizName}</td>
-                        <td>${quiz.score}</td>
-                        <td>${quiz.date}</td>
-                    </tr>
-                `;
+                <tr>
+                    <td><a href="quizStart.jsp?quiz_id=${quiz.quizId}">${quiz.quizName}</a></td>
+                    <td>${quiz.score}</td>
+                    <td>${quiz.date}</td>
+                </tr>
+            `;
                 } else if (type === 'created') {
                     row = `
-                    <tr>
-                        <td>${quiz.quizName}</td>
-                        <td>${quiz.dateCreated}</td>
-                        <td><a href="quizStart.jsp?quiz_id=${quiz.quizId}">Go to quiz</a></td>
-                    </tr>
-                `;
+                <tr>
+                    <td>${quiz.quizName}</td>
+                    <td>${quiz.dateCreated}</td>
+                    <td><a href="quizStart.jsp?quiz_id=${quiz.quizId}">Go to quiz</a></td>
+                </tr>
+            `;
                 }
                 quizTable.innerHTML += row;
             });

@@ -621,13 +621,13 @@ WHERE quiz_id = 1;
                 ));
     }
 
-    public List<Pair<String, Double>> getHighPerformanceQuizzes() throws SQLException {
+    public List<Pair<Pair<String,Integer>, Double>> getHighPerformanceQuizzes() throws SQLException {
         Connection connection = dataSource.getConnection();
-        PreparedStatement statement = connection.prepareStatement("SELECT qt.quiz_name AS name, AVG(rt.score) AS average_score FROM quiz_table qt INNER JOIN review_table rt ON qt.quiz_id = rt.quiz_id GROUP BY qt.quiz_id ORDER BY average_score DESC LIMIT 5");
+        PreparedStatement statement = connection.prepareStatement("SELECT qt.quiz_id AS id, qt.quiz_name AS name, AVG(rt.score) AS average_score FROM quiz_table qt INNER JOIN review_table rt ON qt.quiz_id = rt.quiz_id GROUP BY qt.quiz_id ORDER BY average_score DESC LIMIT 5");
         ResultSet resultSet = statement.executeQuery();
-        List<Pair<String, Double>> res = new ArrayList<>();
+        List<Pair<Pair<String,Integer>, Double>> res = new ArrayList<>();
         while(resultSet.next()){
-            res.add(new Pair<String, Double>(resultSet.getString("name"), resultSet.getDouble("average_score")));
+            res.add(new Pair<Pair<String,Integer>, Double>(new Pair<String,Integer>(resultSet.getString("name"),resultSet.getInt("id")), resultSet.getDouble("average_score")));
         }
         resultSet.close();
         statement.close();

@@ -31,6 +31,7 @@ public class DBManagerTESTER extends TestCase {
     }
 
     private void clearTables() throws SQLException {
+        init();
         Connection connection = dataSource.getConnection();
         Statement statement = connection.createStatement();
 
@@ -201,24 +202,24 @@ public class DBManagerTESTER extends TestCase {
         connection.close();
     }
 
-//    public void testGetStatMap() throws SQLException {
-//        addQuizzes();
-//        addReviews();
-//        Map<Integer, Pair<Integer, Integer>> statsMap = dbManager.getStatMap();
-//        int count = statsMap.get(1).getKey();
-//        int score = statsMap.get(1).getValue();
-//        assertEquals(1, count);
-//        assertEquals(70, score);
-//
-//        count = statsMap.get(2).getKey();
-//        score = statsMap.get(2).getValue();
-//        assertEquals(1, count);
-//        assertEquals(80, score);
-//
-////        removeReviews();
-////        removeQuizzes();
-//        clearTables();
-//    }
+   public void testGetStatMap() throws SQLException {
+       addQuizzes();
+       addReviews();
+       Map<Integer, Pair<Integer, Integer>> statsMap = dbManager.getStatMap();
+       int count = statsMap.get(1).getKey();
+       int score = statsMap.get(1).getValue();
+       assertEquals(1, count);
+       assertEquals(70, score);
+
+       count = statsMap.get(2).getKey();
+       score = statsMap.get(2).getValue();
+       assertEquals(1, count);
+       assertEquals(80, score);
+
+//        removeReviews();
+//        removeQuizzes();
+       clearTables();
+   }
 
     public void testGetFilteredQuizzes() throws SQLException {
         addQuizzes();
@@ -490,8 +491,8 @@ public class DBManagerTESTER extends TestCase {
         statement.executeUpdate("INSERT INTO user_table VALUES (3,'Joe',false,false,14,true,'https://media.entertainmentearth.com/assets/images/fe9f5fc5d21e4c338652f08b5f86b0caxl.jpg');");
         statement.executeUpdate("INSERT INTO user_table VALUES (4,'Bob',false,false,14,true,'https://media.entertainmentearth.com/assets/images/fe9f5fc5d21e4c338652f08b5f86b0caxl.jpg');");
 
-        statement.executeUpdate("INSERT INTO achievement_table(achievement_id, achievement, num_created) VALUES (1,'supreme',10);");
-        statement.executeUpdate("Insert into achievement_table(achievement_id,achievement,num_created) Values (2,'wowzers',20);");
+        statement.executeUpdate("INSERT INTO achievement_table(achievement_id, achievement, num_created) VALUES (1,'supreme',1);");
+        statement.executeUpdate("Insert into achievement_table(achievement_id,achievement,num_created) Values (2,'wowzers',2);");
 
         statement.executeUpdate("INSERT INTO quiz_table(quiz_id,quiz_name,quiz_tag,difficulty,creator_id) VALUES (1,'ez','history','easy',1);");
         statement.executeUpdate("INSERT INTO quiz_table(quiz_id,quiz_name,quiz_tag,difficulty,creator_id) VALUES (2,'mid','english;history','medium',1);");
@@ -531,16 +532,27 @@ public class DBManagerTESTER extends TestCase {
         removeTestUserData();
     }
 
-//    public void testGetAchievments() throws SQLException {
-//        addTestUserData();
-//
-//        User temp = dbManager.getUserData(1);
-//        List<Pair<String,String>> achievements = dbManager.getAchievements(temp);
-//        assertEquals("supreme",achievements.get(0).getKey());
-//        assertEquals("wowzers",achievements.get(1).getKey());
-//
-//        removeTestUserData();
-//    }
+   public void testGetAchievments() throws SQLException {
+       addTestUserData();
+
+       User temp = dbManager.getUserData(1);
+       List<Pair<String,String>> achievements = dbManager.getAchievements(temp);
+       assertEquals("supreme",achievements.get(0).getKey());
+       assertEquals("wowzers",achievements.get(1).getKey());
+
+       removeTestUserData();
+   }
+    public void testGetAchievments() throws SQLException {
+        addTestUserData();
+
+        User temp = dbManager.getUserData(1);
+        List<Pair<String,String>> achievements = dbManager.getAchievements(temp);
+
+        assertEquals("supreme",achievements.get(0).getKey());
+        assertEquals("wowzers",achievements.get(1).getKey());
+
+        removeTestUserData();
+    }
 
     public void testDeleteUser() throws SQLException {
         addTestUserData();
@@ -566,6 +578,15 @@ public class DBManagerTESTER extends TestCase {
 
         dbManager.promoteUserToAdmin(1);
         assertTrue(dbManager.getUserData(1).isAdmin());
+
+        removeTestUserData();
+    }
+
+    public void testGetReviewCount() throws SQLException {
+        addTestUserData();
+
+        int count = dbManager.getReviewCount();
+        assertEquals(1,count);
 
         removeTestUserData();
     }
@@ -643,6 +664,7 @@ public class DBManagerTESTER extends TestCase {
 
 
     public void testGetQuiz() throws SQLException {
+        clearTables();
         addQuizzes();
 
         Quiz quiz1 = dbManager.getQuiz(1);
@@ -660,9 +682,11 @@ public class DBManagerTESTER extends TestCase {
         assertEquals(Arrays.asList("english", "3grade"), quiz2.getQuiz_tag());
         assertEquals("Medium", quiz2.getDifficulty());
         assertEquals(1, quiz2.getCreator_id());
+        clearTables();
     }
 
     public void testIsMultiplePages() throws SQLException {
+        clearTables();
         addQuizzes();
         addQuizzesMore();
 
@@ -671,79 +695,157 @@ public class DBManagerTESTER extends TestCase {
 
         boolean isMultiplePagesQuiz2 = dbManager.isMultiplePages(3);
         assertTrue(isMultiplePagesQuiz2);
+        clearTables();
     }
 
-//    public void testGetQuestions() throws SQLException {
-//        addQuizzes();
-//        addQuestions();
-//
-//        List<Question> questionsQuiz1 = dbManager.getQuestions(1);
-//        assertNotNull(questionsQuiz1);
-//        assertEquals(2, questionsQuiz1.size());
-//
-//        assertTrue(questionsQuiz1.get(0) instanceof MultipleChoice);
-//        assertEquals("What is 2+2?", questionsQuiz1.get(0).getQuestionText());
-//        assertEquals("4", questionsQuiz1.get(0).getAnswer());
-//
-//        List<Question> questionsQuiz2 = dbManager.getQuestions(2);
-//        assertNotNull(questionsQuiz2);
-//        assertEquals(3, questionsQuiz2.size());
-//
-//        assertTrue(questionsQuiz2.get(0) instanceof FillInTheBlank);
-//        assertEquals("----, my name is slim shady", questionsQuiz2.get(0).getQuestionText());
-//        assertEquals("hello", questionsQuiz2.get(0).getAnswer());
-//
-//        assertTrue(questionsQuiz2.get(1) instanceof QuestionResponse);
-//        assertEquals("are you gay?", questionsQuiz2.get(1).getQuestionText());
-//        assertEquals("yes", questionsQuiz2.get(1).getAnswer());
-//
-//        assertTrue(questionsQuiz2.get(2) instanceof PictureResponse);
-//        assertEquals("What is this a picture of?", questionsQuiz2.get(2).getQuestionText());
-//        assertEquals("legend", questionsQuiz2.get(2).getAnswer());
-//    }
+   public void testGetQuestions() throws SQLException {
+       addQuizzes();
+       addQuestions();
+
+       List<Question> questionsQuiz1 = dbManager.getQuestions(1);
+       assertNotNull(questionsQuiz1);
+       assertEquals(2, questionsQuiz1.size());
+
+       assertTrue(questionsQuiz1.get(0) instanceof MultipleChoice);
+       assertEquals("What is 2+2?", questionsQuiz1.get(0).getQuestionText());
+       assertEquals("4", questionsQuiz1.get(0).getAnswer());
+
+       List<Question> questionsQuiz2 = dbManager.getQuestions(2);
+       assertNotNull(questionsQuiz2);
+       assertEquals(3, questionsQuiz2.size());
+
+       assertTrue(questionsQuiz2.get(0) instanceof FillInTheBlank);
+       assertEquals("----, my name is slim shady", questionsQuiz2.get(0).getQuestionText());
+       assertEquals("hello", questionsQuiz2.get(0).getAnswer());
+
+       assertTrue(questionsQuiz2.get(1) instanceof QuestionResponse);
+       assertEquals("are you gay?", questionsQuiz2.get(1).getQuestionText());
+       assertEquals("yes", questionsQuiz2.get(1).getAnswer());
+
+       assertTrue(questionsQuiz2.get(2) instanceof PictureResponse);
+       assertEquals("What is this a picture of?", questionsQuiz2.get(2).getQuestionText());
+       assertEquals("legend", questionsQuiz2.get(2).getAnswer());
+   }
 
 
 
 
-//    public void testSaveReview() throws SQLException {
-//        addQuizzes();
-//        addReviews();
-//
-//        int userId = 2;
-//        int quizId = 1;
-//        int score = 85;
-//        long timeTaken = 3600;
-//        Date date = new Date(1111, 11, 1);
-//        int rating = 4;
-//        String review = "Good quiz!";
-//        String quizName = "Basic Math Quiz";
-//
-//        dbManager.saveReview(userId, quizId, score, timeTaken, date, rating, review, quizName);
-//
-//        Connection connection = dataSource.getConnection();
-//        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM review_table WHERE user_id = ? AND quiz_id = ?");
-//        stmt.setInt(1, userId);
-//        stmt.setInt(2, quizId);
-//        ResultSet rs = stmt.executeQuery();
-//
-//        if (rs.next()) {
-//            assertEquals(userId, rs.getInt("user_id"));
-//            assertEquals(quizId, rs.getInt("quiz_id"));
-//            assertEquals(score, rs.getInt("score"));
-//            assertEquals(timeTaken, rs.getLong("timeTaken"));
-//            assertEquals(new java.sql.Date(date.getTime()), rs.getDate("date"));
-//            assertEquals(rating, rs.getInt("rating"));
-//            assertEquals(review, rs.getString("review_text"));
-//            assertEquals(quizName, rs.getString("quiz_name"));
-//        } else {
-//            throw new AssertionError("Review not found in database");
-//        }
-//
-//        rs.close();
-//        stmt.close();
-//        connection.close();
-//    }
+   public void testSaveReview() throws SQLException {
+       addQuizzes();
+       addReviews();
+
+       int userId = 2;
+       int quizId = 1;
+       int score = 85;
+       long timeTaken = 3600;
+       Date date = new Date(1111, 11, 1);
+       int rating = 4;
+       String review = "Good quiz!";
+       String quizName = "Basic Math Quiz";
+
+       dbManager.saveReview(userId, quizId, score, timeTaken, date, rating, review, quizName);
+
+       Connection connection = dataSource.getConnection();
+       PreparedStatement stmt = connection.prepareStatement("SELECT * FROM review_table WHERE user_id = ? AND quiz_id = ?");
+       stmt.setInt(1, userId);
+       stmt.setInt(2, quizId);
+       ResultSet rs = stmt.executeQuery();
+
+       if (rs.next()) {
+           assertEquals(userId, rs.getInt("user_id"));
+           assertEquals(quizId, rs.getInt("quiz_id"));
+           assertEquals(score, rs.getInt("score"));
+           assertEquals(timeTaken, rs.getLong("timeTaken"));
+           assertEquals(new java.sql.Date(date.getTime()), rs.getDate("date"));
+           assertEquals(rating, rs.getInt("rating"));
+           assertEquals(review, rs.getString("review_text"));
+           assertEquals(quizName, rs.getString("quiz_name"));
+       } else {
+           throw new AssertionError("Review not found in database");
+       }
+
+       rs.close();
+       stmt.close();
+       connection.close();
+   }
+    public void testGetQuestions() throws SQLException {
+        clearTables();
+        addQuizzes();
+        addQuestions();
+
+        List<Question> questionsQuiz1 = dbManager.getQuestions(1);
+        assertNotNull(questionsQuiz1);
+        assertEquals(2, questionsQuiz1.size());
+
+        assertTrue(questionsQuiz1.get(0) instanceof MultipleChoice);
+        assertEquals("What is 2+2?", questionsQuiz1.get(0).getQuestionText());
+        assertEquals("4", questionsQuiz1.get(0).getAnswer());
+
+        List<Question> questionsQuiz2 = dbManager.getQuestions(2);
+        assertNotNull(questionsQuiz2);
+        assertEquals(3, questionsQuiz2.size());
+
+        assertTrue(questionsQuiz2.get(0) instanceof FillInTheBlank);
+        assertEquals("----, my name is slim shady", questionsQuiz2.get(0).getQuestionText());
+        assertEquals("hello", questionsQuiz2.get(0).getAnswer());
+
+        assertTrue(questionsQuiz2.get(1) instanceof QuestionResponse);
+        assertEquals("are you gay?", questionsQuiz2.get(1).getQuestionText());
+        assertEquals("yes", questionsQuiz2.get(1).getAnswer());
+
+        assertTrue(questionsQuiz2.get(2) instanceof PictureResponse);
+        assertEquals("What is this a picture of?", questionsQuiz2.get(2).getQuestionText());
+        assertEquals("legend", questionsQuiz2.get(2).getAnswer());
+
+        clearTables();
+    }
+
+
+
+
+    public void testSaveReview() throws SQLException {
+        clearTables();
+        addQuizzes();
+        addQuizzesMore();
+        addReviews();
+
+        int userId = 2;
+        int quizId = 1;
+        int score = 85;
+        long timeTaken = 3600;
+        Date date = new Date(1111, 11, 1);
+        int rating = 4;
+        String review = "Good quiz!";
+        String quizName = "Basic Math Quiz";
+
+        dbManager.saveReview(userId, quizId, score, timeTaken, date, rating, review, quizName);
+
+        Connection connection = dataSource.getConnection();
+        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM review_table WHERE user_id = ? AND quiz_id = ?");
+        stmt.setInt(1, userId);
+        stmt.setInt(2, quizId);
+        ResultSet rs = stmt.executeQuery();
+
+        if (rs.next()) {
+            assertEquals(userId, rs.getInt("user_id"));
+            assertEquals(quizId, rs.getInt("quiz_id"));
+            assertEquals(score, rs.getInt("score"));
+            assertEquals(timeTaken, rs.getLong("timeTaken"));
+            assertEquals(new java.sql.Date(date.getTime()), rs.getDate("date"));
+            assertEquals(rating, rs.getInt("rating"));
+            assertEquals(review, rs.getString("review_text"));
+            assertEquals(quizName, rs.getString("quiz_name"));
+        } else {
+            throw new AssertionError("Review not found in database");
+        }
+
+        rs.close();
+        stmt.close();
+        connection.close();
+        clearTables();
+    }
     public void testUpdatePracticedField() throws SQLException {
+        clearTables();
         addQuizzes();
 
         int userId = 1;
@@ -767,99 +869,201 @@ public class DBManagerTESTER extends TestCase {
         rs.close();
         stmt.close();
         connection.close();
+        clearTables();
+    }
+   public void testGetUserIdByName() throws SQLException {
+       addQuizzes();
+       String username = "nick";
+       int expectedUserId = 1;
+
+       int actualUserId = dbManager.getUserIdByName(username);
+       assertEquals(expectedUserId, actualUserId);
+
+       username = "john";
+       expectedUserId = 2;
+
+       actualUserId = dbManager.getUserIdByName(username);
+       assertEquals(expectedUserId, actualUserId);
+
+       username = "nonexistent";
+       expectedUserId = -1;
+
+       actualUserId = dbManager.getUserIdByName(username);
+       assertEquals(expectedUserId, actualUserId);
+   }
+
+   public void testSendMail() throws SQLException {
+       addQuizzes();
+       int fromId = 1;
+       int toId = 2;
+       String type = "challenge";
+       String message = "come if you dare";
+
+       dbManager.sendMail(fromId, toId, type, message);
+
+       Connection connection = dataSource.getConnection();
+       PreparedStatement stmt = connection.prepareStatement("SELECT * FROM mail_table WHERE from_id = ? AND to_id = ? AND type = ? AND message = ?");
+       stmt.setInt(1, fromId);
+       stmt.setInt(2, toId);
+       stmt.setString(3, type);
+       stmt.setString(4, message);
+       ResultSet rs = stmt.executeQuery();
+
+       if (rs.next()) {
+           assertEquals(fromId, rs.getInt("from_id"));
+           assertEquals(toId, rs.getInt("to_id"));
+           assertEquals(type, rs.getString("type"));
+           assertEquals(message, rs.getString("message"));
+           assertNotNull(rs.getTimestamp("date")); // Check that the date is not null
+       } else {
+           throw new AssertionError("Mail not found in database");
+       }
+
+       rs.close();
+       stmt.close();
+       connection.close();
+   }
+
+   public void testAreFriends() throws SQLException {
+       addQuizzes();
+       Connection connection = dataSource.getConnection();
+       Statement statement = connection.createStatement();
+       statement.executeUpdate("INSERT INTO friend_table (user_id_1, user_id_2) VALUES (1, 2)");
+       statement.close();
+       connection.close();
+
+       assertTrue(dbManager.areFriends(1, 2));
+       assertTrue(dbManager.areFriends(2, 1));
+       assertFalse(dbManager.areFriends(1, 3));
+       assertFalse(dbManager.areFriends(2, 3));
+   }
+
+   public void testGetHighestScore() throws SQLException {
+       addQuizzes();
+       addReviews();
+       int quizId = 1;
+       int expectedHighestScore = 85;
+
+       int actualHighestScore = dbManager.getHighestScore(quizId);
+       assertEquals(expectedHighestScore, actualHighestScore);
+
+       quizId = 2;
+       expectedHighestScore = 80;
+
+       actualHighestScore = dbManager.getHighestScore(quizId);
+       assertEquals(expectedHighestScore, actualHighestScore);
+
+       quizId = 3;
+       expectedHighestScore = 0;
+
+       actualHighestScore = dbManager.getHighestScore(quizId);
+       assertEquals(expectedHighestScore, actualHighestScore);
+   }
+    public void testGetUserIdByName() throws SQLException {
+        clearTables();
+        addQuizzes();
+        addQuizzesMore();
+        String username = "nick";
+        int expectedUserId = 1;
+
+        int actualUserId = dbManager.getUserIdByName(username);
+        assertEquals(expectedUserId, actualUserId);
+
+        username = "john";
+        expectedUserId = 2;
+
+        actualUserId = dbManager.getUserIdByName(username);
+        assertEquals(expectedUserId, actualUserId);
+
+        username = "nonexistent";
+        expectedUserId = -1;
+
+        actualUserId = dbManager.getUserIdByName(username);
+        assertEquals(expectedUserId, actualUserId);
+        clearTables();
     }
 
-//    public void testGetUserIdByName() throws SQLException {
-//        addQuizzes();
-//        String username = "nick";
-//        int expectedUserId = 1;
-//
-//        int actualUserId = dbManager.getUserIdByName(username);
-//        assertEquals(expectedUserId, actualUserId);
-//
-//        username = "john";
-//        expectedUserId = 2;
-//
-//        actualUserId = dbManager.getUserIdByName(username);
-//        assertEquals(expectedUserId, actualUserId);
-//
-//        username = "nonexistent";
-//        expectedUserId = -1;
-//
-//        actualUserId = dbManager.getUserIdByName(username);
-//        assertEquals(expectedUserId, actualUserId);
-//    }
+    public void testSendMail() throws SQLException {
+        clearTables();
+        addQuizzes();
+        addQuizzesMore();
+        int fromId = 1;
+        int toId = 2;
+        String type = "challenge";
+        String message = "come if you dare";
 
-//    public void testSendMail() throws SQLException {
-//        addQuizzes();
-//        int fromId = 1;
-//        int toId = 2;
-//        String type = "challenge";
-//        String message = "come if you dare";
-//
-//        dbManager.sendMail(fromId, toId, type, message);
-//
-//        Connection connection = dataSource.getConnection();
-//        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM mail_table WHERE from_id = ? AND to_id = ? AND type = ? AND message = ?");
-//        stmt.setInt(1, fromId);
-//        stmt.setInt(2, toId);
-//        stmt.setString(3, type);
-//        stmt.setString(4, message);
-//        ResultSet rs = stmt.executeQuery();
-//
-//        if (rs.next()) {
-//            assertEquals(fromId, rs.getInt("from_id"));
-//            assertEquals(toId, rs.getInt("to_id"));
-//            assertEquals(type, rs.getString("type"));
-//            assertEquals(message, rs.getString("message"));
-//            assertNotNull(rs.getTimestamp("date")); // Check that the date is not null
-//        } else {
-//            throw new AssertionError("Mail not found in database");
-//        }
-//
-//        rs.close();
-//        stmt.close();
-//        connection.close();
-//    }
+        dbManager.sendMail(fromId, toId, type, message);
 
-//    public void testAreFriends() throws SQLException {
-//        addQuizzes();
-//        Connection connection = dataSource.getConnection();
-//        Statement statement = connection.createStatement();
-//        statement.executeUpdate("INSERT INTO friend_table (user_id_1, user_id_2) VALUES (1, 2)");
-//        statement.close();
-//        connection.close();
-//
-//        assertTrue(dbManager.areFriends(1, 2));
-//        assertTrue(dbManager.areFriends(2, 1));
-//        assertFalse(dbManager.areFriends(1, 3));
-//        assertFalse(dbManager.areFriends(2, 3));
-//    }
+        Connection connection = dataSource.getConnection();
+        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM mail_table WHERE from_id = ? AND to_id = ? AND type = ? AND message = ?");
+        stmt.setInt(1, fromId);
+        stmt.setInt(2, toId);
+        stmt.setString(3, type);
+        stmt.setString(4, message);
+        ResultSet rs = stmt.executeQuery();
 
-//    public void testGetHighestScore() throws SQLException {
-//        addQuizzes();
-//        addReviews();
-//        int quizId = 1;
-//        int expectedHighestScore = 85;
-//
-//        int actualHighestScore = dbManager.getHighestScore(quizId);
-//        assertEquals(expectedHighestScore, actualHighestScore);
-//
-//        quizId = 2;
-//        expectedHighestScore = 80;
-//
-//        actualHighestScore = dbManager.getHighestScore(quizId);
-//        assertEquals(expectedHighestScore, actualHighestScore);
-//
-//        quizId = 3;
-//        expectedHighestScore = 0;
-//
-//        actualHighestScore = dbManager.getHighestScore(quizId);
-//        assertEquals(expectedHighestScore, actualHighestScore);
-//    }
+        if (rs.next()) {
+            assertEquals(fromId, rs.getInt("from_id"));
+            assertEquals(toId, rs.getInt("to_id"));
+            assertEquals(type, rs.getString("type"));
+            assertEquals(message, rs.getString("message"));
+            assertNotNull(rs.getTimestamp("date")); // Check that the date is not null
+        } else {
+            throw new AssertionError("Mail not found in database");
+        }
+
+        rs.close();
+        stmt.close();
+        connection.close();
+        clearTables();
+    }
+
+    public void testAreFriends() throws SQLException {
+        clearTables();
+        addQuizzes();
+        addQuizzesMore();
+        Connection connection = dataSource.getConnection();
+        Statement statement = connection.createStatement();
+        statement.executeUpdate("INSERT INTO friend_table (user_id_1, user_id_2) VALUES (1, 2)");
+        statement.close();
+        connection.close();
+
+        assertTrue(dbManager.areFriends(1, 2));
+        assertTrue(dbManager.areFriends(2, 1));
+        assertFalse(dbManager.areFriends(1, 3));
+        assertFalse(dbManager.areFriends(2, 3));
+        clearTables();
+    }
+
+    public void testGetHighestScore() throws SQLException {
+        clearTables();
+        addQuizzes();
+        addQuizzesMore();
+        addReviews();
+        int quizId = 1;
+        int expectedHighestScore = 70;
+
+        int actualHighestScore = dbManager.getHighestScore(quizId);
+        assertEquals(expectedHighestScore, actualHighestScore);
+
+        quizId = 2;
+        expectedHighestScore = 80;
+
+        actualHighestScore = dbManager.getHighestScore(quizId);
+        assertEquals(expectedHighestScore, actualHighestScore);
+
+        quizId = 3;
+        expectedHighestScore = 0;
+
+        actualHighestScore = dbManager.getHighestScore(quizId);
+        assertEquals(expectedHighestScore, actualHighestScore);
+        clearTables();
+    }
 
     public void testUpdateUserScoredHighest() throws SQLException {
+        clearTables();
         addQuizzes();
+        addQuizzesMore();
         int userId = 1;
 
 
@@ -881,6 +1085,7 @@ public class DBManagerTESTER extends TestCase {
         rs.close();
         stmt.close();
         connection.close();
+        clearTables();
     }
     public void testGetSiteTagData() throws SQLException {
         addTestUserData();
@@ -922,7 +1127,7 @@ public class DBManagerTESTER extends TestCase {
     public void testgetHighPerformanceQuizzes() throws SQLException {
         addTestUserData();
 
-        List<Pair<String,Double>> avg = dbManager.getHighPerformanceQuizzes();
+        List<Pair<Pair<String,Integer>,Double>> avg = dbManager.getHighPerformanceQuizzes();
         assertEquals(3,avg.size());
 
         removeTestUserData();

@@ -278,6 +278,10 @@ legend {
     background-color: #3A3A5F;
 }
 
+a{
+    color: white;
+    text-decoration: none;
+}
 
 .table-container {
     overflow-x: auto;
@@ -339,14 +343,14 @@ legend {
 
 
 .admin-buttons form {
-    display: inline-block; /* Ensures forms/buttons are inline */
+    display: inline-block;
     background-color: #0A0A23;
     color: #0A0A23;
-    margin: 0 10px; /* Adjust spacing between buttons */
+    margin: 0 10px;
 }
 
 .admin-buttons{
-    margin-top: 20px; /* Adjust margin as needed */
+    margin-top: 20px;
     right:50px;
     text-align: center;
     color: #fff;
