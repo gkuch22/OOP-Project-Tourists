@@ -28,7 +28,7 @@ public class DBManager {
         dataSource = new BasicDataSource();
         dataSource.setUrl("jdbc:mysql://localhost:3306/tourists");
         dataSource.setUsername("root");
-        dataSource.setPassword("rootroot");
+        dataSource.setPassword("Mangi2004019111007");
     }
 
     void editQuizOptions(Quiz quiz) throws SQLException {
@@ -61,23 +61,6 @@ public class DBManager {
         statement.executeUpdate();
         statement.close();
         connection.close();
-        /*
-UPDATE quiz_table
-SET
-    quiz_name = 'New Quiz Name',
-    quiz_description = 'New description for the quiz.',
-    quiz_tag = 'New Tag',
-    difficulty = 'Medium',
-    date_created = '2024-07-09',
-    multiple_pages = TRUE,
-    practice_mode = TRUE,
-    gradable = TRUE,
-    immediate_correction = TRUE,
-    random_questions = TRUE,
-    timed = TRUE,
-    duration_time = 30
-WHERE quiz_id = 1;
-*/
     }
     public int get_user_id(String name) throws SQLException {
         Connection connection = dataSource.getConnection();
