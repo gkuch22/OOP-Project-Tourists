@@ -68,7 +68,7 @@ public class editQuizOptionsServlet extends HttpServlet {
         boolean gradable = false;
 
         int nextQuizId = 2;
-        // nextQuizId = (Integer)request.getSession().getAttribute("quiz_id");
+         nextQuizId = (Integer)request.getSession().getAttribute("quiz_id");
         Quiz quiz = new QuizImpl(nextQuizId, name, tagsFixed,difficulty, creatorId,
                 isRandom, isTimed, multiplePages, immediatelyCorrected,
                 practiceMode, gradable, description,durationTime);
@@ -80,11 +80,13 @@ public class editQuizOptionsServlet extends HttpServlet {
         }
         //response.sendRedirect(request.getContextPath() + "/chooseQuestion");
 
-        request.getRequestDispatcher("/editQuiz.jsp").forward(request, response);
+        request.getRequestDispatcher("/quizzespage.jsp").forward(request, response);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 //        System.out.println("get");
-        //request.getRequestDispatcher("/createQuizes.jsp").forward(request,response);
+        int quizId = Integer.parseInt(request.getParameter("quiz_id"));
+        request.getSession().setAttribute("quiz_id", quizId);
+        request.getRequestDispatcher("/editQuizOptions.jsp").forward(request,response);
     }
 }

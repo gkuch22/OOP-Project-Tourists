@@ -14,8 +14,8 @@
         <div class="left_div signup">
             <a class="left_href signup_href" href = "signup.jsp"> SIGN UP </a>
         </div>
-        <div class="left_div guest">
-            <a class="left_href guest_href" href = "guest.jsp"> GUEST MODE </a>
+        <div class="left_div guest active">
+            <a class="left_href guest_href" href = "guest.jsp" > GUEST MODE </a>
         </div>
         <div class="left_div about">
             <a class="left_href about_href" href = "about.jsp"> ABOUT US </a>
@@ -27,7 +27,13 @@
     <div class = "head">
         <img class="homePagePicture" src="logo1.png">
     </div>
-    <h1>Guest Mode</h1>
+    <form method="post" action="guestServlet">
+        <div class = "form">
+            <div class = "buttonDiv">
+                <button class="sign"> ENTER AS GUEST </button>
+            </div>
+        </div>
+    </form>
 </div>
 
 

@@ -12,7 +12,7 @@
 <%
     System.out.println("aq var");
     int quizId = 2;
-    //quizId = (Integer)request.getSession().getAttribute("quiz_id");
+    quizId = (Integer)request.getSession().getAttribute("quiz_id");
 
 
     DBManager dbManager = (DBManager) application.getAttribute("db-manager");

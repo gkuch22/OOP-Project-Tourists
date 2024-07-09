@@ -15,6 +15,7 @@
 <%
     DBManager manager = (DBManager) application.getAttribute("db-manager");
     List<Announcement> list = new ArrayList<Announcement>();
+    int user_id = (Integer)request.getSession().getAttribute("user_id");
 
     try {
         list = manager.get_Announcement_List();
@@ -28,9 +29,16 @@
         <div class="left_div takeQuiz">
             <a class="left_href takeQuiz" href = "quizzespage.jsp"> Take Quiz </a>
         </div>
-        <div class="left_div createQuiz">
-            <a class="left_href creatQuiz" href = "createQuizes.jsp"> Create Quiz </a>
-        </div>
+        <%
+            if(user_id != -1){
+
+        %>
+            <div class="left_div createQuiz">
+                <a class="left_href creatQuiz" href = "createQuizes.jsp"> Create Quiz </a>
+            </div>
+        <%
+            }
+        %>
         <div class="left_div history">
             <a class="left_href history" href = "siteHistoryPage.jsp"> History </a>
         </div>
@@ -40,14 +48,14 @@
         <%
                 User user = null;
                 try {
-                    user = manager.getUserData((Integer)request.getSession().getAttribute("user_id"));
+                    if(user_id != -1) user = manager.getUserData(user_id);
 
 //                    user.setAdminStatus(true);
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
 //                System.out.println("isAdmin - " + user.isAdmin());
-                if(user.isAdmin()){
+                if(user != null && user.isAdmin()){
         %>
         <div class="left_div announce">
             <a class="left_href creatQuiz" href = "writeannouncement.jsp"> Announce </a>

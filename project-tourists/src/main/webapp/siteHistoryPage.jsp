@@ -16,6 +16,7 @@
 <%
     DBManager manager = (DBManager) application.getAttribute("db-manager");
     List<History> list = new ArrayList<History>();
+    int user_id = (Integer)request.getSession().getAttribute("user_id");
 
     try {
         list = manager.get_History_List();
@@ -29,9 +30,16 @@
         <div class="left_div takeQuiz">
             <a class="left_href takeQuiz" href = "quizzespage.jsp"> Take Quiz </a>
         </div>
+        <%
+            if(user_id != -1){
+
+        %>
         <div class="left_div createQuiz">
             <a class="left_href creatQuiz" href = "createQuizes.jsp"> Create Quiz </a>
         </div>
+        <%
+            }
+        %>
         <div class="left_div history active">
             <a class="left_href history" href = "siteHistoryPage.jsp"> History </a>
         </div>
