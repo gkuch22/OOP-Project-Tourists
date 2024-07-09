@@ -35,7 +35,8 @@
         quizzesTakenJson.append("{")
                 .append("\"quizName\":\"").append(quiz.getQuiz_name()).append("\",")
                 .append("\"score\":\"").append(quiz.getScore()).append("\",")
-                .append("\"date\":\"").append(quiz.getDate()).append("\"")
+                .append("\"date\":\"").append(quiz.getDate()).append("\",")
+                .append("\"quizId\":\"").append(quiz.getQuiz_id()).append("\"")
                 .append("}");
         if (i < quizzesTaken.size() - 1) {
             quizzesTakenJson.append(",");
@@ -214,7 +215,7 @@
                 if (type === 'taken') {
                     row = `
                         <tr>
-                            <td>${quiz.quizName}</td>
+                            <td><a href="quizStart.jsp?quiz_id=${quiz.quizId}">${quiz.quizName}</a></td>
                             <td>${quiz.score}</td>
                             <td>${quiz.date}</td>
                         </tr>
