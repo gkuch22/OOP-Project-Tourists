@@ -26,7 +26,7 @@ public class editOrRemove extends HttpServlet {
             }
         }else{
             try {
-                dbManager.removeQuestion((String)request.getSession().getAttribute("question_text"));
+                //dbManager.removeQuestion((String)request.getSession().getAttribute("question_text"));
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
