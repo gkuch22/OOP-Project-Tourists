@@ -75,7 +75,7 @@
 <body>
 <!-- Include the top bar -->
 <jsp:include page="topBar.jsp" />
-<form class="createQuizForm" method="post" action="/">
+<form class="createQuizForm" method="post" action="/editQuizOptions">
     <label>Quiz name: <input type="text" name="quizname" placeholder="Name" required value="<%= name %>"> </label>
     <label>Description: </label>
     <textarea name="description" required rows="3" cols="30" placeholder="This quiz is about..."><%= description %></textarea>

@@ -29,6 +29,54 @@ public class DBManager {
         dataSource.setPassword("rootroot");
     }
 
+    void editQuizOptions(Quiz quiz) throws SQLException {
+        Connection connection = dataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement("" +
+    "UPDATE quiz_table " +
+                "SET " +
+                "  quiz_name = ?," +
+                "  quiz_description = ?," +
+                "  quiz_tag = ?," +
+                "  difficulty = ?," +
+                "  multiple_pages = ?," +
+                "  practice_mode = ?," +
+                "  immediate_correction = ?," +
+                "  random_questions = ?," +
+                "  timed = ?," +
+                "  duration_time = ?" +
+                " WHERE quiz_id = ?;");
+        statement.setString(1,quiz.getQuiz_name());
+        statement.setString(2, quiz.getDescription());
+        statement.setString(3, quiz.getQuizTagsAsString());
+        statement.setString(4, quiz.getDifficulty());
+        statement.setBoolean(5, quiz.isMultiple_pages());
+        statement.setBoolean(6, quiz.isPractice_mode());
+        statement.setBoolean(7, quiz.isImmediatelyCorrected());
+        statement.setBoolean(8, quiz.isRandom());
+        statement.setBoolean(9, quiz.isTimed());
+        statement.setInt(10, quiz.getDurationTime());
+        statement.setInt(11, quiz.getQuiz_id());
+        statement.executeUpdate();
+        statement.close();
+        connection.close();
+        /*
+UPDATE quiz_table
+SET
+    quiz_name = 'New Quiz Name',
+    quiz_description = 'New description for the quiz.',
+    quiz_tag = 'New Tag',
+    difficulty = 'Medium',
+    date_created = '2024-07-09',
+    multiple_pages = TRUE,
+    practice_mode = TRUE,
+    gradable = TRUE,
+    immediate_correction = TRUE,
+    random_questions = TRUE,
+    timed = TRUE,
+    duration_time = 30
+WHERE quiz_id = 1;
+*/
+    }
     public int get_user_id(String name) throws SQLException {
         Connection connection = dataSource.getConnection();
         PreparedStatement statement = connection.prepareStatement("select user_id from login_table where username = ?");
