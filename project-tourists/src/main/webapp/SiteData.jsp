@@ -50,15 +50,15 @@
 
     <div class="section">
         <h2>Highest Performing Quizzes</h2>
-        <%List<Pair<String,Double>> getHighPerformanceQuizzes = manager.getHighPerformanceQuizzes();%>
+        <%List<Pair<Pair<String,Integer>,Double>> getHighPerformanceQuizzes = manager.getHighPerformanceQuizzes();%>
         <table>
             <tr>
                 <th>Quiz Name</th>
                 <th>Average Score</th>
             </tr>
-            <%for(Pair<String,Double> cur : getHighPerformanceQuizzes){%>
+            <%for(Pair<Pair<String,Integer>,Double> cur : getHighPerformanceQuizzes){%>
             <tr>
-                <td><a href="quizStart.jsp?quiz_id=<%=cur.getKey()%>"><%=cur.getKey()%></a></td>
+                <td><a href="quizStart.jsp?quiz_id=<%=cur.getKey().getValue()%>"><%=cur.getKey().getKey()%></a></td>
                 <td><%=cur.getValue()%></td>
             </tr>
             <%}%>
@@ -70,7 +70,6 @@
         <%Map<String,Integer> tagData = manager.getSiteTagData();%>
         <div class="tag-container">
             <%for(Map.Entry<String, Integer> entry : tagData.entrySet()){%>
-            <%System.out.println(entry.getKey());%>
             <div class="tag"><%=entry.getKey()%></div>
             <%}%>
         </div>

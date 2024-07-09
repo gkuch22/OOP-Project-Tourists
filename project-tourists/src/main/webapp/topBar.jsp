@@ -11,8 +11,6 @@
 <body>
 <% DBManager dbManager = (DBManager) application.getAttribute("db-manager");
     int userId = (Integer)request.getSession().getAttribute("user_id");
-     //userId = 0;
-//    userId = (int)request.getSession().getAttribute("userId");
     User user = null;
     String pictureURL = null;
     try {

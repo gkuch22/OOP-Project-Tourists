@@ -18,7 +18,6 @@ public class friendRequestServlet extends HttpServlet {
         String action = request.getParameter("action");
         int fromId = Integer.parseInt(request.getParameter("requesterId"));
 
-//        int toId = 1; //TODO userid get parameter
         DBManager dbManager = (DBManager) getServletContext().getAttribute("db-manager");
         int toId = (Integer) request.getSession().getAttribute("user_id");
 

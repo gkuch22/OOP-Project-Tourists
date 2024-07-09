@@ -421,8 +421,8 @@ public class DBManagerTESTER extends TestCase {
         statement.executeUpdate("INSERT INTO user_table VALUES (3,'Joe',false,false,14,true,'https://media.entertainmentearth.com/assets/images/fe9f5fc5d21e4c338652f08b5f86b0caxl.jpg');");
         statement.executeUpdate("INSERT INTO user_table VALUES (4,'Bob',false,false,14,true,'https://media.entertainmentearth.com/assets/images/fe9f5fc5d21e4c338652f08b5f86b0caxl.jpg');");
 
-        statement.executeUpdate("INSERT INTO achievement_table(achievement_id, achievement, num_created) VALUES (1,'supreme',10);");
-        statement.executeUpdate("Insert into achievement_table(achievement_id,achievement,num_created) Values (2,'wowzers',20);");
+        statement.executeUpdate("INSERT INTO achievement_table(achievement_id, achievement, num_created) VALUES (1,'supreme',1);");
+        statement.executeUpdate("Insert into achievement_table(achievement_id,achievement,num_created) Values (2,'wowzers',2);");
 
         statement.executeUpdate("INSERT INTO quiz_table(quiz_id,quiz_name,quiz_tag,difficulty,creator_id) VALUES (1,'ez','history','easy',1);");
         statement.executeUpdate("INSERT INTO quiz_table(quiz_id,quiz_name,quiz_tag,difficulty,creator_id) VALUES (2,'mid','english;history','medium',1);");
@@ -467,6 +467,7 @@ public class DBManagerTESTER extends TestCase {
 
         User temp = dbManager.getUserData(1);
         List<Pair<String,String>> achievements = dbManager.getAchievements(temp);
+
         assertEquals("supreme",achievements.get(0).getKey());
         assertEquals("wowzers",achievements.get(1).getKey());
 
@@ -497,6 +498,15 @@ public class DBManagerTESTER extends TestCase {
 
         dbManager.promoteUserToAdmin(1);
         assertTrue(dbManager.getUserData(1).isAdmin());
+
+        removeTestUserData();
+    }
+
+    public void testGetReviewCount() throws SQLException {
+        addTestUserData();
+
+        int count = dbManager.getReviewCount();
+        assertEquals(1,count);
 
         removeTestUserData();
     }
@@ -853,7 +863,7 @@ public class DBManagerTESTER extends TestCase {
     public void testgetHighPerformanceQuizzes() throws SQLException {
         addTestUserData();
 
-        List<Pair<String,Double>> avg = dbManager.getHighPerformanceQuizzes();
+        List<Pair<Pair<String,Integer>,Double>> avg = dbManager.getHighPerformanceQuizzes();
         assertEquals(3,avg.size());
 
         removeTestUserData();
