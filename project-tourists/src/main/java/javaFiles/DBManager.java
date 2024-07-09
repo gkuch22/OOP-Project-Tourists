@@ -10,7 +10,6 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 //import java.sql.Date;
@@ -28,7 +27,7 @@ public class DBManager {
         dataSource = new BasicDataSource();
         dataSource.setUrl("jdbc:mysql://localhost:3306/tourists");
         dataSource.setUsername("root");
-        dataSource.setPassword("rootroot");
+        dataSource.setPassword("+qwerty+");
     }
 
     void editQuizOptions(Quiz quiz) throws SQLException {
@@ -79,6 +78,7 @@ SET
 WHERE quiz_id = 1;
 */
     }
+
     public int get_user_id(String name) throws SQLException {
         Connection connection = dataSource.getConnection();
         PreparedStatement statement = connection.prepareStatement("select user_id from login_table where username = ?");
@@ -101,7 +101,6 @@ WHERE quiz_id = 1;
 
     public int user_password_is_correct(String name, String password) throws SQLException {
         password = hash(password);
-        System.out.println("admin  pass - " + password);
         Connection connection = dataSource.getConnection();
         PreparedStatement statement = connection.prepareStatement("select user_id from login_table where (username = ?) AND (password = ?)");
         statement.setString(1,name);
@@ -123,8 +122,6 @@ WHERE quiz_id = 1;
 
     public int add_user(String name, String password) throws SQLException {
         password = hash(password);
-        System.out.println("admin pass - " + password);
-        assert(password == null);
         Connection connection = dataSource.getConnection();
         PreparedStatement statement = connection.prepareStatement("insert into login_table (username, password) values (?, ?)");
         statement.setString(1,name);

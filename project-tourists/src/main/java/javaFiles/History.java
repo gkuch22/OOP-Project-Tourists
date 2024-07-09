@@ -10,5 +10,5 @@ public interface History {
     public String get_history_description();
     public void set_history_description(String description);
     public String get_history_type();
-    public void set_history_type();
+    public void set_history_type(String type);
 }

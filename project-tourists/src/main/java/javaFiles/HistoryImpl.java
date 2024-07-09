@@ -52,7 +52,7 @@ public class HistoryImpl implements History{
     }
 
     @Override
-    public void set_history_type() {
+    public void set_history_type(String type) {
         this.type = type;
     }
 
